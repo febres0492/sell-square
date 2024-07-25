@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
+import { useStoreContext } from '../utils/GlobalState';
 import { ADD_PRODUCT } from '../utils/mutations';
-import { QUERY_CATEGORIES } from '../utils/queries';
 import { Link } from 'react-router-dom';
 import Auth from '../utils/auth';
+import useFetchCategories from '../utils/useFetchCategories';
 
 const AddProductPage = () => {
+    const [state] = useStoreContext();
+
+    const { loadingCat, categories } = useFetchCategories();
+
     const [product, setProduct] = useState({
         name: '', description: '', price: '', quantity: '', category: '', zipcode: ''
     });
 
-    const { loading: categoriesLoading, error: categoriesError, data: categoriesData } = useQuery(QUERY_CATEGORIES);
     const [addProduct, { data, loading, error }] = useMutation(ADD_PRODUCT);
 
     const handleChange = (e) => {
         const { name, value, type } = e.target;
-        setProduct({ 
-            ...product, 
-            [name]: type === 'number' ? parseFloat(value) : value 
-        });
+        setProduct({ ...product, [name]: type === 'number' ? parseFloat(value) : value });
     };
 
     const handleSubmit = async (e) => {
@@ -37,11 +38,6 @@ const AddProductPage = () => {
             console.error(err);
         }
     };
-
-    if (categoriesLoading) return <p>Loading categories...</p>;
-    if (categoriesError) return <p>Error loading categories: {categoriesError.message}</p>;
-
-    const categories = categoriesData.categories;
 
     return (
         <>

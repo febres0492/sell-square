@@ -1,42 +1,11 @@
-import { useEffect } from 'react';
-import { useQuery } from '@apollo/client';
+import React from 'react';
+import useFetchCategories from '../../utils/useFetchCategories';
 import { useStoreContext } from '../../utils/GlobalState';
-import {
-    UPDATE_CATEGORIES,
-    UPDATE_CURRENT_CATEGORY,
-} from '../../utils/actions';
-import { QUERY_CATEGORIES } from '../../utils/queries';
-import { idbPromise } from '../../utils/helpers';
+import { UPDATE_CURRENT_CATEGORY } from '../../utils/actions';
 
 function CategoryMenu() {
     const [state, dispatch] = useStoreContext();
-
-    const { categories } = state;
-
-    const { loading, data: categoryData } = useQuery(QUERY_CATEGORIES);
-
-    useEffect(() => {
-        // Fetch categories from IndexedDB first
-        idbPromise('categories', 'get').then((categories) => {
-            if (categories.length) {
-                dispatch({
-                    type: UPDATE_CATEGORIES,
-                    categories: categories,
-                });
-            }
-        });
-
-        // Fetch categories from the server
-        if (categoryData) {
-            dispatch({
-                type: UPDATE_CATEGORIES,
-                categories: categoryData.categories,
-            });
-            categoryData.categories.forEach((category) => {
-                idbPromise('categories', 'put', category);
-            });
-        }
-    }, [categoryData, loading, dispatch]);
+    const { loadingCat, categories } = useFetchCategories();
 
     const handleClick = (id) => {
         dispatch({
@@ -44,6 +13,8 @@ function CategoryMenu() {
             currentCategory: id,
         });
     };
+
+    if (loadingCat) return <p>Loading categories...</p>;
 
     return (
         <div>
