@@ -117,6 +117,20 @@ const resolvers = {
 
             return { token, user };
         },
+        addProduct: async (parent, args, context) => {
+            if (context.user) {
+                try {
+                    const product = await Product.create({
+                        ...args,
+                        user: context.user._id,
+                    });
+                    return product;
+                } catch (error) {
+                    throw new Error('Error adding product: ' + error.message);
+                }
+            }
+            throw new AuthenticationError('Not logged in');
+        },
         addOrder: async (parent, { products }, context) => {
             if (context.user) {
                 const order = new Order({ products });

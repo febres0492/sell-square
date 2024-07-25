@@ -12,6 +12,7 @@ const typeDefs = `
         quantity: Int
         price: Float
         category: Category
+        zipcode: String
     }
 
     type Order {
@@ -52,6 +53,15 @@ const typeDefs = `
         updateUser(firstName: String, lastName: String, email: String, password: String): User
         updateProduct(_id: ID!, quantity: Int!): Product
         login(email: String!, password: String!): Auth
+        addProduct(
+            name: String!,
+            description: String!,
+            image: String,
+            quantity: Int!,
+            price: Float!,
+            category: ID!,
+            zipcode: String!
+        ): Product
     }
 `;
 

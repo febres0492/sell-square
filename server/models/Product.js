@@ -35,7 +35,7 @@ const productSchema = new Schema({
         required: true
     },
     zipcode: {
-        type: String,
+        type: Number,
         required: false,
         trim: true
     }

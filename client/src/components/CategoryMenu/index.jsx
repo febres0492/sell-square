@@ -1,5 +1,3 @@
-// Category menu component
-
 import { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useStoreContext } from '../../utils/GlobalState';
@@ -18,6 +16,17 @@ function CategoryMenu() {
     const { loading, data: categoryData } = useQuery(QUERY_CATEGORIES);
 
     useEffect(() => {
+        // Fetch categories from IndexedDB first
+        idbPromise('categories', 'get').then((categories) => {
+            if (categories.length) {
+                dispatch({
+                    type: UPDATE_CATEGORIES,
+                    categories: categories,
+                });
+            }
+        });
+
+        // Fetch categories from the server
         if (categoryData) {
             dispatch({
                 type: UPDATE_CATEGORIES,
@@ -25,13 +34,6 @@ function CategoryMenu() {
             });
             categoryData.categories.forEach((category) => {
                 idbPromise('categories', 'put', category);
-            });
-        } else if (!loading) {
-            idbPromise('categories', 'get').then((categories) => {
-                dispatch({
-                    type: UPDATE_CATEGORIES,
-                    categories: categories,
-                });
             });
         }
     }, [categoryData, loading, dispatch]);

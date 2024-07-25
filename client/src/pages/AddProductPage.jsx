@@ -1,82 +1,75 @@
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { ADD_PRODUCT } from '../utils/mutations';
+import { QUERY_CATEGORIES } from '../utils/queries';
 import { Link } from 'react-router-dom';
+import Auth from '../utils/auth';
 
 const AddProductPage = () => {
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [price, setPrice] = useState('');
-    const [quantity, setQuantity] = useState('');
-    const [category, setCategory] = useState('');
+    const [product, setProduct] = useState({
+        name: '', description: '', price: '', quantity: '', category: '', zipcode: ''
+    });
 
+    const { loading: categoriesLoading, error: categoriesError, data: categoriesData } = useQuery(QUERY_CATEGORIES);
     const [addProduct, { data, loading, error }] = useMutation(ADD_PRODUCT);
+
+    const handleChange = (e) => {
+        const { name, value, type } = e.target;
+        setProduct({ 
+            ...product, 
+            [name]: type === 'number' ? parseFloat(value) : value 
+        });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const variables = Object.keys(product).reduce((acc, key) => ({ ...acc, [key]: product[key] }), {});
             await addProduct({
-                variables: {
-                    name,
-                    description,
-                    price: parseFloat(price),
-                    quantity: parseInt(quantity),
-                    category
-                }
+                variables,
+                context: {
+                    headers: {
+                        authorization: `Bearer ${Auth.getToken()}`,
+                    },
+                },
             });
-            // Optionally, reset the form or show a success message
         } catch (err) {
             console.error(err);
         }
     };
 
+    if (categoriesLoading) return <p>Loading categories...</p>;
+    if (categoriesError) return <p>Error loading categories: {categoriesError.message}</p>;
+
+    const categories = categoriesData.categories;
+
     return (
-        <div>
-            <Link to="/">← Back to Products</Link>
-            <h1>Add Product</h1>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="Description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                />
-                <input
-                    type="number"
-                    placeholder="Price"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    required
-                />
-                <input
-                    type="number"
-                    placeholder="Quantity"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="Category ID"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    required
-                />
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Adding...' : 'Add Product'}
-                </button>
-                {error && <p>Error: {error.message}</p>}
-            </form>
-            {data && <p>Product added successfully!</p>}
-        </div>
+        <>
+            <div className="container my-1">
+                <Link to="/">← Back to Products</Link>
+                <h1>Add Product</h1>
+                <form className='d-flex flex-column' onSubmit={handleSubmit}>
+                    <input type="text" name="name" placeholder="Name" value={product.name} onChange={handleChange} required />
+                    <textarea name="description" placeholder="Description" value={product.description} onChange={handleChange} required rows="4" />
+                    <input type="number" name="price" placeholder="Price" value={product.price} onChange={handleChange} required />
+                    <input type="number" name="quantity" placeholder="Quantity" value={product.quantity} onChange={handleChange} required />
+                    <select name="category" value={product.category} onChange={handleChange} required>
+                        <option value="">Select Category</option>
+                        {categories.map((category) => (
+                            <option key={category._id} value={category._id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                    <input type="text" name="zipcode" placeholder="Zipcode" value={product.zipcode} onChange={handleChange} required />
+                    <button type="submit" disabled={loading}>
+                        {loading ? 'Adding...' : 'Add Product'}
+                    </button>
+                    {error && <p>Error: {error.message}</p>}
+                </form>
+                {data && <p>Product added successfully!</p>}
+            </div>
+        </>
     );
 };
 

@@ -7,10 +7,10 @@ import SearchResults from "../components/SearchResults";
 const Home = () => {
     return (
         <div className="container">
+            < CategoryMenu />
             < SearchBar />
             < SearchResults />
             {/* <Cart /> */}
-            {/* < CategoryMenu /> */}
             {/* <ProductList /> */}
         </div>
     );
