@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client';
 import { useStoreContext } from '../../utils/GlobalState';
 import { updateSearchResults } from '../../utils/actions';
 import { QUERY_PRODUCTS_BY_SEARCH_TERM } from '../../utils/queries';
+import { Link } from 'react-router-dom'; // Import Link component
 
 function SearchBar() {
     const [inputValue, setSearchTerm] = useState('');
@@ -37,6 +38,9 @@ function SearchBar() {
                 onKeyDown={handleKeyDown}
             />
             <button onClick={handleSearch}>Search</button>
+            <Link to="/add-product">
+                <button>List New Product</button>
+            </Link>
         </div>
     );
 }

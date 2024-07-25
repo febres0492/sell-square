@@ -12,6 +12,9 @@ import Signup from './pages/Signup';
 import Success from './pages/Success';
 import OrderHistory from './pages/OrderHistory';
 import AccountSettings from './pages/AccountSettings';
+import AddProductPage from './pages/AddProductPage';
+
+
 
 const router = createBrowserRouter([
     {
@@ -25,6 +28,7 @@ const router = createBrowserRouter([
             { path: '/success', element: <Success /> },
             { path: '/orderHistory', element: <OrderHistory /> },
             { path: '/accountSettings', element: <AccountSettings /> },
+            { path: '/add-product', element: <AddProductPage /> },
             { path: '/products/:id', element: <Detail /> }
         ]
     }
