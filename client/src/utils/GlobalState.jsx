@@ -5,19 +5,20 @@ const StoreContext = createContext();
 const { Provider } = StoreContext;
 
 const StoreProvider = ({ value = [], ...props }) => {
-  const [state, dispatch] = useReducer(reducer, {
-    products: [],
-    cart: [],
-    cartOpen: false,
-    categories: [],
-    currentCategory: '',
-  });
+    const [state, dispatch] = useReducer(reducer, {
+        products: [],
+        cart: [],
+        cartOpen: false,
+        categories: [],
+        currentCategory: '',
+        searchResults: []
+    });
 
-  return <Provider value={[state, dispatch]} {...props} />;
+    return <Provider value={[state, dispatch]} {...props} />;
 };
 
 const useStoreContext = () => {
-  return useContext(StoreContext);
+    return useContext(StoreContext);
 };
 
 export { StoreProvider, useStoreContext };

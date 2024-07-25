@@ -9,3 +9,11 @@ export const TOGGLE_CART = "TOGGLE_CART";
 
 export const UPDATE_CATEGORIES = "UPDATE_CATEGORIES";
 export const UPDATE_CURRENT_CATEGORY = "UPDATE_CURRENT_CATEGORY";
+export const UPDATE_SEARCH_RESULTS = 'UPDATE_SEARCH_RESULTS';
+
+export const updateSearchResults = (searchResults) => {
+    return {
+        type: UPDATE_SEARCH_RESULTS,
+        products: searchResults,
+    };
+};
