@@ -58,6 +58,7 @@ export const ADD_PRODUCT = gql`
         $quantity: Int!
         $category: ID!
         $zipcode: String!
+        $image: String!
     ) {
         addProduct(
             name: $name
@@ -66,6 +67,7 @@ export const ADD_PRODUCT = gql`
             quantity: $quantity
             category: $category
             zipcode: $zipcode
+            image: $image
         ) {
             _id
             name
@@ -77,6 +79,7 @@ export const ADD_PRODUCT = gql`
                 name
             }
             zipcode
+            image
         }
     }
 `;

@@ -1,7 +1,37 @@
-export function pluralize(name, count) {
-    if (count === 1) {
-        return name;
+// helpers.js
+
+export async function uploadImage(imageFile) {
+    const apiEndpoint = '/api/upload-image'; 
+
+    try {
+        const formData = new FormData();
+        formData.append('image', imageFile);
+
+        const response = await fetch(apiEndpoint, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Image uploaded successfully', result);
+            if (result && result.secure_url) {
+                return result.path
+            } else {
+                return "https://via.placeholder.com/150";
+            }
+        } else {
+            console.error('Error uploading image to API:', response.statusText);
+            return "https://via.placeholder.com/150";
+        }
+    } catch (error) {
+        console.error('Error uploading image to API:', error);
+        return "https://via.placeholder.com/150";
     }
+}
+
+export function pluralize(name, count) {
+    if (count === 1) { return name; }
     return name + 's';
 }
 

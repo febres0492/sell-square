@@ -8,6 +8,7 @@ import { updateSearchResults } from '../../utils/actions';
 function SearchResults() {
     const [state, dispatch] = useStoreContext();
     const { searchResults } = state;
+    console.log('SearchResults:', searchResults);
 
     const { loading, data, error } = useQuery(QUERY_ALL_PRODUCTS);
 
@@ -28,7 +29,7 @@ function SearchResults() {
             {searchResults.map((r) => (
                 <div className="card px-1 py-1" key={r._id}>
                     <Link to={`/products/${r._id}`}>
-                        <img alt={r.name} src={`/images/${r.image}`} />
+                        <img alt={r.name} src={r.image} />
                         <p>{r.name}</p>
                     </Link>
                     <div>
