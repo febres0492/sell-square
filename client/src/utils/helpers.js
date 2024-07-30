@@ -15,8 +15,8 @@ export async function uploadImage(imageFile) {
         if (response.ok) {
             const result = await response.json();
             console.log('Image uploaded successfully', result);
-            if (result && result.secure_url) {
-                return result.path
+            if (result && result.url) {
+                return result.url
             } else {
                 return "https://via.placeholder.com/150";
             }

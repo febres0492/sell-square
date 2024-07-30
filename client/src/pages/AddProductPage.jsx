@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useStoreContext } from '../utils/GlobalState';
 import { ADD_PRODUCT } from '../utils/mutations';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Auth from '../utils/auth';
 import useFetchCategories from '../utils/useFetchCategories';
 import { uploadImage } from '../utils/helpers';
@@ -15,6 +15,7 @@ const AddProductPage = () => {
     });
     const [imageFile, setImageFile] = useState(null);
     const [addProduct, { data, loading, error }] = useMutation(ADD_PRODUCT);
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value, type } = e.target;
@@ -36,7 +37,7 @@ const AddProductPage = () => {
             const variables = Object.keys(product).reduce((acc, key) => ({ ...acc, [key]: product[key] }), {});
             variables.image = imageUrl;
 
-            await addProduct({
+            const poduct = await addProduct({
                 variables,
                 context: {
                     headers: {
@@ -44,6 +45,11 @@ const AddProductPage = () => {
                     },
                 },
             });
+            console.log('new product', poduct);
+
+            // redirecting to productDetailsPage
+            navigate(`/products/${poduct.data.addProduct._id}`);
+
         } catch (err) {
             console.error(err);
         }

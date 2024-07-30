@@ -28,7 +28,18 @@ const resolvers = {
             return await Product.find(filter);
         },
         product: async (parent, { _id }) => {
-            return await Product.findById(_id).populate('category');
+            try {
+                console.log('product id', _id);
+                const product = await Product.findById(_id).populate('category');
+                if (!product) {
+                    console.error(`Product with ID ${_id} not found`);
+                    throw new Error('Product not found');
+                }
+                return product;
+            } catch (error) {
+                console.error(`Error fetching product with ID ${_id}:`, error);
+                throw new Error('Error fetching product');
+            }
         },
         user: async (parent, args, context) => {
             if (context.user) {
@@ -91,7 +102,8 @@ const resolvers = {
             });
 
             return { session: session.id };
-        }
+        },
+        
     },
     Mutation: {
         addUser: async (parent, args) => {
