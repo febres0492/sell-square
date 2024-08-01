@@ -6,12 +6,10 @@ import SearchResults from "../components/SearchResults";
 
 const Home = () => {
     return (
-        <div className="container">
+        <div className="container-fluid pt-4">
             < CategoryMenu />
             < SearchBar />
             < SearchResults />
-            {/* <Cart /> */}
-            {/* <ProductList /> */}
         </div>
     );
 };

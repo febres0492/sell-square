@@ -7,24 +7,22 @@ const resolvers = {
         categories: async () => {
             return await Category.find();
         },
-        products: async (_, { category, name, searchTerm }) => {
+        products: async (_, { category, name, searchTerm, user }) => {
             let filter = {};
-
-            if (category) {
-                filter.category = category;
-            }
-
-            if (name) {
-                filter.name = { $regex: name, $options: 'i' }; 
-            }
-
+        
+            if (category) { filter.category = category; }
+        
+            if (name) { filter.name = { $regex: name, $options: 'i' }; }
+        
             if (searchTerm) {
                 filter.$or = [
                     { name: { $regex: searchTerm, $options: 'i' } },
                     { description: { $regex: searchTerm, $options: 'i' } }
                 ];
             }
-
+        
+            if (user) { filter.user = user; }
+        
             return await Product.find(filter);
         },
         product: async (parent, { _id }) => {
@@ -49,11 +47,16 @@ const resolvers = {
                 });
 
                 user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
+                console.log('user', user);
+                const products = await Product.find({ user: context.user._id }).populate('category');
 
-                return user;
+                return {
+                    ...user.toObject(),
+                    products
+                };
             }
 
-            throw AuthenticationError;
+            throw new AuthenticationError('Not authenticated');
         },
         order: async (parent, { _id }, context) => {
             if (context.user) {

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { QUERY_PRODUCT, QUERY_PRODUCTS_BY_SEARCH_TERM } from '../utils/queries';
+import { QUERY_PRODUCT_BY_ID, QUERY_PRODUCTS_BY_SEARCH_TERM } from '../utils/queries';
 import spinner from '../assets/spinner.gif';
 
 function ProductDetailsPage() {
     const { id } = useParams();
-    const { loading, data, error } = useQuery(QUERY_PRODUCT, { variables: { id }, });
+    const { loading, data, error } = useQuery(QUERY_PRODUCT_BY_ID, { variables: { id }, });
     
     if (loading) return <img src={spinner} alt="loading" />;
 
