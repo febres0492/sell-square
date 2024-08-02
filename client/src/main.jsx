@@ -13,6 +13,7 @@ import Success from './pages/Success';
 import OrderHistory from './pages/OrderHistory';
 import AccountSettings from './pages/AccountSettings';
 import AddProductPage from './pages/AddProductPage';
+import EditProductPage from './pages/EditProductPage';
 import HomePage from './pages/HomePage';
 import Dashboard from './pages/Dashboard';
 
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
             { path: '/orderHistory', element: <OrderHistory /> },
             { path: '/accountSettings', element: <AccountSettings /> },
             { path: '/add-product', element: <AddProductPage /> },
+            { path: '/edit-product/:id', element: <EditProductPage /> },
             { path: '/products/:id', element: <ProducDetailsPage /> }
         ]
     }

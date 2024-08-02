@@ -7,8 +7,18 @@ const resolvers = {
         categories: async () => {
             return await Category.find();
         },
-        products: async (_, { category, name, searchTerm, user }) => {
+        products: async (parent, { id, category, name, searchTerm, user }) => {
             let filter = {};
+        
+            if (id) { 
+                console.log('product id -----', id);
+                const product = await Product.findById(id).populate('category');
+                if (!product) {
+                    console.error(`Product with ID ${id} not found`);
+                    throw new Error('Product not found');
+                }
+                return product ? [product] : [];
+            }
         
             if (category) { filter.category = category; }
         
@@ -23,7 +33,7 @@ const resolvers = {
         
             if (user) { filter.user = user; }
         
-            return await Product.find(filter);
+            return await Product.find(filter).populate('category');
         },
         product: async (parent, { _id }) => {
             try {
@@ -147,10 +157,26 @@ const resolvers = {
 
             throw AuthenticationError;
         },
-        updateProduct: async (parent, { _id, quantity }) => {
-            const decrement = Math.abs(quantity) * -1;
-
-            return await Product.findByIdAndUpdate(_id, { $inc: { quantity: decrement } }, { new: true });
+        updateProduct: async (parent, args, context) => {
+            const updatedProduct = await Product.findByIdAndUpdate(
+                args._id,
+                { $set: args },
+                { new: true }
+            );
+            return updatedProduct
+            // if (context.user) {
+            //     try {
+            //         const updatedProduct = await Product.findByIdAndUpdate(
+            //             args._id,
+            //             { $set: args },
+            //             { new: true }
+            //         );
+            //         return updatedProduct;
+            //     } catch (error) {
+            //         throw new Error('Error updating product: ' + error.message);
+            //     }
+            // }
+            // throw new AuthenticationError;
         },
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
