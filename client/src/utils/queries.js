@@ -12,6 +12,12 @@ const keys = `
     quantity
     image
     zipcode
+    user {
+        _id
+        firstName
+        lastName
+        email
+    }
     category {
         _id
         name
@@ -30,14 +36,30 @@ export const QUERY_PRODUCT_BY_ID = gql`
      query getProduct($id: ID!) {
         product(_id: $id) {
             ${keys}
+            user {
+                _id
+                firstName
+                lastName
+                email
+            }
         }
     }
 `;
 
 export const QUERY_USER_PRODUCTS = gql`
-    query getProducts($category: ID, $user: ID) {
-        products(category: $category, user: $user) {
-            ${keys}
+    query Products {
+        products(getUserProducts: true) {
+            _id
+            name
+            description
+            image
+            quantity
+            price
+            category {
+                _id
+                name
+            }
+            zipcode
         }
     }
 `;
@@ -51,8 +73,10 @@ export const QUERY_CHECKOUT = gql`
 `;
 
 export const QUERY_ALL_PRODUCTS = gql`
-    {
-        products { ${keys} }
+    { 
+        products { 
+            ${keys}
+        } 
     }
 `;
 
@@ -68,18 +92,74 @@ export const QUERY_CATEGORIES = gql`
 export const QUERY_USER = gql`
     {
         user {
+            _id
             firstName
             lastName
             email
             products { ${keys} }
-            orders {
-                _id
-                purchaseDate
-                products { ${keys} }
-            }
         }
     }
 `;
+
+export const QUERY_USER_CONVERSATIONS = gql`
+    query UserConversations {
+        userConversations {
+            _id
+            productId {
+                _id
+                user {
+                    _id
+                    firstName
+                    lastName
+                    email
+                }
+            }
+            participants {
+                _id
+                firstName
+                lastName
+                email
+            }
+            messages {
+                text
+                senderId
+                receiverId
+                createdAt
+            }
+        }
+    }   
+`;
+// export const QUERY_USER_CONVERSATIONS = gql`
+//     query User {
+//         user {
+//             _id
+//             firstName
+//             conversations {
+//                 _id
+//                 productId {
+//                     _id
+//                     name
+//                     description
+//                     image
+//                     quantity
+//                     price
+//                     zipcode
+//                 }
+//                 participants {
+//                     firstName
+//                     lastName
+//                     email
+//                 }
+//                 messages {
+//                     text
+//                     senderId
+//                     receiverId
+//                     createdAt
+//                 }
+//             }
+//         }
+//     }
+// `;
 
 export const QUERY_PRODUCTS_BY_SEARCH_TERM = gql`
     query getProductsBySearchTerm($searchTerm: String!) {

@@ -29,11 +29,24 @@ const typeDefs = `
         email: String
         orders: [Order]
         products: [Product]
+        conversations: [Conversation]
     }
 
-    type Checkout {
-        session: ID
+    type Message {
+        text: String
+        senderId: ID
+        receiverId: ID
+        createdAt: String
     }
+
+    type Conversation {
+        _id: ID!
+        productId: Product!
+        participants: [User]
+        messages: [Message]
+    }
+
+    type Checkout { session: ID }
 
     type Auth {
         token: ID
@@ -42,11 +55,18 @@ const typeDefs = `
 
     type Query {
         categories: [Category]
-        products(category: ID, name: String, searchTerm: String, user: ID): [Product]
+        products(
+            category: ID, 
+            name: String, 
+            searchTerm: String, 
+            user: ID,
+            getUserProducts: Boolean
+        ): [Product]
         product(_id: ID!): Product
         user: User
         order(_id: ID!): Order
         checkout(products: [ID]!): Checkout
+        userConversations: [Conversation]
     }
 
     type Mutation {
@@ -73,6 +93,14 @@ const typeDefs = `
             category: ID!,
             zipcode: String!
         ): Product
+        sendMessage(senderId: ID! receiverId: ID!, content: String!, productId: ID!): Conversation
+        createConversation(productId: ID!, messages: [MessageInput!]!): Conversation
+    }
+
+    input MessageInput {
+        text: String!
+        senderId: ID!
+        receiverId: ID!
     }
 `;
 

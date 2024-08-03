@@ -60,11 +60,9 @@ function EditProductPage() {
 
     const handleChange = (event) => {
         const { name, value, type } = event.target;
-        const val = type === 'number' ? parseInt(value) : value
-        console.log('name', name, 'value', val, 'type', type);
         setFormState({
             ...formState,
-            [name]: val
+            [name]: type === 'number' ? parseInt(value) : value
         });
     };
 

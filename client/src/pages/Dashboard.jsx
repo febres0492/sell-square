@@ -1,17 +1,17 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-    CssBaseline,
-    Drawer,
-    AppBar,
-    Toolbar,
+    // CssBaseline,
+    // Drawer,
+    // AppBar,
+    // Toolbar,
     Typography,
-    Divider,
-    IconButton,
-    Box,
+    // Divider,
+    // IconButton,
+    // Box,
     Container,
     Grid,
-    Paper,
+    // Paper,
     CircularProgress,
     Card,
     CardContent,
@@ -28,8 +28,14 @@ import {
 // import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { QUERY_USER } from '../utils/queries';
-import { useStoreContext } from '../utils/GlobalState';
+import { QUERY_USER, QUERY_USER_CONVERSATIONS, QUERY_USER_PRODUCTS } from '../utils/queries';
+// import { useStoreContext } from '../utils/GlobalState';
+
+const c = {
+    red: '\x1b[31m%s\x1b[0m',
+    green: '\x1b[32m%s\x1b[0m',
+    yellow: '\x1b[33m%s\x1b[0m'
+};
 
 const useStyles = makeStyles((theme) => ({
     // Your styles here
@@ -48,40 +54,84 @@ const useStyles = makeStyles((theme) => ({
 const Dashboard = () => {
     const classes = useStyles();
 
-    const { loading, error, data } = useQuery(QUERY_USER);
+    const { loading, error, data } = useQuery(QUERY_USER_PRODUCTS);
+    console.log('products', data);
+    const products = data?.products || [];
+
+    // if(!loading && !user) window.location.replace('/login');
 
     if (loading) return <CircularProgress />;
     if (error) return <Typography variant="h6" color="error">Error: {error.message}</Typography>;
 
-    return (
+    return (<>
+        <Conversations />
         <Container>
             <Typography variant="h5">Your Products</Typography>
             <Grid container spacing={3}>
-                {data.user.products.map((product) => (
-                    <Grid className='' item key={product._id} xs={6} md={6} lg={4}>
-                        <Card className={classes.card}>
-                            <CardMedia
-                                className={classes.cardMedia}
-                                image={product.image || 'https://via.placeholder.com/150'}
-                                title={product.name || 'Image title'}
-                            />
-                            <CardContent className={classes.cardContent}>
-                                <Typography component="h5" variant="h5">
-                                    {product.name}
-                                </Typography>
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    {product.description}
-                                </Typography>
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    {product.category.name}
-                                </Typography>
-                            </CardContent>
-                        </Card>
+                {products.map((product) => (
+                    <Grid item className='' key={product._id} xs={6} md={6} lg={4}>
+                        <Link to={`/products/${product._id}`}>
+                            <Card className={classes.card}>
+                                <CardMedia
+                                    className={classes.cardMedia}
+                                    image={product.image || 'https://via.placeholder.com/150'}
+                                    title={product.name || 'Image title'}
+                                />
+                                <CardContent className={classes.cardContent}>
+                                    <Typography component="h5" variant="h5">
+                                        {product.name}
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        {product.description}
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        {product.category.name}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Link>
                     </Grid>
                 ))}
             </Grid>
         </Container>
-    );
+    </>);
 };
+
+function Conversations() {
+    const conversationsData = useQuery(QUERY_USER_CONVERSATIONS).data
+    console.log('component conversations', conversationsData);
+    return (
+        <Container>
+            <Typography variant="h5">Conversations</Typography>
+            {/* <Grid container spacing={3}>
+                {conversationsData.map(thread => (
+                    const product = thread.messages[0].product;
+                    <Grid item className='' xs={6} md={6} lg={4}>
+                        <Link to={`/products/${product._id}`}>
+                            <Card className={classes.card}>
+                                <CardMedia
+                                    className={classes.cardMedia}
+                                    image={product.image || 'https://via.placeholder.com/150'}
+                                    title={product.name || 'Image title'}
+                                />
+                                <CardContent className={classes.cardContent}>
+                                    <Typography component="h5" variant="h5">
+                                        {product.name}
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        {product.description}
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        {product.category.name}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Link>
+                    </Grid>
+                ))}
+            </Grid> */}
+        </Container>
+    );
+}
 
 export default Dashboard;

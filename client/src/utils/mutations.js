@@ -115,3 +115,17 @@ export const UPDATE_PRODUCT = gql`
     }
 `;
 
+export const SEND_MESSAGE = gql`
+    mutation SendMessage($senderId: ID!, $receiverId: ID!, $content: String!, $productId: ID!) {
+        sendMessage(senderId: $senderId, receiverId: $receiverId, content: $content, productId: $productId) {
+            _id
+            messages {
+                text
+                senderId
+                receiverId
+                createdAt
+            }
+        }
+    }
+`;
+

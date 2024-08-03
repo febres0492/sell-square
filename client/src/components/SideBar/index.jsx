@@ -61,40 +61,32 @@ const SideBar = ({ open, handleDrawerClose }) => {
             open={open}
         >
             <div className={classes.toolbarIcon}>
-                <IconButton onClick={handleDrawerClose}>
-                    <ChevronLeftIcon />
-                </IconButton>
+                <IconButton onClick={handleDrawerClose}> <ChevronLeftIcon /> </IconButton>
             </div>
             <Divider />
             <List>
-                <ListItem button component={Link} to="/">
-                    <ListItemIcon>
-                        <DashboardIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Home Page" />
-                </ListItem>
-                <ListItem button component={Link} to="/dashboard">
-                    <ListItemIcon>
-                        <DashboardIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Dashboard" />
-                </ListItem>
+                <Link to="/">
+                    <ListItem button >
+                        <ListItemIcon> <DashboardIcon /> </ListItemIcon>
+                        <ListItemText primary="Home Page" />
+                    </ListItem>
+                </Link>
+                <Link to="/dashboard">
+                    <ListItem button >
+                        <ListItemIcon> <DashboardIcon /> </ListItemIcon>
+                        <ListItemText primary="Dashboard" />
+                    </ListItem>
+                </Link>
                 <ListItem button>
-                    <ListItemIcon>
-                        <PeopleIcon />
-                    </ListItemIcon>
+                    <ListItemIcon> <PeopleIcon /> </ListItemIcon>
                     <ListItemText primary="Account" />
                 </ListItem>
                 <ListItem button>
-                    <ListItemIcon>
-                        <BarChartIcon />
-                    </ListItemIcon>
+                    <ListItemIcon> <BarChartIcon /> </ListItemIcon>
                     <ListItemText primary="Reports" />
                 </ListItem>
                 <ListItem button>
-                    <ListItemIcon>
-                        <LayersIcon />
-                    </ListItemIcon>
+                    <ListItemIcon> <LayersIcon /> </ListItemIcon>
                     <ListItemText primary="Integrations" />
                 </ListItem>
             </List>

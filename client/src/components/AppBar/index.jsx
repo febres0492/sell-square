@@ -5,12 +5,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import Button from '@material-ui/core/Button'; // Import Button component
+import Button from '@material-ui/core/Button'; 
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom'; // Import Link component
+import { Link } from 'react-router-dom'; 
 
-// Define your styles using makeStyles
+// styles 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -44,9 +44,10 @@ const useStyles = makeStyles((theme) => ({
 const MyComponent = ({ open, handleDrawerOpen }) => {
     const classes = useStyles();
     const loggedIn = Auth.loggedIn();
+    console.log('loggedIn', loggedIn);
 
     return (
-        <AppBar position="" className={clsx(classes.appBar, open && classes.appBarShift)}>
+        <AppBar position="static" className={clsx(classes.appBar, open && classes.appBarShift)}>
             <Toolbar>
                 {/* <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={handleDrawerOpen}
                     className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
@@ -56,15 +57,28 @@ const MyComponent = ({ open, handleDrawerOpen }) => {
                 <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                     Dashboard
                 </Typography>
-                <Button color="inherit" className={classes.homeButton} component={Link} to="/">Home</Button>
+
+                <Link to="/" className={classes.homeButton}>
+                    <Button color="inherit">Home</Button>
+                </Link>
                 {loggedIn && (<>
-                    <Button color="inherit" className={classes.homeButton} component={Link} to="/dashboard">Dashboard</Button>
-                    <Button color="inherit" className={classes.homeButton} component={Link} to="/accountSettings">Account</Button>
-                    <Button color="inherit" className={classes.homeButton} to="/" onClick={Auth.logout}>Logout</Button>
+                    <Link to="/dashboard" className={classes.homeButton}>
+                        <Button color="inherit">Dashboard</Button>
+                    </Link>
+                    <Link to="/accountSettings" className={classes.homeButton}>
+                        <Button color="inherit">Account</Button>
+                    </Link>
+                    <Link to="/" className={classes.homeButton} onClick={Auth.logout}>
+                        <Button color="inherit">Logout</Button>
+                    </Link>
                 </>)}
                 {!loggedIn && (<>
-                    <Button color="inherit" className={classes.homeButton} component={Link} to="/signup">Signup</Button>
-                    <Button color="inherit" className={classes.homeButton} component={Link} to="/login">Login</Button>
+                    <Link to="/signup" className={classes.homeButton}>
+                        <Button color="inherit">Signup</Button>
+                    </Link>
+                    <Link to="/login" className={classes.homeButton}>
+                        <Button color="inherit">Login</Button>
+                    </Link>
                 </> )}
             </Toolbar>
         </AppBar>
