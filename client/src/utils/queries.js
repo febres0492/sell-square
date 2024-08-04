@@ -107,12 +107,11 @@ export const QUERY_USER_CONVERSATIONS = gql`
             _id
             productId {
                 _id
-                user {
-                    _id
-                    firstName
-                    lastName
-                    email
-                }
+                name
+                description
+                image
+                quantity
+                price
             }
             participants {
                 _id
@@ -129,37 +128,6 @@ export const QUERY_USER_CONVERSATIONS = gql`
         }
     }   
 `;
-// export const QUERY_USER_CONVERSATIONS = gql`
-//     query User {
-//         user {
-//             _id
-//             firstName
-//             conversations {
-//                 _id
-//                 productId {
-//                     _id
-//                     name
-//                     description
-//                     image
-//                     quantity
-//                     price
-//                     zipcode
-//                 }
-//                 participants {
-//                     firstName
-//                     lastName
-//                     email
-//                 }
-//                 messages {
-//                     text
-//                     senderId
-//                     receiverId
-//                     createdAt
-//                 }
-//             }
-//         }
-//     }
-// `;
 
 export const QUERY_PRODUCTS_BY_SEARCH_TERM = gql`
     query getProductsBySearchTerm($searchTerm: String!) {

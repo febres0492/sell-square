@@ -135,7 +135,6 @@ const resolvers = {
             return { session: session.id };
         },
         userConversations: async (parent, args, context) => {
-            console.log('userConversations', args);
             if (!context.user._id) {
                 console.log(c.red,'You need to be logged in to view your conversations');
                 return{ error: 'You need to be logged in to view your conversations' };
@@ -143,6 +142,10 @@ const resolvers = {
             }
             try {
                 const conversations = await Conversation.find({ participants: context.user._id })
+                .populate('participants', 'firstName lastName email')
+                .populate('productId')
+
+                console.log('userConversations', conversations);
                 return conversations;
             } catch (error) {
                 console.error('Error fetching conversations:', error);

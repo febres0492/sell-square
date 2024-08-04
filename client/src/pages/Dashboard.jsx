@@ -64,8 +64,8 @@ const Dashboard = () => {
     if (error) return <Typography variant="h6" color="error">Error: {error.message}</Typography>;
 
     return (<>
-        <Conversations />
         <Container>
+            <Conversations />
             <Typography variant="h5">Your Products</Typography>
             <Grid container spacing={3}>
                 {products.map((product) => (
@@ -98,39 +98,38 @@ const Dashboard = () => {
 };
 
 function Conversations() {
-    const conversationsData = useQuery(QUERY_USER_CONVERSATIONS).data
+    const classes = useStyles();
+    let conversationsData = useQuery(QUERY_USER_CONVERSATIONS).data?.userConversations || [];
     console.log('component conversations', conversationsData);
+
     return (
-        <Container>
+        <>
             <Typography variant="h5">Conversations</Typography>
-            {/* <Grid container spacing={3}>
-                {conversationsData.map(thread => (
-                    const product = thread.messages[0].product;
+            <Grid container border spacing={3}>
+                {conversationsData.map(data => (
+                    
                     <Grid item className='' xs={6} md={6} lg={4}>
-                        <Link to={`/products/${product._id}`}>
+                        <Link to={`/products/${data.productId._id}`}>
                             <Card className={classes.card}>
                                 <CardMedia
                                     className={classes.cardMedia}
-                                    image={product.image || 'https://via.placeholder.com/150'}
-                                    title={product.name || 'Image title'}
+                                    image={data.productId.image || 'https://via.placeholder.com/150'}
+                                    title={data.productId.name || 'Image title'}
                                 />
                                 <CardContent className={classes.cardContent}>
                                     <Typography component="h5" variant="h5">
-                                        {product.name}
+                                        {data.productId.name}
                                     </Typography>
                                     <Typography variant="subtitle1" color="textSecondary">
-                                        {product.description}
-                                    </Typography>
-                                    <Typography variant="subtitle1" color="textSecondary">
-                                        {product.category.name}
+                                        {data.productId.description}
                                     </Typography>
                                 </CardContent>
                             </Card>
                         </Link>
                     </Grid>
                 ))}
-            </Grid> */}
-        </Container>
+            </Grid>
+        </>
     );
 }
 
