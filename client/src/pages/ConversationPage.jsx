@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery, gql } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,7 +28,34 @@ function ConversationPage() {
     const { loading, error, data } = ifLoggedIn(QUERY_CONVERSATIONS, { id } );
     const userData = useQuery(QUERY_USER).data?.user || {};
     
-    const { messages, sendMessage } = useSendMessage();
+    const { newMessages, sendMessage } = useSendMessage();
+    const [messageList, setMessagesList] = useState([]);
+
+    useEffect(() => {
+        if (data?.conversation) {
+            setMessagesList(data.conversation.messages);
+        }
+    }, [data, newMessages]);
+
+    const handleSendMessage = useCallback(async () => {
+        const participant = data?.conversation?.participants.filter(p => p._id !== data.conversation.productId.user._id)[0];
+        const productId = data?.conversation?.productId._id;
+
+        const newMessage = await sendMessage({
+            recipientId: participant._id,
+            messageText,
+            productId
+        });
+
+        if (!newMessage) { return }
+        setMessageText('');
+
+        setMessagesList([...messageList, newMessage]);
+    }, [messageText, sendMessage, data]);
+
+    const handleChange = useCallback((event) => {
+        setMessageText(event.target.value);
+    }, []);
 
     if (loading) return <CircularProgress />;
 
@@ -54,23 +81,8 @@ function ConversationPage() {
         return <Typography variant="h6" color="error">No conversation found</Typography>;
     }
 
-    console.log('conversation, messages', conv.messages.map(m => m.text));
-    console.log(c.red,'new--messages', messages);
-
     const productId = conv.productId._id;
-    const participant = conv ? conv.participants.filter(p => p._id !== conv.productId.user._id)[0] : null;
-
-    const handleSendMessage = async () => {
-        const newMessage = await sendMessage({
-            recipientId: participant._id,
-            messageText,
-            productId
-        });
-
-        if (newMessage) {
-            setMessageText('');
-        }
-    };
+    const participant = conv.participants.filter(p => p._id !== conv.productId.user._id)[0];
 
     return (
         <Container>
@@ -79,7 +91,7 @@ function ConversationPage() {
             </Typography>
             <Paper>
                 <List>
-                    {conv.messages.map(message => {
+                    {messageList.map(message => {
                         console.log('message', message.receiverId);
                         const sendtByMe = message.receiverId == userData._id;
                         const hhmm = formatTime(message.createdAt)
@@ -105,7 +117,7 @@ function ConversationPage() {
                 variant="outlined"
                 fullWidth
                 value={messageText}
-                onChange={(e) => setMessageText(e.target.value)}
+                onChange={handleChange}
             />
             <Button variant="contained" color="primary" onClick={handleSendMessage}>
                 Send
