@@ -134,6 +134,28 @@ const resolvers = {
 
             return { session: session.id };
         },
+        conversation: async (_, args, context) => {
+            console.log(c.red,'conversation args', args);
+            try {
+                let query;
+                if (args._id) {
+                    query = Conversation.findById(args._id);
+                } else {
+                    query = Conversation.find({ participants: context.user._id });
+                }
+        
+                const conversation = await query
+                    .populate('participants', 'firstName lastName email')
+                    .populate('productId')
+                    // .populate('messages.senderId messages.receiverId');
+        
+                console.log('conversation', conversation);
+                return conversation;
+            } catch (error) {
+                console.error('Error fetching conversation:', error);
+                throw new Error('Failed to fetch conversation');
+            }
+        },
         userConversations: async (parent, args, context) => {
             if (!context.user._id) {
                 console.log(c.red,'You need to be logged in to view your conversations');
@@ -145,7 +167,15 @@ const resolvers = {
                 .populate('participants', 'firstName lastName email')
                 .populate('productId')
 
-                console.log('userConversations', conversations);
+                const filteredConversations = conversations.map(conversation => {
+                    conversation.participants = conversation.participants.filter(participant => participant._id.toString() !== context.user._id);
+                    return conversation;
+                });
+        
+                console.log(c.green, 'userConversations', filteredConversations);
+                return filteredConversations;
+
+                console.log(c.green,'userConversations', conversations);
                 return conversations;
             } catch (error) {
                 console.error('Error fetching conversations:', error);
@@ -212,24 +242,13 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
-        createConversation: async (_, { productId, messages }) => {
-            const newConversation = new Conversation({
-                product: productId,
-                messages: messages.map(message => ({
-                    ...message,
-                    createdAt: new Date().toISOString()
-                }))
-            });
-
-            try {
-                const savedConversation = await newConversation.save();
-                return savedConversation;
-            } catch (error) {
-                throw new Error('Error creating conversation: ' + error.message);
-            }
-        },
-        sendMessage: async (parent, { senderId, receiverId, content, productId }) => {
+        sendMessage: async (parent, { receiverId, content, productId }, context) => {
             // Check if the senderId is provided
+            if(!context.user) { 
+                console.log(c.red, 'You need to be logged in to send messages');
+                throw new AuthenticationError; 
+            }
+            const senderId = context.user._id;
             console.log(c.red, 'sendMessage', senderId, receiverId, content, productId);
             const newMessage = { text: content, senderId, receiverId, createdAt: new Date(), };
         
@@ -252,18 +271,13 @@ const resolvers = {
                 }
         
                 conversation.messages.push(newMessage);
-                console.log(c.red, 'conversation', conversation);
                 conversation = await conversation.save();
-                console.log(c.green, 'conversation', conversation);
-                
+                console.log(c.green, 'newMessage', newMessage);
         
-                // Populate the senderId and receiverId fields in the messages
-                // await conversation.populate({
-                //     path: 'messages.senderId messages.receiverId',
-                //     select: 'firstName lastName'
-                // })
-        
-                return conversation;
+                const lastMessage = conversation.messages[conversation.messages.length - 1];
+                console.log(c.green, 'lastMessage', lastMessage);
+
+                return lastMessage
             } catch (error) {
                 // Log and rethrow the error for further handling
                 console.error('Error updating conversation:', error);

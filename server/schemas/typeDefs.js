@@ -33,10 +33,10 @@ const typeDefs = `
     }
 
     type Message {
-        text: String
-        senderId: ID
-        receiverId: ID
-        createdAt: String
+        _id: ID!
+        text: String!
+        createdAt: String!
+        receiverId: ID!
     }
 
     type Conversation {
@@ -67,6 +67,7 @@ const typeDefs = `
         order(_id: ID!): Order
         checkout(products: [ID]!): Checkout
         userConversations: [Conversation]
+        conversation(_id: ID): Conversation
     }
 
     type Mutation {
@@ -93,14 +94,7 @@ const typeDefs = `
             category: ID!,
             zipcode: String!
         ): Product
-        sendMessage(senderId: ID! receiverId: ID!, content: String!, productId: ID!): Conversation
-        createConversation(productId: ID!, messages: [MessageInput!]!): Conversation
-    }
-
-    input MessageInput {
-        text: String!
-        senderId: ID!
-        receiverId: ID!
+        sendMessage(receiverId: ID!, content: String!, productId: ID!): Message
     }
 `;
 

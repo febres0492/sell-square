@@ -83,9 +83,9 @@ function ProductDetailsPage() {
                     </Card>
                 ) : ( <Typography>Product not found</Typography> )}
             </Grid>
-            <Grid container className='border mb-4'>
+            {/* <Grid container className='border mb-4'>
                 <MessageComponent recipientId={product.user._id} productId={id} />
-            </Grid>
+            </Grid> */}
         </Container>
     );
 }

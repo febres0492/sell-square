@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { TextField, Button, List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import { useState, useEffect } from 'react';
+import { TextField, Button } from '@material-ui/core';
 import { useQuery, useMutation } from '@apollo/client';
-import { QUERY_USER, QUERY_USER_CONVERSATIONS } from '../../utils/queries';
+import { QUERY_USER } from '../../utils/queries';
 import { SEND_MESSAGE } from '../../utils/mutations';
 
 const c = {
@@ -13,33 +13,40 @@ const c = {
 const MessageComponent = ({ user, recipientId, productId }) => {
     const [messages, setMessages] = useState([]);
     const [messageText, setMessageText] = useState('');
+    const [currentUser, setCurrentUser] = useState(user);
 
-    user = user || useQuery(QUERY_USER).data?.user
+    const { data } = useQuery(QUERY_USER, { skip: !!user });
 
-    const conversationsData = useQuery(QUERY_USER_CONVERSATIONS).data?.user?.conversations || [];
+    useEffect(() => {
+        if (data && data.user) {
+            setCurrentUser(data.user);
+        }
+    }, [data]);
+
     const [sendMessage] = useMutation(SEND_MESSAGE);
 
-    console.log('conversationsData', conversationsData);
-    // console.log('recipient', recipient);
-    // console.log('user._id', user._id);
     console.log('recipient._id', recipientId);
 
     const handleSendMessage = async () => {
-        if(!user){ window.alert('Please login to send messages'); }
-        
+        if (!currentUser) {
+            window.alert('Please login to send messages');
+            return;
+        }
+
         if (messageText.trim() === '') return;
+
         const variables = {
-            senderId: user._id,
+            senderId: currentUser._id,
             receiverId: recipientId,
             content: messageText,
             productId
-        }
-        
+        };
+
         const invalidVariable = validateVariables(variables);
-        if (invalidVariable) { 
+        if (invalidVariable) {
             console.log(c.red, invalidVariable);
             return;
-        };
+        }
 
         try {
             const { data } = await sendMessage({ variables });
@@ -56,23 +63,16 @@ const MessageComponent = ({ user, recipientId, productId }) => {
 
     return (
         <div>
-            <Typography variant="h6">Messages</Typography>
-            {/* <List>
-                {messages && messages.map((message, index) => (
-                    <ListItem key={index}>
-                        <ListItemText
-                            primary={`${message.sender.firstName} ${message.sender.lastName}`}
-                            secondary={message.text}
-                        />
-                    </ListItem>
-                ))}
-            </List> */}
-            <TextField label="Type a message" variant="outlined" fullWidth value={messageText}
+            {/* <TextField
+                label="Type a message"
+                variant="outlined"
+                fullWidth
+                value={messageText}
                 onChange={(e) => setMessageText(e.target.value)}
             />
             <Button variant="contained" color="primary" onClick={handleSendMessage}>
                 Send
-            </Button>
+            </Button> */}
         </div>
     );
 };

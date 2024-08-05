@@ -112,6 +112,9 @@ export const QUERY_USER_CONVERSATIONS = gql`
                 image
                 quantity
                 price
+                user {
+                    _id
+                }
             }
             participants {
                 _id
@@ -121,12 +124,39 @@ export const QUERY_USER_CONVERSATIONS = gql`
             }
             messages {
                 text
-                senderId
                 receiverId
                 createdAt
             }
         }
     }   
+`;
+
+export const QUERY_CONVERSATIONS = gql`
+query Conversation($id: ID) {
+  conversation(_id: $id) {
+    _id
+    productId {
+      _id
+      name
+      description
+      image
+      user {
+        _id
+      }
+    }
+    participants {
+      _id
+      firstName
+      lastName
+      email
+    }
+    messages {
+      text
+      receiverId
+      createdAt
+    }
+  }
+}
 `;
 
 export const QUERY_PRODUCTS_BY_SEARCH_TERM = gql`

@@ -116,15 +116,12 @@ export const UPDATE_PRODUCT = gql`
 `;
 
 export const SEND_MESSAGE = gql`
-    mutation SendMessage($senderId: ID!, $receiverId: ID!, $content: String!, $productId: ID!) {
-        sendMessage(senderId: $senderId, receiverId: $receiverId, content: $content, productId: $productId) {
+    mutation SendMessage($receiverId: ID!, $productId: ID!, $content: String!) {
+        sendMessage(receiverId: $receiverId, productId: $productId, content: $content) {
             _id
-            messages {
-                text
-                senderId
-                receiverId
-                createdAt
-            }
+            text
+            receiverId
+            createdAt
         }
     }
 `;

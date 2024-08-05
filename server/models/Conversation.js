@@ -9,12 +9,12 @@ const messageContentSchema = new mongoose.Schema({
 });
 
 // Virtual field for sender's full name
-messageContentSchema.virtual('senderFullName').get(function() {
-    if (this.senderId && this.senderId.firstName && this.senderId.lastName) {
-        return `${this.senderId.firstName} ${this.senderId.lastName}`;
-    }
-    return '';
-});
+// messageContentSchema.virtual('senderFullName').get(function() {
+//     if (this.senderId && this.senderId.firstName && this.senderId.lastName) {
+//         return `${this.senderId.firstName} ${this.senderId.lastName}`;
+//     }
+//     return '';
+// });
 
 const conversationSchema = new mongoose.Schema({
     productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
@@ -23,9 +23,9 @@ const conversationSchema = new mongoose.Schema({
 });
 
 // Virtual field for participant names
-conversationSchema.virtual('participantNames').get(function() {
-    return this.participants.map(participant => `${participant.firstName} ${participant.lastName}`);
-});
+// conversationSchema.virtual('participantNames').get(function() {
+//     return this.participants.map(participant => `${participant.firstName} ${participant.lastName}`);
+// });
 
 // Ensure there are at least two participants
 conversationSchema.path('participants').validate(function (value) {
