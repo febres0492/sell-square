@@ -82,12 +82,18 @@ function ConversationPage() {
                     {conv.messages.map(message => {
                         console.log('message', message.receiverId);
                         const sendtByMe = message.receiverId == userData._id;
+                        const hhmm = formatTime(message.createdAt)
                         return (
-                            <Grid container justify={sendtByMe ? 'flex-end' : 'flex-start'} key={message._id}>
+                            <Grid container justifyContent={sendtByMe ? 'flex-end' : 'flex-start'} key={message._id}>
                                 <Grid item xs={8}>
-                                    <ListItem className={`${classes.listItem} ${sendtByMe ? 'bg-secondary' : ''}`}>
-                                        <ListItemText primary={message.text} secondary={message.createdAt} />
-                                    </ListItem>
+                                    <div className={`${classes.listItem} ${sendtByMe ? 'bg-secondary' : ''}`}>
+                                        <Typography variant="body1" color="textPrimary">
+                                            {message.text}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                            {hhmm}
+                                        </Typography>
+                                    </div>
                                 </Grid>
                             </Grid>
                         );
@@ -109,3 +115,10 @@ function ConversationPage() {
 }
 
 export default ConversationPage;
+
+function formatTime (timestamp){
+    const date = new Date(parseInt(timestamp, 10))
+    const hours = date.getHours().toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2,'0')
+    return `${hours}:${minutes}`
+};
