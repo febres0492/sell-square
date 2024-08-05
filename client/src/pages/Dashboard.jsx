@@ -28,6 +28,7 @@ import {
 // import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
+import ifLoggedIn from '../utils/ifLoggedIn';
 import { QUERY_CONVERSATIONS, QUERY_USER_CONVERSATIONS, QUERY_USER_PRODUCTS,  } from '../utils/queries';
 // import { useStoreContext } from '../utils/GlobalState';
 
@@ -53,12 +54,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = () => {
     const classes = useStyles();
-
-    const { loading, error, data } = useQuery(QUERY_USER_PRODUCTS);
-    console.log('products', data);
+    const { loading, error, data } = ifLoggedIn(QUERY_USER_PRODUCTS);
     const products = data?.products || [];
-
-    // if(!loading && !user) window.location.replace('/login');
 
     if (loading) return <CircularProgress />;
     if (error) return <Typography variant="h6" color="error">Error: {error.message}</Typography>;
@@ -101,7 +98,7 @@ const Dashboard = () => {
 
 function Conversations() {
     const classes = useStyles();
-    const { loading, error, data } = useQuery(QUERY_USER_CONVERSATIONS);
+    const { loading, error, data } = ifLoggedIn(QUERY_USER_CONVERSATIONS);
 
     if (loading) return <CircularProgress />;
     if (error) return <Typography variant="h6" color="error">Error: {error.message}</Typography>;

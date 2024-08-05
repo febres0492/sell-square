@@ -43,7 +43,11 @@ const resolvers = {
             }
 
             if(args.getUserProducts){
-                console.log(c.red,'getUserProducts', context.user);
+                console.log(c.red,'getUserProducts');
+                if (!context.user?._id) {
+                    console.log(c.red,'You need to be logged in to view your conversations');
+                    return [{ error: 'You need to be logged in to view your conversations' }];
+                }
                 filter.user = context.user._id;
             }
         
