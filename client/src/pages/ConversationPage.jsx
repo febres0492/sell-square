@@ -8,6 +8,8 @@ import {
 import { QUERY_USER, QUERY_CONVERSATIONS } from '../utils/queries';
 import useSendMessage from '../utils/useSendMessage';
 import ifLoggedIn from '../utils/ifLoggedIn';
+import Auth from "../utils/auth";
+import { showModal } from '../components/Modal'; 
 
 const useStyles = makeStyles((theme) => ({
     container: { marginTop: theme.spacing(2), },
@@ -30,6 +32,12 @@ function ConversationPage() {
     
     const { newMessages, sendMessage } = useSendMessage();
     const [messageList, setMessagesList] = useState([]);
+
+    useEffect(() => {
+        if(!Auth.loggedIn()) {
+            showModal('MessageComponent', { user: userData, recipientId: id, productId: data?.conversation?.productId._id });
+        }
+    },[])
 
     useEffect(() => {
         if (data?.conversation) {

@@ -17,20 +17,12 @@ import {
     CardContent,
     CardMedia
 } from '@material-ui/core';
-// import {
-//     Menu as MenuIcon,
-//     ChevronLeft as ChevronLeftIcon,
-//     Dashboard as DashboardIcon,
-//     People as PeopleIcon,
-//     BarChart as BarChartIcon,
-//     Layers as LayersIcon
-// } from '@material-ui/icons';
-// import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+// import { useQuery } from '@apollo/client';
 import ifLoggedIn from '../utils/ifLoggedIn';
-import { QUERY_CONVERSATIONS, QUERY_USER_CONVERSATIONS, QUERY_USER_PRODUCTS,  } from '../utils/queries';
-// import { useStoreContext } from '../utils/GlobalState';
+import { QUERY_USER_CONVERSATIONS, QUERY_USER_PRODUCTS,  } from '../utils/queries';
+import { showModal } from '../components/Modal'; 
+
 
 const c = {
     red: '\x1b[31m%s\x1b[0m',

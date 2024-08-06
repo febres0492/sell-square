@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Typography, Button, Card, CardContent, CardMedia, CircularProgress, Grid } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import { QUERY_PRODUCT_BY_ID, QUERY_USER_CONVERSATIONS } from '../utils/queries';
-import MessageComponent from '../components/MessageComponent';
+import Auth from "../utils/auth";
+import { showModal } from '../components/Modal'; 
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -33,8 +34,17 @@ const useStyles = makeStyles((theme) => ({
 function ProductDetailsPage() {
     const classes = useStyles();
     const { id } = useParams();
+    const navigate = useNavigate();
     const { loading, data, error } = useQuery(QUERY_PRODUCT_BY_ID, { variables: { id }, });
-        
+
+    const handleEditButton = () => {
+        if (Auth.loggedIn()) {
+            navigate(`/edit-product/${data?.product?._id}`);
+        } else {
+            showModal('Please log in to edit this product');
+        }
+    };
+
     if (loading) return <CircularProgress />;
 
     if (error) {
@@ -73,19 +83,15 @@ function ProductDetailsPage() {
                             <Typography variant="body1" component="p"> <strong>Category:</strong> {product.category.name} </Typography>
                             <Typography variant="body1" component="p"> <strong>Quantity:</strong> {product.quantity} </Typography>
                             <Typography variant="body1" component="p"> <strong>Zipcode:</strong> {product.zipcode} </Typography>
-                            <Link to={`/edit-product/${product._id}`}>
-                                <Button variant="contained" color="secondary" startIcon={<EditIcon />} 
-                                    className={classes.editButton} 
-                                    >Edit
-                                </Button>
-                            </Link>
+                            <Button variant="contained" color="secondary" startIcon={<EditIcon />} 
+                                className={classes.editButton} 
+                                onClick={handleEditButton}
+                                >Edit
+                            </Button>
                         </CardContent>
                     </Card>
                 ) : ( <Typography>Product not found</Typography> )}
             </Grid>
-            {/* <Grid container className='border mb-4'>
-                <MessageComponent recipientId={product.user._id} productId={id} />
-            </Grid> */}
         </Container>
     );
 }

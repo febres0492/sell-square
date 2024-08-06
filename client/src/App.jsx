@@ -7,16 +7,13 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
-import Nav from './components/Nav';
+// import Nav from './components/Nav';
 import { StoreProvider } from './utils/GlobalState';
 import AppBar from './components/AppBar';
-import SideBar from './components/SideBar';
-import HomePage from './pages/HomePage';
+import Modal from './components/Modal';
+// import HomePage from './pages/HomePage';
 
-const httpLink = createHttpLink({
-    uri: '/graphql',
-});
-
+const httpLink = createHttpLink({ uri: '/graphql', });
 const authLink = setContext((_, { headers }) => {
     const token = localStorage.getItem('id_token');
     return {
@@ -36,7 +33,7 @@ function App() {
     return (
         <ApolloProvider client={client}>
             <StoreProvider>
-                {/* <Nav /> */}
+                <Modal />
                 <AppBar />
                 {/* <SideBar /> */}
                 <Outlet />
