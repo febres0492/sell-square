@@ -4,7 +4,7 @@ import { UPDATE_PRODUCT } from '../utils/mutations';
 import { QUERY_PRODUCT_BY_ID } from '../utils/queries';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Container, Paper, Card, CardMedia } from '@material-ui/core';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -87,6 +87,11 @@ function EditProductPage() {
     return (
         <Container maxWidth="md">
             <Paper className={classes.container}>
+                <Link to={`/products/${id}`} className={classes.button}>
+                    <Button variant="contained" color="primary" className={classes.button}>
+                        ← Product Page
+                    </Button>
+                </Link>
                 <Typography variant="h4" gutterBottom>
                     Update Product
                 </Typography>

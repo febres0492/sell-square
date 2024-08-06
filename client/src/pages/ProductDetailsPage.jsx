@@ -36,9 +36,10 @@ function ProductDetailsPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { loading, data, error } = useQuery(QUERY_PRODUCT_BY_ID, { variables: { id }, });
+    const [loggedIn, _] = useState(Auth.loggedIn());
 
     const handleEditButton = () => {
-        if (Auth.loggedIn()) {
+        if (loggedIn) {
             navigate(`/edit-product/${data?.product?._id}`);
         } else {
             showModal('Please log in to edit this product');
@@ -83,11 +84,12 @@ function ProductDetailsPage() {
                             <Typography variant="body1" component="p"> <strong>Category:</strong> {product.category.name} </Typography>
                             <Typography variant="body1" component="p"> <strong>Quantity:</strong> {product.quantity} </Typography>
                             <Typography variant="body1" component="p"> <strong>Zipcode:</strong> {product.zipcode} </Typography>
-                            <Button variant="contained" color="secondary" startIcon={<EditIcon />} 
-                                className={classes.editButton} 
-                                onClick={handleEditButton}
-                                >Edit
-                            </Button>
+                            { loggedIn ? (
+                                <Button variant="contained" color="secondary" startIcon={<EditIcon />} 
+                                    className={classes.editButton} onClick={handleEditButton}
+                                    >Edit
+                                </Button>) : '' 
+                            }
                         </CardContent>
                     </Card>
                 ) : ( <Typography>Product not found</Typography> )}
