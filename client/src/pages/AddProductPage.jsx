@@ -8,7 +8,7 @@ import useFetchCategories from '../utils/useFetchCategories';
 import { uploadImage } from '../utils/helpers';
 
 const AddProductPage = () => {
-    const [state] = useStoreContext();
+    // const [state] = useStoreContext();
     const { loadingCat, categories } = useFetchCategories();
     const [product, setProduct] = useState({
         name: '', description: '', price: '', quantity: '', category: '', zipcode: '', image: ''
@@ -73,6 +73,7 @@ const AddProductPage = () => {
                     ))}
                 </select>
                 <input type="text" name="zipcode" placeholder="Zipcode" value={product.zipcode} onChange={handleChange} required />
+                <label>Product Image</label>
                 <input type="file" name="image" onChange={handleFileChange} required />
                 <button type="submit" disabled={loading}>
                     {loading ? 'Adding...' : 'Add Product'}

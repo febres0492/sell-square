@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     // CssBaseline,
@@ -6,12 +6,13 @@ import {
     // AppBar,
     // Toolbar,
     Typography,
-    // Divider,
+    Divider,
+    Button,
     // IconButton,
     // Box,
     Container,
     Grid,
-    // Paper,
+    Paper,
     CircularProgress,
     Card,
     CardContent,
@@ -43,6 +44,11 @@ const useStyles = makeStyles((theme) => ({
     cardContent: {
         flex: '1 0 auto',
     },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    },
 }));
 
 const Dashboard = () => {
@@ -54,10 +60,19 @@ const Dashboard = () => {
     if (error) return <Typography variant="h6" color="error">Error: {error.message}</Typography>;
 
     return (<>
-        <Container>
+        <Container className='my-4'>
+            <Link to="/add-product">
+                <Button variant="contained" color="primary" >
+                    Add Product
+                </Button>
+            </Link>
+        </Container>
 
+        <Container className='my-4'>
             <Conversations />
+        </Container>
 
+        <Container className='my-4'>
             <Typography variant="h5">Your Products</Typography>
             <Grid container spacing={3}>
                 {products.map((product) => (
@@ -92,7 +107,10 @@ const Dashboard = () => {
 function Conversations() {
     const classes = useStyles();
     const userData = useQuery(QUERY_USER).data?.user || {};
-    const { loading, error, data } = useQuery( QUERY_CONVERSATIONS, { variables: { userId: userData._id } });
+    const { loading, error, data, refetch } = useQuery(QUERY_CONVERSATIONS, { variables: { userId: userData._id } });
+
+    useEffect(() => { refetch(); }, [refetch]);
+
     console.log(c.yellow,'userData', data);
     // const { loading, error, data } = ifLoggedIn(QUERY_USER_CONVERSATIONS);
 
@@ -101,41 +119,46 @@ function Conversations() {
 
     const conversationsData = Object.values(data)[0] || [];
     console.log(c.yellow,'conversations', data, conversationsData);
-    
+
     return (
         <>
             <Typography variant="h5">Conversations</Typography>
-            <Grid container border spacing={3}>
-                {conversationsData.map(con => {
-                    const participant = con.participants;
-                    const fistLast = participant.firstName || '' + ' ' + participant.lastName || '';
-                    console.log('participant', participant, );
+            <Grid container spacing={3}>
+                { !conversationsData.length ? 
+                    <Grid item className='' >
+                        <Typography variant="h6">No Conversations </Typography>
+                    </Grid>
+                    :
+                    ( conversationsData.map(con => {
+                        const participant = con.participants;
+                        const fistLast = participant.firstName || '' + ' ' + participant.lastName || '';
+                        console.log('participant', participant, );
 
-                    return (
-                        <Grid item className='' xs={6} md={6} lg={4}>
-                            <Link to={`/conversation/${con._id}`}>
-                                <Card className={classes.card}>
-                                    <CardMedia
-                                        className={classes.cardMedia}
-                                        image={con.productId.image || 'https://via.placeholder.com/150'}
-                                        title={con.productId.name || 'Image title'}
-                                    />
-                                    <CardContent className={classes.cardContent}>
-                                        <Typography component="h5" variant="h5">
-                                            {con.productId.name}
-                                        </Typography>
-                                        <Typography variant="subtitle1" color="textSecondary">
-                                            {con.productId.description}
-                                        </Typography>
-                                        {/* <Typography variant="subtitle1" color="textSecondary">
-                                            {participant}
-                                        </Typography> */}
-                                    </CardContent>
-                                </Card>
-                            </Link>
-                        </Grid>
-                    )
-                })}
+                        return (
+                            <Grid item className='' xs={6} md={6} lg={4}>
+                                <Link to={`/conversation/${con._id}`}>
+                                    <Card className={classes.card}>
+                                        <CardMedia
+                                            className={classes.cardMedia}
+                                            image={con.productId.image || 'https://via.placeholder.com/150'}
+                                            title={con.productId.name || 'Image title'}
+                                        />
+                                        <CardContent className={classes.cardContent}>
+                                            <Typography component="h5" variant="h5">
+                                                {con.productId.name}
+                                            </Typography>
+                                            <Typography variant="subtitle1" color="textSecondary">
+                                                {con.productId.description}
+                                            </Typography>
+                                            {/* <Typography variant="subtitle1" color="textSecondary">
+                                                {participant}
+                                            </Typography> */}
+                                        </CardContent>
+                                    </Card>
+                                </Link>
+                            </Grid>
+                        )
+                    }) )}
             </Grid>
         </>
     );

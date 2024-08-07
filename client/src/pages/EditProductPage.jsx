@@ -5,7 +5,7 @@ import { QUERY_PRODUCT_BY_ID } from '../utils/queries';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Container, Paper, Card, CardMedia } from '@material-ui/core';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-
+import { uploadImage } from '../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -16,33 +16,23 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
     },
-    input: {
-        marginBottom: theme.spacing(2),
-    },
-    button: {
-        marginBottom: theme.spacing(2),
-    },
+    input: { marginBottom: theme.spacing(2), },
+    button: { marginBottom: theme.spacing(2), },
 }));
 
 function EditProductPage() {
     const classes = useStyles();
     const navigate = useNavigate();
     const { id } = useParams();
-
+    const [imageFile, setImageFile] = useState(null);
 
     const { loading, data, error } = useQuery(QUERY_PRODUCT_BY_ID, {
         variables: { id },
     });
 
     const [formState, setFormState] = useState({
-        name: '',
-        description: '',
-        price: '',
-        quantity: '',
-        image: '',
-        zipcode: '',
+        name: '', description: '', price: '', quantity: '', image: '', zipcode: '',
     });
-
 
     const [updateProduct, { error: updateError }] = useMutation(UPDATE_PRODUCT);
 
@@ -61,28 +51,50 @@ function EditProductPage() {
 
     const handleChange = (event) => {
         const { name, value, type } = event.target;
-        setFormState({
-            ...formState,
-            [name]: type === 'number' ? parseInt(value) : value
-        });
+        setFormState({ ...formState, [name]: type === 'number' ? parseInt(value) : value });
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setImageFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setFormState({ ...formState, image: reader.result });
+        };
+        reader.readAsDataURL(file);
     };
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log('formState', formState, id );
-            await updateProduct({ variables: { id, ...formState }, })
-            
+            if (imageFile) {
+                const imageUrl = await uploadImage(imageFile);
+                formState.image = imageUrl;
+            }
+            await updateProduct({ variables: { id, ...formState } });
             navigate(`/products/${id}`);
         } catch (e) {
             console.error(e, updateError);
         }
     };
 
+    const handleDelete = () => {
+        console.log('Product ID:', data.product._id);
+        console.log('image', data.product.image);
+    };
+
     if (loading) return <Typography>Loading...</Typography>;
     if (error) return <Typography>Error loading product</Typography>;
 
     const product = data.product || {};
+
+    const fields = [
+        { label: "Name", name: "name", type: "text" },
+        { label: "Description", name: "description", type: "text" },
+        { label: "Price", name: "price", type: "number" },
+        { label: "Quantity", name: "quantity", type: "number" },
+        { label: "Zipcode", name: "zipcode", type: "number" }
+    ];
 
     return (
         <Container maxWidth="md">
@@ -96,75 +108,32 @@ function EditProductPage() {
                     Update Product
                 </Typography>
                 <Card className="mb-4">
-                    {product.image && (
+                    {formState.image && (
                         <CardMedia
-                            component="img"
-                            alt={product.name}
-                            height="140"
-                            image={product.image}
-                            title={product.name}
+                            component="img" alt={product.name} height="140" image={formState.image} title={product.name}
                         />
                     )}
                 </Card>
-                <Button type="submit" variant="contained" color="primary" className={classes.button} >
-                    Update Image
-                </Button>
+                <input accept="image/*" style={{ display: 'none' }} id="upload-image" type="file"
+                    name="image" onChange={handleImageChange} required
+                />
+                <label htmlFor="upload-image">
+                    <Button variant="contained" color="primary" component="span" className={classes.button}>
+                        Change Image
+                    </Button>
+                </label>
                 <form className={classes.form} onSubmit={handleFormSubmit}>
-                    <TextField
-                        className={classes.input}
-                        label="Name"
-                        // variant="outlined"
-                        name="name"
-                        value={formState.name}
-                        onChange={handleChange}
-                        required
-                    />
-                    <TextField
-                        className={classes.input}
-                        label="Description"
-                        // variant="outlined"
-                        name="description"
-                        value={formState.description}
-                        onChange={handleChange}
-                        required
-                    />
-                    <TextField
-                        className={classes.input}
-                        label="Price"
-                        // variant="outlined"
-                        name="price"
-                        type="number"
-                        value={formState.price}
-                        onChange={handleChange}
-                        required
-                    />
-                    <TextField
-                        className={classes.input}
-                        label="Quantity"
-                        // variant="outlined"
-                        name="quantity"
-                        type="number"
-                        value={formState.quantity}
-                        onChange={handleChange}
-                        required
-                    />
-                    <TextField
-                        className={classes.input}
-                        label="Zipcode"
-                        // variant="outlined"
-                        name="zipcode"
-                        type="number"
-                        value={formState.zipcode}
-                        onChange={handleChange}
-                        required
-                    />
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                    >
-                        Update Product
+                    {fields.map((field) => (
+                        <TextField
+                            key={field.name} className={classes.input} label={field.label} name={field.name}
+                            type={field.type} value={formState[field.name]} onChange={handleChange} required
+                        />
+                    ))}
+                    <Button type="submit" variant="contained" color="primary" className={classes.button} >
+                        Save Changes
+                    </Button>
+                    <Button type="button" variant="contained" color="secondary" className={classes.button} onClick={handleDelete}>
+                        Delete Product
                     </Button>
                 </form>
                 {updateError && <Typography color="error">Error updating product</Typography>}

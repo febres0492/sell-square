@@ -16,7 +16,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
-// Define the upload-image route
+// upload-image route
 router.post('/upload-image', upload.single('image'), (req, res) => {
     console.log('upload-image',req.file);
     if (!req.file) {
@@ -26,6 +26,29 @@ router.post('/upload-image', upload.single('image'), (req, res) => {
         message: 'Image uploaded successfully',
         url: req.file.path,
     });
+});
+
+// delete-image route
+router.delete('/delete-image', async (req, res) => {
+    const { imageUrl } = req.body;
+    if (!imageUrl) {
+        return res.status(400).send('No image URL provided.');
+    }
+
+    const publicId = imageUrl.split('/').pop().split('.')[0];
+
+    try {
+        const result = await cloudinary.uploader.destroy(publicId);
+        if (result.result !== 'ok') {
+            return res.status(400).send('Failed to delete image.');
+        }
+        res.send({
+            message: 'Image deleted successfully',
+        });
+    } catch (error) {
+        console.error('Error deleting image:', error);
+        res.status(500).send('Internal server error.');
+    }
 });
 
 // Sample route
