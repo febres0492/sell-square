@@ -37,6 +37,7 @@ const typeDefs = `
         text: String!
         createdAt: String!
         receiverId: ID!
+        conversationId: ID!
     }
 
     type Conversation {
@@ -67,7 +68,7 @@ const typeDefs = `
         order(_id: ID!): Order
         checkout(products: [ID]!): Checkout
         userConversations: [Conversation]
-        conversation(_id: ID): Conversation
+        conversation(_id: ID, userId: ID, productId: ID, participantId: ID): [Conversation]
     }
 
     type Mutation {

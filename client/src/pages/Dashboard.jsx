@@ -20,8 +20,9 @@ import {
 import { Link } from 'react-router-dom';
 // import { useQuery } from '@apollo/client';
 import ifLoggedIn from '../utils/ifLoggedIn';
-import { QUERY_USER_CONVERSATIONS, QUERY_USER_PRODUCTS,  } from '../utils/queries';
+import { QUERY_USER, QUERY_USER_CONVERSATIONS, QUERY_USER_PRODUCTS, QUERY_CONVERSATIONS  } from '../utils/queries';
 import { showModal } from '../components/Modal'; 
+import { useQuery } from '@apollo/client';
 
 
 const c = {
@@ -90,14 +91,17 @@ const Dashboard = () => {
 
 function Conversations() {
     const classes = useStyles();
-    const { loading, error, data } = ifLoggedIn(QUERY_USER_CONVERSATIONS);
+    const userData = useQuery(QUERY_USER).data?.user || {};
+    const { loading, error, data } = useQuery( QUERY_CONVERSATIONS, { variables: { userId: userData._id } });
+    console.log(c.yellow,'userData', data);
+    // const { loading, error, data } = ifLoggedIn(QUERY_USER_CONVERSATIONS);
 
     if (loading) return <CircularProgress />;
     if (error) return <Typography variant="h6" color="error">Error: {error.message}</Typography>;
 
     const conversationsData = Object.values(data)[0] || [];
     console.log(c.yellow,'conversations', data, conversationsData);
-// 66a06bbd6e983c14c4b0a6e8
+    
     return (
         <>
             <Typography variant="h5">Conversations</Typography>

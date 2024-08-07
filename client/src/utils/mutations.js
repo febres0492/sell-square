@@ -122,6 +122,7 @@ export const SEND_MESSAGE = gql`
             text
             receiverId
             createdAt
+            conversationId
         }
     }
 `;

@@ -1,10 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
-    Container, Typography, Button, CircularProgress, Paper, List, ListItem, ListItemText, TextField, Grid
+    Container, Typography, Button, CircularProgress, Paper, List, ListItem, ListItemText, TextField, Grid, 
+    Select, MenuItem, Icon
 } from '@material-ui/core';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { QUERY_USER, QUERY_CONVERSATIONS } from '../utils/queries';
 import useSendMessage from '../utils/useSendMessage';
 import ifLoggedIn from '../utils/ifLoggedIn';
@@ -27,27 +29,32 @@ function ConversationPage() {
     const classes = useStyles();
     const { id } = useParams();
     const [messageText, setMessageText] = useState('');
-    const { loading, error, data } = ifLoggedIn(QUERY_CONVERSATIONS, { id } );
+    // const { loading, error, data } = ifLoggedIn(QUERY_CONVERSATIONS, { id } );
+    let { loading, error, data } = useQuery( QUERY_CONVERSATIONS, { variables: { id } });
+    // data = data[0]
+    let conv = data?.conversation[0] || {};
+    console.log(c.red, 'conv', conv);
+    
     const userData = useQuery(QUERY_USER).data?.user || {};
     
     const { newMessages, sendMessage } = useSendMessage();
     const [messageList, setMessagesList] = useState([]);
+    const [selectedValue, setSelectedValue] = useState('');
 
     useEffect(() => {
-        if(!Auth.loggedIn()) {
-            showModal('MessageComponent', { user: userData, recipientId: id, productId: data?.conversation?.productId._id });
-        }
+        if(!Auth.loggedIn()) { showModal('Please Login First'); }
     },[])
 
     useEffect(() => {
-        if (data?.conversation) {
-            setMessagesList(data.conversation.messages);
+        if (conv._id) {
+            setMessagesList(conv.messages);
         }
     }, [data, newMessages]);
 
     const handleSendMessage = useCallback(async () => {
-        const participant = data?.conversation?.participants.filter(p => p._id !== data.conversation.productId.user._id)[0];
-        const productId = data?.conversation?.productId._id;
+        const participant = conv?.participants.filter(p => p._id !== userData._id)[0];
+        console.log(c.red, 'handleSendMessage participant', participant);
+        const productId = conv?.productId._id;
 
         const newMessage = await sendMessage({
             recipientId: participant._id,
@@ -65,6 +72,10 @@ function ConversationPage() {
         setMessageText(event.target.value);
     }, []);
 
+    const handleDropdownChange = (event) => {
+        setSelectedValue(event.target.value);
+    };
+
     if (loading) return <CircularProgress />;
 
     if (error) {
@@ -80,31 +91,34 @@ function ConversationPage() {
         );
     }
 
-    console.log(c.yellow, 'userData', userData);
-    console.log(c.yellow, 'data', data);
-
-    let conv = data?.conversation || {};
-
-    if (!conv || !conv.participants.length) {
+    if (!conv._id || !conv.participants.length) {
         return <Typography variant="h6" color="error">No conversation found</Typography>;
     }
 
-    const productId = conv.productId._id;
+    // const productId = conv.productId._id;
     const participant = conv.participants.filter(p => p._id !== conv.productId.user._id)[0];
 
+    // console.log(c.red,'myId', userData._id);
+    // console.log(c.red,'participantId', participant._id);
+    // console.log(c.red,'allIda', conv.participants.map(p => p._id));
     return (
         <Container>
             <Typography variant="h4" gutterBottom>
-                Conversation with {conv.participants.map(p => p.firstName).join(', ')}
+                Conversation with {participant.firstName} {participant.lastName}
             </Typography>
+            <Select value={selectedValue} onChange={handleDropdownChange} displayEmpty IconComponent={MoreVertIcon}>
+                <MenuItem value="option1">Option 1</MenuItem>
+                <MenuItem value="option2">Option 2</MenuItem>
+                <MenuItem value="option3">Option 3</MenuItem>
+            </Select>
             <Paper>
                 <List>
-                    {messageList.map(message => {
-                        console.log('message', message.receiverId);
-                        const sendtByMe = message.receiverId == userData._id;
+                    {messageList.map((message, i) => {
+                        console.log('message', message.receiverId, userData._id, message.receiverId == userData._id);
+                        const sendtByMe = message.receiverId != userData._id;
                         const hhmm = formatTime(message.createdAt)
                         return (
-                            <Grid container justifyContent={sendtByMe ? 'flex-end' : 'flex-start'} key={message._id}>
+                            <Grid container justifyContent={sendtByMe ? 'flex-end' : 'flex-start'} key={`${message._id}_${i}`}>
                                 <Grid item xs={8}>
                                     <div className={`${classes.listItem} ${sendtByMe ? 'bg-secondary' : ''}`}>
                                         <Typography variant="body1" color="textPrimary">

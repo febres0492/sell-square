@@ -131,9 +131,37 @@ export const QUERY_USER_CONVERSATIONS = gql`
     }   
 `;
 
+export const QUERY_CONVERSATION_BY_PRODUCT_ID = gql`
+    query Conversation($id: ID, $userId: ID, $productId: ID) {
+        conversation(_id:$id, userId: $userId, productId: $productId) {
+            _id
+            productId {
+                _id
+                name
+                description
+                image
+                user {
+                    _id
+                }
+            }
+            participants {
+                _id
+                firstName
+                lastName
+                email
+            }
+            messages {
+                text
+                receiverId
+                createdAt
+            }
+        }
+    }
+`;
+
 export const QUERY_CONVERSATIONS = gql`
-query Conversation($id: ID) {
-  conversation(_id: $id) {
+query Conversation($id: ID, $userId: ID, $productId: ID, $participantId: ID) {
+  conversation(_id: $id, userId: $userId, productId: $productId, participantId: $participantId) {
     _id
     productId {
       _id
@@ -155,6 +183,14 @@ query Conversation($id: ID) {
       receiverId
       createdAt
     }
+  }
+}
+`;
+
+export const QUERY_CONVERSATIONS_WITH_USER = gql`
+query Conversation($userId: ID) {
+  conversation(userId: $userId) {
+    _id
   }
 }
 `;

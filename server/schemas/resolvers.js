@@ -138,23 +138,26 @@ const resolvers = {
 
             return { session: session.id };
         },
-        conversation: async (_, args, context) => {
-            console.log(c.red,'conversation args', args);
+        conversation: async (parent, args, context) => {
+            let filter = {};
+        
             try {
-                let query;
-                if (args._id) {
-                    query = Conversation.findById(args._id);
-                } else {
-                    query = Conversation.find({ participants: context.user._id });
+
+                if(args._id){ filter._id = args._id; }
+                if (args.productId) { filter.productId = args.productId; }
+                if (args.userId) { filter.participants = args.userId; }
+                if (args.participantId && context.user._id !== args.participantId) { 
+                    filter.participants = [context.user._id, args.participantId ]; 
                 }
-        
-                const conversation = await query
+
+                console.log('conversations', args, filter)
+                
+                const conversations = await Conversation.find(filter)
                     .populate('participants', 'firstName lastName email')
-                    .populate('productId')
-                    // .populate('messages.senderId messages.receiverId');
+                    .populate('productId');
         
-                console.log('conversation', conversation);
-                return conversation;
+                console.log(c.red, 'conver res', args, conversations[0]?._id);
+                return conversations;
             } catch (error) {
                 console.error('Error fetching conversation:', error);
                 throw new Error('Failed to fetch conversation');
@@ -279,6 +282,7 @@ const resolvers = {
                 console.log(c.green, 'newMessage', newMessage);
         
                 const lastMessage = conversation.messages[conversation.messages.length - 1];
+                lastMessage.conversationId = conversation._id
                 console.log(c.green, 'lastMessage', lastMessage);
 
                 return lastMessage
