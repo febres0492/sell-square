@@ -4,6 +4,8 @@ const multer = require('multer');
 const cloudinary = require('../config/cloudinaryConfig'); // Adjust the path as necessary
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
+const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
+
 // Configure multer storage with Cloudinary
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
@@ -35,13 +37,25 @@ router.delete('/delete-image', async (req, res) => {
         return res.status(400).send('No image URL provided.');
     }
 
-    const publicId = imageUrl.split('/').pop().split('.')[0];
+    // Extract the publicId correctly
+    let publicId = imageUrl .split('/').slice(-2).join('/').split('.')[0];
+    const fileExtension = imageUrl.split('.').pop();
+
+    // Check if the image has a double extension
+    if (imageUrl.includes(`.${fileExtension}.${fileExtension}`)) {
+        publicId = publicId + '.' + fileExtension;
+    }
 
     try {
         const result = await cloudinary.uploader.destroy(publicId);
+        console.log(c.red, 'imageUrl', imageUrl);
+        console.log(c.red, 'publicId', publicId);
+        console.log(c.red, 'result', result);
         if (result.result !== 'ok') {
+            console.log(c.red, 'Failed to delete image:', result);
             return res.status(400).send('Failed to delete image.');
         }
+        console.log(c.red, 'delete-image', publicId, result);
         res.send({
             message: 'Image deleted successfully',
         });

@@ -5,7 +5,7 @@ import { QUERY_PRODUCT_BY_ID } from '../utils/queries';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Container, Paper, Card, CardMedia } from '@material-ui/core';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { uploadImage } from '../utils/helpers';
+import { uploadImage, deleteImage } from '../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -55,7 +55,9 @@ function EditProductPage() {
     };
 
     const handleImageChange = (e) => {
-        const file = e.target.files[0];
+        const file = {...e.target.files[0]};
+        file.name = file.name.split('.')[0]
+        console.log('file:', file.name);
         setImageFile(file);
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -78,9 +80,16 @@ function EditProductPage() {
         }
     };
 
-    const handleDelete = () => {
-        console.log('Product ID:', data.product._id);
-        console.log('image', data.product.image);
+    const handleDelete = async () => {
+        try {
+            if (data.product.image) {
+                const res = await deleteImage(data.product.image);
+                console.log('delete image response:', res);
+                setFormState({ ...formState, image: '' });
+            }
+        } catch (e) {
+            console.error('Error deleting image:', e);
+        }
     };
 
     if (loading) return <Typography>Loading...</Typography>;

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { useStoreContext } from '../utils/GlobalState';
 import { ADD_PRODUCT } from '../utils/mutations';
 import { Link, useNavigate } from 'react-router-dom';
 import Auth from '../utils/auth';
@@ -8,7 +7,6 @@ import useFetchCategories from '../utils/useFetchCategories';
 import { uploadImage } from '../utils/helpers';
 
 const AddProductPage = () => {
-    // const [state] = useStoreContext();
     const { loadingCat, categories } = useFetchCategories();
     const [product, setProduct] = useState({
         name: '', description: '', price: '', quantity: '', category: '', zipcode: '', image: ''
@@ -24,26 +22,18 @@ const AddProductPage = () => {
 
     const handleFileChange = (e) => { setImageFile(e.target.files[0]); };
 
-    // addProduct mutation
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Uploading image
             let imageUrl = '';
-            if (imageFile) {
-                imageUrl = await uploadImage(imageFile);
-            }
+            if (imageFile) { imageUrl = await uploadImage(imageFile); }
 
             const variables = Object.keys(product).reduce((acc, key) => ({ ...acc, [key]: product[key] }), {});
             variables.image = imageUrl;
 
             const poduct = await addProduct({
                 variables,
-                context: {
-                    headers: {
-                        authorization: `Bearer ${Auth.getToken()}`,
-                    },
-                },
+                context: { headers: { authorization: `Bearer ${Auth.getToken()}`, }, },
             });
             console.log('new product', poduct);
 
