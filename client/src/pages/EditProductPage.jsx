@@ -81,6 +81,10 @@ function EditProductPage() {
     };
 
     const handleDelete = async () => {
+        const confirm = await showModal('Are you sure you want to delete this product?', 
+            {type: 'confirm'}
+        )
+        if (!confirm) return;
         try {
             if (data.product.image) {
                 const res = await deleteImage(data.product.image);
