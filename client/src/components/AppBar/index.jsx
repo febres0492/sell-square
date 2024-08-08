@@ -55,7 +55,7 @@ const MyComponent = ({ open, handleDrawerOpen }) => {
                     <MenuIcon />
                 </IconButton> */}
                 <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                    Dashboard
+                    Sell Square
                 </Typography>
 
                 <Link to="/" className={classes.homeButton}>
