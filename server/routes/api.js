@@ -37,7 +37,6 @@ router.delete('/delete-image', async (req, res) => {
         return res.status(400).send('No image URL provided.');
     }
 
-    // Extract the publicId correctly
     let publicId = imageUrl .split('/').slice(-2).join('/').split('.')[0];
     const fileExtension = imageUrl.split('.').pop();
 
@@ -48,14 +47,9 @@ router.delete('/delete-image', async (req, res) => {
 
     try {
         const result = await cloudinary.uploader.destroy(publicId);
-        console.log(c.red, 'imageUrl', imageUrl);
-        console.log(c.red, 'publicId', publicId);
-        console.log(c.red, 'result', result);
         if (result.result !== 'ok') {
-            console.log(c.red, 'Failed to delete image:', result);
             return res.status(400).send('Failed to delete image.');
         }
-        console.log(c.red, 'delete-image', publicId, result);
         res.send({
             message: 'Image deleted successfully',
         });

@@ -217,6 +217,12 @@ const resolvers = {
                 throw new Error('Error adding product: ' + error.message);
             }
         },
+        deleteProduct: async (parent, { _id }, context) => {
+            if (!context.user) { throw AuthenticationError; }
+            console.log('deleteProduct', context.user);
+            const product = await Product.findByIdAndDelete(_id);
+            return product;
+        },
         addOrder: async (parent, { products }, context) => {
             if (!context.user) { throw AuthenticationError; }
             const order = new Order({ products });
@@ -291,7 +297,7 @@ const resolvers = {
                 console.error('Error updating conversation:', error);
                 throw new Error('Failed to send message.');
             }
-        },
+        }
     }
 };
 

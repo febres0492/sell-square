@@ -115,6 +115,16 @@ export const UPDATE_PRODUCT = gql`
     }
 `;
 
+export const DELETE_PRODUCT = gql`
+    mutation DeleteProduct($id: ID!) {
+        deleteProduct(_id: $id) { 
+            _id 
+            name
+            description
+        }
+    }
+`;
+
 export const SEND_MESSAGE = gql`
     mutation SendMessage($receiverId: ID!, $productId: ID!, $content: String!) {
         sendMessage(receiverId: $receiverId, productId: $productId, content: $content) {

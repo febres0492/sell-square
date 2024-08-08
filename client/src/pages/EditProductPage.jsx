@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { UPDATE_PRODUCT } from '../utils/mutations';
+import { UPDATE_PRODUCT, DELETE_PRODUCT } from '../utils/mutations';
 import { QUERY_PRODUCT_BY_ID } from '../utils/queries';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Container, Paper, Card, CardMedia } from '@material-ui/core';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { uploadImage, deleteImage } from '../utils/helpers';
+import { showModal } from '../components/Modal'; 
 
 const useStyles = makeStyles((theme) => ({
-    container: {
-        marginTop: theme.spacing(4),
-        padding: theme.spacing(2),
-    },
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
+    container: { marginTop: theme.spacing(4), padding: theme.spacing(2) },
+    form: { display: 'flex', flexDirection: 'column', },
     input: { marginBottom: theme.spacing(2), },
     button: { marginBottom: theme.spacing(2), },
 }));
@@ -35,6 +30,7 @@ function EditProductPage() {
     });
 
     const [updateProduct, { error: updateError }] = useMutation(UPDATE_PRODUCT);
+    const [deleteProduct] = useMutation(DELETE_PRODUCT);
 
     useEffect(() => {
         if (data) {
@@ -55,15 +51,19 @@ function EditProductPage() {
     };
 
     const handleImageChange = (e) => {
-        const file = {...e.target.files[0]};
-        file.name = file.name.split('.')[0]
-        console.log('file:', file.name);
-        setImageFile(file);
+        const preFile = e.target.files[0];
+        const nameWithoutExtension = preFile.name.split('.')[0];
+        const newFile = new File([preFile], nameWithoutExtension, {
+            type: preFile.type,
+            lastModified: preFile.lastModified,
+        });
+    
+        setImageFile(newFile);
         const reader = new FileReader();
         reader.onloadend = () => {
             setFormState({ ...formState, image: reader.result });
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(newFile);
     };
 
     const handleFormSubmit = async (event) => {
@@ -87,8 +87,11 @@ function EditProductPage() {
                 console.log('delete image response:', res);
                 setFormState({ ...formState, image: '' });
             }
+            const deletedProduct = await deleteProduct({ variables: { id } });
+            console.log('deleted product:', deletedProduct);
+            navigate('/dashboard');
         } catch (e) {
-            console.error('Error deleting image:', e);
+            console.error('Error deleting product:', e);
         }
     };
 

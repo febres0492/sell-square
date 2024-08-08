@@ -95,6 +95,7 @@ const typeDefs = `
             category: ID!,
             zipcode: String!
         ): Product
+        deleteProduct(_id: ID!): Product
         sendMessage(receiverId: ID!, content: String!, productId: ID!): Message
     }
 `;
