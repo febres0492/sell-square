@@ -9,7 +9,7 @@ import {
     Divider,
     Button,
     // IconButton,
-    // Box,
+    Box,
     Container,
     Grid,
     Paper,
@@ -57,11 +57,18 @@ const Dashboard = () => {
 
     return (<>
         <Container className='my-4'>
-            <Link to="/add-product">
-                <Button variant="contained" color="primary" >
-                    Add Product
-                </Button>
-            </Link>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Link to="/">
+                    <Button variant="contained" color="primary">
+                        ← Home
+                    </Button>
+                </Link>
+                <Link to="/add-product">
+                    <Button variant="contained" color="primary">
+                        Add Product
+                    </Button>
+                </Link>
+            </Box>
         </Container>
 
         <Container className='my-4'>

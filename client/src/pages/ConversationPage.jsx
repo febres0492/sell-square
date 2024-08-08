@@ -29,9 +29,7 @@ function ConversationPage() {
     const classes = useStyles();
     const { id } = useParams();
     const [messageText, setMessageText] = useState('');
-    // const { loading, error, data } = ifLoggedIn(QUERY_CONVERSATIONS, { id } );
     let { loading, error, data } = useQuery( QUERY_CONVERSATIONS, { variables: { id } });
-    // data = data[0]
     let conv = data?.conversation[0] || {};
     console.log(c.red, 'conv', conv);
     
@@ -95,13 +93,17 @@ function ConversationPage() {
         return <Typography variant="h6" color="error">No conversation found</Typography>;
     }
 
-    // const productId = conv.productId._id;
     const participant = conv.participants.filter(p => p._id !== conv.productId.user._id)[0];
 
-    // console.log(c.red,'myId', userData._id);
-    // console.log(c.red,'participantId', participant._id);
-    // console.log(c.red,'allIda', conv.participants.map(p => p._id));
-    return (
+    return (<>
+        <Container className='my-4'>
+            <Link to="/dashboard">
+                <Button variant="contained" color="primary" >
+                    ← Dashboard
+                </Button>
+            </Link>
+        </Container>
+    
         <Container>
             <Typography variant="h4" gutterBottom>
                 Conversation with {participant.firstName} {participant.lastName}
@@ -145,7 +147,7 @@ function ConversationPage() {
                 Send
             </Button>
         </Container>
-    );
+    </>);
 }
 
 export default ConversationPage;
