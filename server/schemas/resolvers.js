@@ -230,10 +230,6 @@ const resolvers = {
             return order;
             
         },
-        updateUser: async (parent, args, context) => {
-            if (!context.user) { throw AuthenticationError; }
-            return await User.findByIdAndUpdate(context.user._id, args, { new: true });
-        },
         updateProduct: async (parent, args, context) => {
             if (!context.user) { throw AuthenticationError; }
 
@@ -297,7 +293,41 @@ const resolvers = {
                 console.error('Error updating conversation:', error);
                 throw new Error('Failed to send message.');
             }
-        }
+        },
+        updateUser: async (_, { firstName, lastName, email, currentPassword, password }, context) => {
+            if (!context.user) {
+                throw new AuthenticationError('You need to be logged in!');
+            }
+
+            const user = await User.findById(context.user._id);
+
+            if (!user) {
+                throw new AuthenticationError('User not found');
+            }
+
+            if (currentPassword && password) {
+                const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
+
+                if (!isPasswordCorrect) {
+                    throw new AuthenticationError('Current password is incorrect');
+                }
+
+                user.password = await bcrypt.hash(password, 10);
+            }
+
+            if (firstName) user.firstName = firstName;
+            if (lastName) user.lastName = lastName;
+            if (email) user.email = email;
+
+            await user.save();
+
+            return {
+                _id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+            };
+        },
     }
 };
 

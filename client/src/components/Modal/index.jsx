@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
-import { Modal, Button, makeStyles, Typography } from '@material-ui/core';
+import React, { useState } from 'react'
+import { createRoot } from 'react-dom/client'
+import { Modal, Button, makeStyles, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -23,10 +23,10 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
         alignSelf: 'center',
     },
-}));
+}))
 
-const ReusableModal = ({ open, handleClose, handleConfirm, message, type }) => {
-    const classes = useStyles();
+const ReusableModal = ({ open, handleClose, handleConfirm, handleLogin, message, type }) => {
+    const classes = useStyles()
 
     return (
         <Modal
@@ -47,6 +47,15 @@ const ReusableModal = ({ open, handleClose, handleConfirm, message, type }) => {
                             Cancel
                         </Button>
                     </>
+                ) : type === 'login' ? (
+                    <>
+                        <Button variant="contained" color="primary" onClick={handleLogin} className={classes.button} >
+                            Login
+                        </Button>
+                        <Button variant="contained" color="secondary" onClick={handleClose} className={classes.button} >
+                            Cancel
+                        </Button>
+                    </>
                 ) : (
                     <Button variant="contained" color="primary" onClick={handleClose} className={classes.button} >
                         Close
@@ -54,44 +63,45 @@ const ReusableModal = ({ open, handleClose, handleConfirm, message, type }) => {
                 )}
             </div>
         </Modal>
-    );
-};
+    )
+}
 
 const showModal = (message, args) => {
-    const type = args?.type || 'alert';
+    const type = args?.type || 'alert'
     return new Promise((resolve) => {
-        const div = document.createElement('div');
-        document.body.appendChild(div);
+        const div = document.createElement('div')
+        document.body.appendChild(div)
 
         const ModalWrapper = () => {
-            const [open, setOpen] = useState(true);
+            const [open, setOpen] = useState(true)
 
-            const handleClose = () => {
-                setOpen(false);
-                document.body.removeChild(div);
-                resolve(false);
-            };
+            const closeModal = (result) => {
+                setOpen(false)
+                document.body.removeChild(div)
+                if (type === 'login') { window.location.href = '/login' }
+                resolve(result)
+            }
 
-            const handleConfirm = () => {
-                setOpen(false);
-                document.body.removeChild(div);
-                resolve(true);
-            };
+            const handleClose = () => closeModal(false)
+            const handleConfirm = () => closeModal(true)
+            const handleLogin = () => closeModal(false)
 
             return (
                 <ReusableModal
                     open={open}
                     handleClose={handleClose}
                     handleConfirm={handleConfirm}
+                    handleLogin={handleLogin}
                     message={message}
                     type={type}
                 />
-            );
-        };
+            )
+        }
 
-        ReactDOM.render(<ModalWrapper />, div);
-    });
-};
+        const root = createRoot(div)
+        root.render(<ModalWrapper />)
+    })
+}
 
-export { showModal };
-export default ReusableModal;
+export { showModal }
+export default ReusableModal

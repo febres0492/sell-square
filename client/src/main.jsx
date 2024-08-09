@@ -10,7 +10,7 @@ import NoMatch from './pages/NoMatch';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Success from './pages/Success';
-import OrderHistory from './pages/OrderHistory';
+// import OrderHistory from './pages/OrderHistory';
 import AccountSettings from './pages/AccountSettings';
 import AddProductPage from './pages/AddProductPage';
 import EditProductPage from './pages/EditProductPage';
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
             { path: '/login', element: <Login /> },
             { path: '/signup', element: <Signup /> },
             { path: '/success', element: <Success /> },
-            { path: '/orderHistory', element: <OrderHistory /> },
+            // { path: '/orderHistory', element: <OrderHistory /> },
             { path: '/accountSettings', element: <AccountSettings /> },
             { path: '/add-product', element: <AddProductPage /> },
             { path: '/edit-product/:id', element: <EditProductPage /> },
