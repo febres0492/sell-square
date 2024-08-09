@@ -6,6 +6,7 @@
     "scripts": {
         "start": "node server.js",
         "watch": "nodemon",
+        "install": "npm install --legacy-peer-deps",
         "seed": "node config/seeds.js"
     },
     "keywords": [],
