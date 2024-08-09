@@ -9,7 +9,6 @@ import ProductDetailsPage from './pages/ProductDetailsPage.jsx';
 import NoMatch from './pages/NoMatch';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Success from './pages/Success';
 import AccountSettings from './pages/AccountSettings';
 import AddProductPage from './pages/AddProductPage';
 import EditProductPage from './pages/EditProductPage';

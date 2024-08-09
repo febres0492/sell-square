@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.15",
-    "@stripe/stripe-js": "^1.54.0",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^5.16.7",
     "@testing-library/react": "^14.0.0",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
