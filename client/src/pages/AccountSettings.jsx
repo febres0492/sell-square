@@ -5,10 +5,14 @@ import { QUERY_USER } from '../utils/queries';
 import { UPDATE_USER } from '../utils/mutations';
 import ifLoggedIn from '../utils/ifLoggedIn';
 import { showModal } from '../components/Modal';
+import { useMutation } from '@apollo/client';
+import Auth from '../utils/auth';
 
 function AccountSettings() {
     const { data: userData, loading: userLoading, error: userError } = ifLoggedIn(QUERY_USER);
-    const user = userData?.user || {};
+    
+    const user  = userData?.user || {};
+
     const [formState, setFormState] = useState({
         firstName: user.firstName || '',
         lastName: user.lastName || '',
@@ -17,6 +21,8 @@ function AccountSettings() {
         newPassword: '',
         confirmNewPassword: ''
     });
+
+    console.log('AccountSettings user', user);
 
     const { 
         mutateFunction: updateUser, loading: updateLoading, error: updateError, data: updateData 
@@ -95,10 +101,14 @@ function AccountSettings() {
                         <Box component="form" noValidate autoComplete="off">
                             {fields.map((field) => (
                                 <TextField key={field.name} label={field.label} variant="filled" name={field.name}
-                                    value={formState[field.name] || ''} onChange={handleChange} fullWidth margin="normal" type={field.type}
+                                    value={formState[field.name] || ''} 
+                                    onChange={handleChange} 
+                                    fullWidth margin="normal" type={field.type}
                                 />
                             ))}
-                            <Button variant="contained" color="primary" onClick={handleUpdateInfo} disabled={isInfoFormEmpty}>
+                            <Button variant="contained" color="primary" 
+                                onClick={handleUpdateInfo} 
+                                disabled={isInfoFormEmpty}>
                                 Update Info
                             </Button>
                         </Box>
@@ -108,10 +118,14 @@ function AccountSettings() {
                         <Box component="form" noValidate autoComplete="off">
                             {passwordFields.map((field) => (
                                 <TextField key={field.name} label={field.label} variant="filled" type={field.type} name={field.name}
-                                    value={formState[field.name] || ''} onChange={handleChange} fullWidth margin="normal"
+                                    value={formState[field.name] || ''} 
+                                    onChange={handleChange} 
+                                    fullWidth margin="normal"
                                 />
                             ))}
-                            <Button variant="contained" color="primary" onClick={handleUpdatePassword} disabled={isPasswordFormEmpty}>
+                            <Button variant="contained" color="primary" 
+                                onClick={handleUpdatePassword} 
+                                disabled={isPasswordFormEmpty}>
                                 Update Password
                             </Button>
                         </Box>

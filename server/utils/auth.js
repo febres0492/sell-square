@@ -11,11 +11,19 @@ const c = {
 };
 
 module.exports = {
-    AuthenticationError: new GraphQLError('Could not authenticate user.', {
-        extensions: {
-            code: 'UNAUTHENTICATED',
-        },
-    }),
+    // AuthenticationError: new GraphQLError('Could not authenticate user.', {
+    //     extensions: {
+    //         code: 'UNAUTHENTICATED',
+    //     },
+    // }),
+    AuthenticationError: function (message = 'Could not authenticate user') {
+        return new GraphQLError(message, {
+            extensions: {
+                code: 'UNAUTHENTICATED',
+                message,
+            },
+        });
+    },
     authMiddleware: function ({ req }) {
         // allows token to be sent via req.body, req.query, or headers
         let token = req.body.token || req.query.token || req.headers.authorization;

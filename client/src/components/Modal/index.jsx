@@ -75,23 +75,19 @@ const showModal = (message, args) => {
         const ModalWrapper = () => {
             const [open, setOpen] = useState(true)
 
-            const closeModal = (result) => {
+            const closeModal = (args) => {
                 setOpen(false)
                 document.body.removeChild(div)
                 if (type === 'login') { window.location.href = '/login' }
-                resolve(result)
+                resolve(args.resolve)
             }
-
-            const handleClose = () => closeModal(false)
-            const handleConfirm = () => closeModal(true)
-            const handleLogin = () => closeModal(false)
 
             return (
                 <ReusableModal
                     open={open}
-                    handleClose={handleClose}
-                    handleConfirm={handleConfirm}
-                    handleLogin={handleLogin}
+                    handleClose={()=>closeModal({resolve:false})}
+                    handleConfirm={()=>closeModal({resolve:true})}
+                    handleLogin={()=>closeModal({resolve:false})}
                     message={message}
                     type={type}
                 />

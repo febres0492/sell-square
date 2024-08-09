@@ -71,7 +71,7 @@ const resolvers = {
             }
         },
         user: async (parent, args, context) => {
-            console.log('user', context.user?.firstName, args);
+            console.log(c.green,'user', context.user?.firstName, args);
             if (!context.user) { return {message: 'no user found'} }
         
             const user = await User.findById(context.user._id).populate({
@@ -80,15 +80,8 @@ const resolvers = {
             });
                 
             const products = await Product.find({ user: context.user._id }).populate('category');
-            // const conversations = await Conversation.find({ participants: context.user._id })
-
-            // console.log(c.yellow,'conversations', conversations);
         
-            return {
-                ...user.toObject(),
-                products,
-                // conversations
-            };
+            return { ...user.toObject(), products, };
         },
         order: async (parent, { _id }, context) => {
             if (context.user) {
@@ -100,7 +93,7 @@ const resolvers = {
                 return user.orders.id(_id);
             }
 
-            throw AuthenticationError;
+            throw AuthenticationError();
         },
         checkout: async (parent, args, context) => {
             const url = new URL(context.headers.referer).origin;
@@ -166,8 +159,8 @@ const resolvers = {
         userConversations: async (parent, args, context) => {
             if (!context.user._id) {
                 console.log(c.red,'You need to be logged in to view your conversations');
-                return{ error: 'You need to be logged in to view your conversations' };
-                throw new AuthenticationError 
+                // return{ error: 'You need to be logged in to view your conversations' };
+                throw AuthenticationError() 
             }
             try {
                 const conversations = await Conversation.find({ participants: context.user._id })
@@ -206,7 +199,7 @@ const resolvers = {
         },
         addProduct: async (parent, args, context) => {
             console.log('addProduct', context.user);
-            if (!context.user) { throw AuthenticationError; }
+            if (!context.user) { throw AuthenticationError() }
             try {
                 const product = await Product.create({
                     ...args,
@@ -218,20 +211,20 @@ const resolvers = {
             }
         },
         deleteProduct: async (parent, { _id }, context) => {
-            if (!context.user) { throw AuthenticationError; }
+            if (!context.user) { throw AuthenticationErro() }
             console.log('deleteProduct', context.user);
             const product = await Product.findByIdAndDelete(_id);
             return product;
         },
         addOrder: async (parent, { products }, context) => {
-            if (!context.user) { throw AuthenticationError; }
+            if (!context.user) { throw AuthenticationError() }
             const order = new Order({ products });
             await User.findByIdAndUpdate(context.user._id, { $push: { orders: order } });
             return order;
             
         },
         updateProduct: async (parent, args, context) => {
-            if (!context.user) { throw AuthenticationError; }
+            if (!context.user) { throw AuthenticationError() }
 
             console.log('updateProduct', context.user);
             const updatedProduct = await Product.findByIdAndUpdate(
@@ -243,10 +236,10 @@ const resolvers = {
         },
         login: async (parent, { email, password }, context) => {
             const user = await User.findOne({ email });
-            if (!user) { throw AuthenticationError; }
+            if (!user) { throw AuthenticationError() }
             console.log(c.red, 'login', user);
             const correctPw = await user.isCorrectPassword(password);
-            if (!correctPw) { throw AuthenticationError; }
+            if (!correctPw) { throw AuthenticationError() }
             context.user = user;
             const token = signToken(user);
             return { token, user };
@@ -255,7 +248,7 @@ const resolvers = {
             // Check if the senderId is provided
             if(!context.user) { 
                 console.log(c.red, 'You need to be logged in to send messages');
-                throw new AuthenticationError; 
+                throw new AuthenticationError() 
             }
             const senderId = context.user._id;
             console.log(c.red, 'sendMessage', senderId, receiverId, content, productId);
@@ -295,8 +288,9 @@ const resolvers = {
             }
         },
         updateUser: async (_, { firstName, lastName, email, currentPassword, password }, context) => {
+            console.log(c.res, 'updateUser', context.user);
             if (!context.user) {
-                throw new AuthenticationError('You need to be logged in!');
+                throw new AuthenticationError('Login Required!');
             }
 
             const user = await User.findById(context.user._id);

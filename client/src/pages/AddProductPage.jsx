@@ -33,7 +33,7 @@ const AddProductPage = () => {
 
             const poduct = await addProduct({
                 variables,
-                context: { headers: { authorization: `Bearer ${Auth.getToken()}`, }, },
+                // context: { headers: { authorization: `Bearer ${Auth.getToken()}`, }, },
             });
             console.log('new product', poduct);
 
