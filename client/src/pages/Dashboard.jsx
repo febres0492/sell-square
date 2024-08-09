@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import ifLoggedIn from '../utils/ifLoggedIn';
-import { QUERY_USER, QUERY_USER_CONVERSATIONS, QUERY_USER_PRODUCTS, QUERY_CONVERSATIONS } from '../utils/queries';
-import { showModal } from '../components/Modal';
+import { QUERY_USER, QUERY_USER_PRODUCTS, QUERY_CONVERSATIONS } from '../utils/queries';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
