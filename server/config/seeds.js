@@ -5,7 +5,7 @@ const cleanDB = require('./cleanDB');
 db.once('open', async () => {
   try {
     await cleanDB('Category', 'categories');
-    await cleanDB('Product', 'products');
+    // await cleanDB('Product', 'products');
     // await cleanDB('User', 'users');
 
     const categories = await Category.insertMany([
@@ -33,32 +33,32 @@ db.once('open', async () => {
 
     console.log('categories seeded');
 
-    const products = await Product.insertMany([
-        {
-            name: 'Tin of Cookies',
-            description:
-                'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.',
-            image: 'https://via.placeholder.com/150',
-            category: categories[0]._id,
-            price: 2.99,
-            quantity: 500,
-            zipcode: '90210',
-            user:'66b6626a8f6e9e78d5eac76a'
-        },
-        {
-            name: 'Canned Coffee',
-            description:
-                'Praesent sed lacinia mauris. Nulla congue nibh magna, at feugiat nunc scelerisque quis. Donec iaculis rutrum vulputate. Suspendisse lectus sem, vulputate ac lectus sed, placerat consequat dui.',
-            image: 'https://via.placeholder.com/150',
-            category: categories[0]._id,
-            price: 1.99,
-            quantity: 500,
-            zipcode: '32839',
-            user:'66b6626a8f6e9e78d5eac76a'
-        },
-      ]);
+    // const products = await Product.insertMany([
+    //     {
+    //         name: 'Tin of Cookies',
+    //         description:
+    //             'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.',
+    //         image: 'https://via.placeholder.com/150',
+    //         category: categories[0]._id,
+    //         price: 2.99,
+    //         quantity: 500,
+    //         zipcode: '90210',
+    //         user:'66b6626a8f6e9e78d5eac76a'
+    //     },
+    //     {
+    //         name: 'Canned Coffee',
+    //         description:
+    //             'Praesent sed lacinia mauris. Nulla congue nibh magna, at feugiat nunc scelerisque quis. Donec iaculis rutrum vulputate. Suspendisse lectus sem, vulputate ac lectus sed, placerat consequat dui.',
+    //         image: 'https://via.placeholder.com/150',
+    //         category: categories[0]._id,
+    //         price: 1.99,
+    //         quantity: 500,
+    //         zipcode: '32839',
+    //         user:'66b6626a8f6e9e78d5eac76a'
+    //     },
+    //   ]);
 
-    console.log('products seeded');
+    // console.log('products seeded');
 
     // await User.create({
     //   firstName: 'Pamela',

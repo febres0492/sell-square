@@ -104,7 +104,9 @@ const resolvers = {
                 if(args._id){ filter._id = args._id; }
                 if (args.productId) { filter.productId = args.productId; }
                 if (args.userId) { filter.participants = args.userId; }
-                if (args.participantId && context.user._id !== args.participantId) { 
+
+                console.log(c.red,args.participantId, context.user )
+                if (args.participantId && context.user?._id !== args.participantId) { 
                     filter.participants = [context.user._id, args.participantId ]; 
                 }
 
@@ -123,9 +125,9 @@ const resolvers = {
         },
         userConversations: async (parent, args, context) => {
             if (!context.user._id) {
-                console.log(c.red,'You need to be logged in to view your conversations');
+                console.log(c.red,'login to view conversations');
                 // return{ error: 'You need to be logged in to view your conversations' };
-                throw AuthenticationError() 
+                return AuthenticationError() 
             }
             try {
                 const conversations = await Conversation.find({ participants: context.user._id })
