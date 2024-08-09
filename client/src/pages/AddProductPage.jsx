@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_PRODUCT } from '../utils/mutations';
 import { Link, useNavigate } from 'react-router-dom';
-import Auth from '../utils/auth';
 import useFetchCategories from '../utils/useFetchCategories';
 import { uploadImage } from '../utils/helpers';
 

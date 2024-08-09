@@ -1,16 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { 
-    Container, Typography, Button, CircularProgress, Paper, List, ListItem, ListItemText, TextField, Grid, 
-    Select, MenuItem, Icon
-} from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { QUERY_USER, QUERY_CONVERSATIONS } from '../utils/queries';
 import useSendMessage from '../utils/useSendMessage';
 import ifLoggedIn from '../utils/ifLoggedIn';
 import Auth from "../utils/auth";
-import { showModal } from '../components/Modal'; 
+import { showModal } from '../components/Modal';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const c = {
     red: '\x1b[31m%s\x1b[0m',
@@ -66,79 +62,78 @@ function ConversationPage() {
         setSelectedValue(event.target.value);
     };
 
-    if (loading) return <CircularProgress />;
+    if (loading) return <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>;
 
     if (error) {
         return (
-            <Container>
+            <div className="container">
                 <Link to="/">
-                    <Button variant="contained" color="primary">
+                    <button className="btn btn-primary">
                         ← Home
-                    </Button>
+                    </button>
                 </Link>
-                <Typography color="error">Error: {error.message}</Typography>
-            </Container>
+                <div className="text-danger">Error: {error.message}</div>
+            </div>
         );
     }
 
     if (!conv._id || !conv.participants.length) {
-        return <Typography variant="h6" color="error">No conversation found</Typography>;
+        return <div className="text-danger">No conversation found</div>;
     }
 
     const participant = conv.participants.filter(p => p._id !== conv.productId.user._id)[0];
 
     return (<>
-        <Container className='my-4'>
+        <div className='container my-4'>
             <Link to="/dashboard">
-                <Button variant="contained" color="primary" >
+                <button className="btn btn-primary">
                     ← Dashboard
-                </Button>
+                </button>
             </Link>
-        </Container>
+        </div>
     
-        <Container>
-            <Typography variant="h4" gutterBottom>
+        <div className="container">
+            <h4 className="mb-4">
                 Conversation with {participant.firstName} {participant.lastName}
-            </Typography>
-            <Select value={selectedValue} onChange={handleDropdownChange} displayEmpty IconComponent={MoreVertIcon}>
-                <MenuItem value="option1">Option 1</MenuItem>
-                <MenuItem value="option2">Option 2</MenuItem>
-                <MenuItem value="option3">Option 3</MenuItem>
-            </Select>
-            <Paper>
-                <List>
+            </h4>
+            <select className="form-select mb-4" value={selectedValue} onChange={handleDropdownChange}>
+                <option value="" disabled>Select an option</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+            <div className="card mb-4">
+                <ul className="list-group list-group-flush">
                     {messageList.map((message, i) => {
                         console.log('message', message.receiverId, userData._id, message.receiverId == userData._id);
                         const sendtByMe = message.receiverId != userData._id;
                         const hhmm = formatTime(message.createdAt)
                         return (
-                            <Grid container justifyContent={sendtByMe ? 'flex-end' : 'flex-start'} key={`${message._id}_${i}`}>
-                                <Grid item xs={8}>
-                                    <div className={`${sendtByMe ? 'bg-secondary' : ''}`}>
-                                        <Typography variant="body1" color="textPrimary">
-                                            {message.text}
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            {hhmm}
-                                        </Typography>
+                            <li className="list-group-item" key={`${message._id}_${i}`}>
+                                <div className={`d-flex justify-content-${sendtByMe ? 'end' : 'start'}`}>
+                                    <div className={`p-2 ${sendtByMe ? 'bg-secondary text-white' : ''}`}>
+                                        <div>{message.text}</div>
+                                        <small className="text-muted">{hhmm}</small>
                                     </div>
-                                </Grid>
-                            </Grid>
+                                </div>
+                            </li>
                         );
                     })}
-                </List>
-            </Paper>
-            <TextField
-                label="Type a message"
-                variant="outlined"
-                fullWidth
-                value={messageText}
-                onChange={handleChange}
-            />
-            <Button variant="contained" color="primary" onClick={handleSendMessage}>
-                Send
-            </Button>
-        </Container>
+                </ul>
+            </div>
+            <div className="input-group mb-3">
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Type a message"
+                    value={messageText}
+                    onChange={handleChange}
+                />
+                <button className="btn btn-primary" onClick={handleSendMessage}>
+                    Send
+                </button>
+            </div>
+        </div>
     </>);
 }
 

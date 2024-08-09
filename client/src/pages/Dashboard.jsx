@@ -1,22 +1,10 @@
 import React, { useEffect } from 'react';
-import {
-    Typography,
-    Divider,
-    Button,
-    Box,
-    Container,
-    Grid,
-    Paper,
-    CircularProgress,
-    Card,
-    CardContent,
-    CardMedia
-} from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import ifLoggedIn from '../utils/ifLoggedIn';
 import { QUERY_USER, QUERY_USER_CONVERSATIONS, QUERY_USER_PRODUCTS, QUERY_CONVERSATIONS } from '../utils/queries';
 import { showModal } from '../components/Modal';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
 
@@ -24,60 +12,53 @@ const Dashboard = () => {
     const { loading, error, data } = ifLoggedIn(QUERY_USER_PRODUCTS);
     const products = data?.products || [];
 
-    if (loading) return <CircularProgress />;
-    if (error) return <Typography variant="h6" color="error">Error: {error.message}</Typography>;
+    if (loading) return <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>;
+    if (error) return <div className="alert alert-danger">Error: {error.message}</div>;
 
     return (
         <>
-            <Container className='my-4'>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
+            <div className="container my-4">
+                <div className="d-flex justify-content-between align-items-center">
                     <Link to="/">
-                        <Button variant="contained" color="primary">
+                        <button className="btn btn-primary">
                             ← Home
-                        </Button>
+                        </button>
                     </Link>
                     <Link to="/add-product">
-                        <Button variant="contained" color="primary">
+                        <button className="btn btn-primary">
                             Add Product
-                        </Button>
+                        </button>
                     </Link>
-                </Box>
-            </Container>
+                </div>
+            </div>
 
-            <Container className='my-4'>
+            <div className="container my-4">
                 <Conversations />
-            </Container>
+            </div>
 
-            <Container className='my-4'>
-                <Typography variant="h5">Your Products</Typography>
-                <Grid container spacing={3}>
+            <div className="container my-4">
+                <h5>Your Products</h5>
+                <div className="row">
                     {products.map((product) => (
-                        <Grid item key={product._id} xs={6} md={6} lg={4}>
+                        <div className="col-6 col-md-6 col-lg-4 mb-3" key={product._id}>
                             <Link to={`/products/${product._id}`}>
-                                <Card>
-                                    <CardMedia
-                                        component="img"
-                                        height="160"
-                                        image={product.image || 'https://via.placeholder.com/150'}
-                                        title={product.name || 'Image title'}
+                                <div className="card">
+                                    <img
+                                        src={product.image || 'https://via.placeholder.com/150'}
+                                        className="card-img-top"
+                                        alt={product.name || 'Image title'}
                                     />
-                                    <CardContent>
-                                        <Typography component="h5" variant="h5">
-                                            {product.name}
-                                        </Typography>
-                                        <Typography variant="subtitle1" color="textSecondary">
-                                            {product.description}
-                                        </Typography>
-                                        <Typography variant="subtitle1" color="textSecondary">
-                                            {product.category.name}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
+                                    <div className="card-body">
+                                        <h5 className="card-title">{product.name}</h5>
+                                        <p className="card-text">{product.description}</p>
+                                        <p className="card-text"><small className="text-muted">{product.category.name}</small></p>
+                                    </div>
+                                </div>
                             </Link>
-                        </Grid>
+                        </div>
                     ))}
-                </Grid>
-            </Container>
+                </div>
+            </div>
         </>
     );
 };
@@ -90,20 +71,20 @@ function Conversations() {
 
     console.log(c.yellow, 'userData', data);
 
-    if (loading) return <CircularProgress />;
-    if (error) return <Typography variant="h6" color="error">Error: {error.message}</Typography>;
+    if (loading) return <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>;
+    if (error) return <div className="alert alert-danger">Error: {error.message}</div>;
 
     const conversationsData = Object.values(data)[0] || [];
     console.log(c.yellow, 'conversations', data, conversationsData);
 
     return (
         <>
-            <Typography variant="h5">Conversations</Typography>
-            <Grid container spacing={3}>
+            <h5>Conversations</h5>
+            <div className="row">
                 {conversationsData.length === 0 ?
-                    <Grid item>
-                        <Typography variant="h6">No Conversations</Typography>
-                    </Grid>
+                    <div className="col">
+                        <h6>No Conversations</h6>
+                    </div>
                     :
                     (conversationsData.map(con => {
                         const participant = con.participants;
@@ -111,29 +92,24 @@ function Conversations() {
                         console.log('participant', participant);
 
                         return (
-                            <Grid item key={con._id} xs={6} md={6} lg={4}>
+                            <div className="col-6 col-md-6 col-lg-4 mb-3" key={con._id}>
                                 <Link to={`/conversation/${con._id}`}>
-                                    <Card>
-                                        <CardMedia
-                                            component="img"
-                                            height="160"
-                                            image={con.productId.image || 'https://via.placeholder.com/150'}
-                                            title={con.productId.name || 'Image title'}
+                                    <div className="card">
+                                        <img
+                                            src={con.productId.image || 'https://via.placeholder.com/150'}
+                                            className="card-img-top"
+                                            alt={con.productId.name || 'Image title'}
                                         />
-                                        <CardContent>
-                                            <Typography component="h5" variant="h5">
-                                                {con.productId.name}
-                                            </Typography>
-                                            <Typography variant="subtitle1" color="textSecondary">
-                                                {con.productId.description}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
+                                        <div className="card-body">
+                                            <h5 className="card-title">{con.productId.name}</h5>
+                                            <p className="card-text">{con.productId.description}</p>
+                                        </div>
+                                    </div>
                                 </Link>
-                            </Grid>
+                            </div>
                         )
                     }))}
-            </Grid>
+            </div>
         </>
     );
 }

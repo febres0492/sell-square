@@ -4,7 +4,7 @@ import { useStoreContext } from '../../utils/GlobalState';
 import { updateSearchResults } from '../../utils/actions';
 import { QUERY_ALL_PRODUCTS, QUERY_PRODUCTS_BY_SEARCH_TERM } from '../../utils/queries';
 import { Link } from 'react-router-dom';
-import { TextField, Button, Typography, Box } from '@material-ui/core';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function SearchBar() {
     const [inputValue, setSearchTerm] = useState('');
@@ -51,24 +51,25 @@ function SearchBar() {
     };
 
     return (
-        <Box>
-            <Typography variant="h4" gutterBottom> Products </Typography>
-            <TextField
-                label="Enter search term"
-                variant="outlined"
-                value={inputValue}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyDown={handleKeyDown}
-                fullWidth
-                margin="normal"
-            />
-            <Button variant="contained" color="primary" onClick={handleSearch}>
+        <div className="container">
+            <h4 className="mb-3">Products</h4>
+            <div className="mb-3">
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter search term"
+                    value={inputValue}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                />
+            </div>
+            <button className="btn btn-primary" onClick={handleSearch}>
                 Search
-            </Button>
-            <Button variant="contained" color="default" onClick={handleClear} style={{ marginLeft: '10px' }}>
+            </button>
+            <button className="btn btn-secondary ml-2" onClick={handleClear}>
                 Clear
-            </Button>
-        </Box>
+            </button>
+        </div>
     );
 }
 

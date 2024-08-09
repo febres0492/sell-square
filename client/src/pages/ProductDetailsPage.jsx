@@ -1,8 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { Container, Typography, Button, Card, CardContent, CardMedia, CircularProgress, Grid } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import { QUERY_PRODUCT_BY_ID, QUERY_USER, QUERY_CONVERSATIONS } from '../utils/queries';
 import Auth from "../utils/auth";
 import { showModal } from '../components/Modal'; 
@@ -46,18 +44,18 @@ function ProductDetailsPage() {
         }
     }, [convExit, convData, data, navigate, productSellerId, sendMessage]);
 
-    if (loading) return <CircularProgress />;
+    if (loading) return <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>;
 
     if (error) {
         return (
-            <Container>
+            <div className="container">
                 <Link to="/">
-                    <Button variant="contained" color="primary">
+                    <button className="btn btn-primary">
                         ← Back to Products
-                    </Button>
+                    </button>
                 </Link>
-                <Typography color="error">Error: {error.message}</Typography>
-            </Container>
+                <div className="text-danger">Error: {error.message}</div>
+            </div>
         );
     }
 
@@ -75,45 +73,41 @@ function ProductDetailsPage() {
     };
 
     return (
-        <Container>
+        <div className="container">
             <Link to="/">
-                <Button variant="contained" color="primary">
+                <button className="btn btn-primary">
                     ← Back to Products
-                </Button>
+                </button>
             </Link>
-            <Grid container>
+            <div className="row">
                 {product ? (
-                    <Card>
-                        <CardMedia title={product.name}
-                            image={product.image || 'https://via.placeholder.com/150'}
-                        />
-                        <CardContent>
-                            <Typography variant="body1" component="p"> <strong>Seller:</strong> {product.user.firstName} {product.user.lastName}</Typography>
-                            <Typography variant="h5" component="h2"> {product.name} </Typography>
-                            <Typography variant="body2" component="p"> {product.description} </Typography>
-                            <Typography variant="body1" component="p"> <strong>Price:</strong> ${product.price} </Typography>
-                            <Typography variant="body1" component="p"> <strong>Category:</strong> {product.category.name} </Typography>
-                            <Typography variant="body1" component="p"> <strong>Quantity:</strong> {product.quantity} </Typography>
-                            <Typography variant="body1" component="p"> <strong>Zipcode:</strong> {product.zipcode} </Typography>
+                    <div className="card">
+                        <img className="card-img-top" src={product.image || 'https://via.placeholder.com/150'} alt={product.name} />
+                        <div className="card-body">
+                            <p className="card-text"><strong>Seller:</strong> {product.user.firstName} {product.user.lastName}</p>
+                            <h2 className="card-title">{product.name}</h2>
+                            <p className="card-text">{product.description}</p>
+                            <p className="card-text"><strong>Price:</strong> ${product.price}</p>
+                            <p className="card-text"><strong>Category:</strong> {product.category.name}</p>
+                            <p className="card-text"><strong>Quantity:</strong> {product.quantity}</p>
+                            <p className="card-text"><strong>Zipcode:</strong> {product.zipcode}</p>
                             {loggedIn && isMyProduct && (
-                                <Button variant="contained" color="secondary" startIcon={<EditIcon />} 
-                                    onClick={handleEditButton}>
+                                <button className="btn btn-secondary" onClick={handleEditButton}>
                                     Edit
-                                </Button>
+                                </button>
                             )}
                             {loggedIn && !isMyProduct && (
-                                <Button variant="contained" color="primary" 
-                                    onClick={handleSendMessage}>
+                                <button className="btn btn-primary" onClick={handleSendMessage}>
                                     Message Seller
-                                </Button>
+                                </button>
                             )}
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
                 ) : (
-                    <Typography>Product not found</Typography>
+                    <div>Product not found</div>
                 )}
-            </Grid>
-        </Container>
+            </div>
+        </div>
     );
 }
 

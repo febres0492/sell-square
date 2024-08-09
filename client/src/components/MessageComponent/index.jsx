@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { TextField, Button } from '@material-ui/core';
 import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_USER } from '../../utils/queries';
 import { SEND_MESSAGE } from '../../utils/mutations';

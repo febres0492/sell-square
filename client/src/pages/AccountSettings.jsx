@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { TextField, Typography, Button, Box, Container, Paper } from '@mui/material';
 import { QUERY_USER } from '../utils/queries';
 import { UPDATE_USER } from '../utils/mutations';
 import ifLoggedIn from '../utils/ifLoggedIn';
 import { showModal } from '../components/Modal';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
 
@@ -90,50 +90,64 @@ function AccountSettings() {
     return (
         <div className="container my-1">
             {user ? (
-                <Container>
-                    <Paper className="my-4 p-3" elevation={3}>
+                <div>
+                    <div className="card my-4 p-3">
                         <h2> User Info </h2>
-                        <Box component="div" noValidate autoComplete="off">
-                            <Typography variant="body1"><strong>First Name:</strong> {user.firstName}</Typography>
-                            <Typography variant="body1"><strong>Last Name:</strong> {user.lastName}</Typography>
-                            <Typography variant="body1"><strong>Email:</strong> {user.email}</Typography>
-                        </Box>
-                    </Paper>
-                    <Paper className="my-4 p-3" elevation={3}>
+                        <div>
+                            <p><strong>First Name:</strong> {user.firstName}</p>
+                            <p><strong>Last Name:</strong> {user.lastName}</p>
+                            <p><strong>Email:</strong> {user.email}</p>
+                        </div>
+                    </div>
+                    <div className="card my-4 p-3">
                         <h2> Account Settings </h2>
-                        <Box component="form" noValidate autoComplete="off">
+                        <form>
                             {fields.map((field) => (
-                                <TextField key={field.name} label={field.label} variant="filled" name={field.name}
-                                    value={formState[field.name] || ''} 
-                                    onChange={handleChange} 
-                                    fullWidth margin="normal" type={field.type}
-                                />
+                                <div className="mb-3" key={field.name}>
+                                    <label className="form-label">{field.label}</label>
+                                    <input 
+                                        type={field.type} 
+                                        className="form-control" 
+                                        name={field.name} 
+                                        value={formState[field.name] || ''} 
+                                        onChange={handleChange} 
+                                    />
+                                </div>
                             ))}
-                            <Button variant="contained" color="primary" 
+                            <button 
+                                type="button" 
+                                className="btn btn-primary" 
                                 onClick={handleUpdateInfo} 
                                 disabled={isInfoFormEmpty}>
                                 Update Info
-                            </Button>
-                        </Box>
-                    </Paper>
-                    <Paper elevation={3} className="mb-4 p-3">
+                            </button>
+                        </form>
+                    </div>
+                    <div className="card mb-4 p-3">
                         <h2> Update Password </h2>
-                        <Box component="form" noValidate autoComplete="off">
+                        <form>
                             {passwordFields.map((field) => (
-                                <TextField key={field.name} label={field.label} variant="filled" type={field.type} name={field.name}
-                                    value={formState[field.name] || ''} 
-                                    onChange={handleChange} 
-                                    fullWidth margin="normal"
-                                />
+                                <div className="mb-3" key={field.name}>
+                                    <label className="form-label">{field.label}</label>
+                                    <input 
+                                        type={field.type} 
+                                        className="form-control" 
+                                        name={field.name} 
+                                        value={formState[field.name] || ''} 
+                                        onChange={handleChange} 
+                                    />
+                                </div>
                             ))}
-                            <Button variant="contained" color="primary" 
+                            <button 
+                                type="button" 
+                                className="btn btn-primary" 
                                 onClick={handleUpdatePassword} 
                                 disabled={isPasswordFormEmpty}>
                                 Update Password
-                            </Button>
-                        </Box>
-                    </Paper>
-                </Container>
+                            </button>
+                        </form>
+                    </div>
+                </div>
             ) : null}
         </div>
     );
