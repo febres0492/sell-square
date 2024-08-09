@@ -15,17 +15,17 @@ const ifLoggedIn = (operation, variables = {}, obj) => {
     }
 
     if (obj?.isMutation) {
-        console.log('isMutation', variables)
+        // console.log('isMutation', variables)
         const [mutateFunction, { loading, error, data }] = useMutation(operation, {
             variables,
             // context: { headers: { authorization: `Bearer ${Auth.getToken()}` } },
         });
-        console.log('error', error)
+        // console.log('error', error)
         return { mutateFunction, loading, error, data }
     } else {
-        console.log('isQuery', variables)
+        // console.log('isQuery', variables)
         const { loading, error, data } = useQuery(operation, { variables })
-        console.log('data = ', data)
+        // console.log('data = ', data)
         return { loading, error, data }
     }
 }

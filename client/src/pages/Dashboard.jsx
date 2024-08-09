@@ -127,7 +127,7 @@ function Conversations() {
         <>
             <Typography variant="h5">Conversations</Typography>
             <Grid container spacing={3}>
-                { !conversationsData.length ? 
+                { conversationsData.length == 0 ? 
                     <Grid item className='' >
                         <Typography variant="h6">No Conversations </Typography>
                     </Grid>
@@ -153,9 +153,6 @@ function Conversations() {
                                             <Typography variant="subtitle1" color="textSecondary">
                                                 {con.productId.description}
                                             </Typography>
-                                            {/* <Typography variant="subtitle1" color="textSecondary">
-                                                {participant}
-                                            </Typography> */}
                                         </CardContent>
                                     </Card>
                                 </Link>
