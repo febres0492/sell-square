@@ -5,18 +5,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import App from './App.jsx';
 import Home from './pages/Home';
-import ProducDetailsPage from './pages/ProducDetailsPage';
+import ProductDetailsPage from './pages/ProductDetailsPage.jsx';
 import NoMatch from './pages/NoMatch';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Success from './pages/Success';
-import OrderHistory from './pages/OrderHistory';
 import AccountSettings from './pages/AccountSettings';
 import AddProductPage from './pages/AddProductPage';
-import HomePage from './pages/HomePage';
+import EditProductPage from './pages/EditProductPage';
 import Dashboard from './pages/Dashboard';
-
-
+import ConversationPage from './pages/ConversationPage';
 
 const router = createBrowserRouter([
     {
@@ -29,10 +27,12 @@ const router = createBrowserRouter([
             { path: '/login', element: <Login /> },
             { path: '/signup', element: <Signup /> },
             { path: '/success', element: <Success /> },
-            { path: '/orderHistory', element: <OrderHistory /> },
             { path: '/accountSettings', element: <AccountSettings /> },
             { path: '/add-product', element: <AddProductPage /> },
-            { path: '/products/:id', element: <ProducDetailsPage /> }
+            { path: '/products/:id', element: <ProductDetailsPage /> },
+            { path: '/edit-product/:id', element: <EditProductPage /> },
+            { path: '/conversation/:id', element: <ConversationPage /> }
+
         ]
     }
 ]);

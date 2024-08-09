@@ -1,13 +1,12 @@
 // helpers.js
 
 export async function uploadImage(imageFile) {
-    const apiEndpoint = '/api/upload-image'; 
-
     try {
         const formData = new FormData();
         formData.append('image', imageFile);
+        console.log('formData', formData);
 
-        const response = await fetch(apiEndpoint, {
+        const response = await fetch('/api/upload-image', {
             method: 'POST',
             body: formData,
         });
@@ -27,6 +26,28 @@ export async function uploadImage(imageFile) {
     } catch (error) {
         console.error('Error uploading image to API:', error);
         return "https://via.placeholder.com/150";
+    }
+}
+
+export async function deleteImage(imageUrl) {
+    try {
+        const response = await fetch('/api/delete-image', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json', },
+            body: JSON.stringify({ imageUrl }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Image deleted successfully', result);
+            return result;
+        } else {
+            console.error('Error deleting image from API:', response.statusText);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error deleting image from API:', error);
+        return null;
     }
 }
 

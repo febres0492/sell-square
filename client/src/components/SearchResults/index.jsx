@@ -24,7 +24,6 @@ function SearchResults() {
 
     return (<>
     
-        <h3>Search Results:</h3>
         <div className="d-flex flex-wrap">
             {searchResults.map((r) => (
                 <div className="card px-1 py-1" key={r._id}>
@@ -32,6 +31,9 @@ function SearchResults() {
                         <img alt={r.name} src={r.image} />
                         <p>{r.name}</p>
                     </Link>
+                    <div>
+                        <span>Seller: {r.user ? `${r.user?.firstName} ${ r.user?.lastName}` : 'Unknown'}</span>
+                    </div>
                     <div>
                         <span>${r.price}</span>
                     </div>
