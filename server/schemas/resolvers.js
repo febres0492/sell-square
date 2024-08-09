@@ -155,7 +155,7 @@ const resolvers = {
             // Check if the email is already in use
             const existingUser = await User.findOne({ email: args.email });
             if (existingUser) {
-                throw AuthenticationError('Email is already in use');
+                return AuthenticationError('Email is already in use');
             }
         
             // Create the new user

@@ -2,21 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { UPDATE_PRODUCT, DELETE_PRODUCT } from '../utils/mutations';
 import { QUERY_PRODUCT_BY_ID } from '../utils/queries';
-import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button, Typography, Container, Paper, Card, CardMedia } from '@material-ui/core';
+import { TextField, Button, Typography, Container, Paper, Card, CardMedia, Box } from '@mui/material';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { uploadImage, deleteImage } from '../utils/helpers';
-import { showModal } from '../components/Modal'; 
-
-const useStyles = makeStyles((theme) => ({
-    container: { marginTop: theme.spacing(4), padding: theme.spacing(2) },
-    form: { display: 'flex', flexDirection: 'column', },
-    input: { marginBottom: theme.spacing(2), },
-    button: { marginBottom: theme.spacing(2), },
-}));
+import { showModal } from '../components/Modal';
 
 function EditProductPage() {
-    const classes = useStyles();
     const navigate = useNavigate();
     const { id } = useParams();
     const [imageFile, setImageFile] = useState(null);
@@ -114,16 +105,16 @@ function EditProductPage() {
 
     return (
         <Container maxWidth="md">
-            <Paper className={classes.container}>
-                <Link to={`/products/${id}`} className={classes.button}>
-                    <Button variant="contained" color="primary" className={classes.button}>
+            <Paper sx={{ marginTop: 4, padding: 2 }}>
+                <Link to={`/products/${id}`}>
+                    <Button variant="contained" color="primary" sx={{ marginBottom: 2 }}>
                         ← Product Page
                     </Button>
                 </Link>
                 <Typography variant="h4" gutterBottom>
                     Update Product
                 </Typography>
-                <Card className="mb-4">
+                <Card sx={{ marginBottom: 4 }}>
                     {formState.image && (
                         <CardMedia
                             component="img" alt={product.name} height="140" image={formState.image} title={product.name}
@@ -134,23 +125,25 @@ function EditProductPage() {
                     name="image" onChange={handleImageChange} required
                 />
                 <label htmlFor="upload-image">
-                    <Button variant="contained" color="primary" component="span" className={classes.button}>
+                    <Button variant="contained" color="primary" component="span" sx={{ marginBottom: 2 }}>
                         Change Image
                     </Button>
                 </label>
-                <form className={classes.form} onSubmit={handleFormSubmit}>
+                <form onSubmit={handleFormSubmit}>
                     {fields.map((field) => (
                         <TextField
-                            key={field.name} className={classes.input} label={field.label} name={field.name}
+                            key={field.name} sx={{ marginBottom: 2 }} label={field.label} name={field.name}
                             type={field.type} value={formState[field.name]} onChange={handleChange} required
                         />
                     ))}
-                    <Button type="submit" variant="contained" color="primary" className={classes.button} >
-                        Save Changes
-                    </Button>
-                    <Button type="button" variant="contained" color="secondary" className={classes.button} onClick={handleDelete}>
-                        Delete Product
-                    </Button>
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                        <Button type="submit" variant="contained" color="primary">
+                            Save Changes
+                        </Button>
+                        <Button type="button" variant="contained" color="secondary" onClick={handleDelete}>
+                            Delete Product
+                        </Button>
+                    </Box>
                 </form>
                 {updateError && <Typography color="error">Error updating product</Typography>}
             </Paper>

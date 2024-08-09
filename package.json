@@ -17,8 +17,6 @@
         "concurrently": "^5.1.0"
     },
     "dependencies": {
-        "@material-ui/core": "^4.12.4",
-        "@material-ui/icons": "^4.11.3",
         "clsx": "^2.1.1",
         "dotenv": "^16.4.5",
         "cloudinary": "^2.3.1",

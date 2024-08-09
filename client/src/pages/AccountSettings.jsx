@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextField, Typography, Button, Box, Container, Paper } from '@material-ui/core';
+import { TextField, Typography, Button, Box, Container, Paper } from '@mui/material';
 import { QUERY_USER } from '../utils/queries';
 import { UPDATE_USER } from '../utils/mutations';
 import ifLoggedIn from '../utils/ifLoggedIn';

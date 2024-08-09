@@ -1,23 +1,16 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { makeStyles } from '@material-ui/core/styles';
 import { 
     Container, Typography, Button, CircularProgress, Paper, List, ListItem, ListItemText, TextField, Grid, 
     Select, MenuItem, Icon
-} from '@material-ui/core';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+} from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { QUERY_USER, QUERY_CONVERSATIONS } from '../utils/queries';
 import useSendMessage from '../utils/useSendMessage';
 import ifLoggedIn from '../utils/ifLoggedIn';
 import Auth from "../utils/auth";
 import { showModal } from '../components/Modal'; 
-
-const useStyles = makeStyles((theme) => ({
-    container: { marginTop: theme.spacing(2), },
-    backButton: { marginBottom: theme.spacing(2), },
-    listItem: { borderRadius: '10px', margin: '10px', padding: '10px', backgroundColor: '#f0f0f0' },
-}));
 
 const c = {
     red: '\x1b[31m%s\x1b[0m',
@@ -26,10 +19,9 @@ const c = {
 };
 
 function ConversationPage() {
-    const classes = useStyles();
     const { id } = useParams();
     const [messageText, setMessageText] = useState('');
-    let { loading, error, data } = useQuery( QUERY_CONVERSATIONS, { variables: { id } });
+    let { loading, error, data } = useQuery(QUERY_CONVERSATIONS, { variables: { id } });
     let conv = data?.conversation[0] || {};
     console.log(c.red, 'conv', conv);
     
@@ -78,9 +70,9 @@ function ConversationPage() {
 
     if (error) {
         return (
-            <Container className={classes.container}>
-                <Link to="/" className={classes.backButton}>
-                    <Button variant="contained" color="primary" className={classes.backButton}>
+            <Container>
+                <Link to="/">
+                    <Button variant="contained" color="primary">
                         ← Home
                     </Button>
                 </Link>
@@ -122,7 +114,7 @@ function ConversationPage() {
                         return (
                             <Grid container justifyContent={sendtByMe ? 'flex-end' : 'flex-start'} key={`${message._id}_${i}`}>
                                 <Grid item xs={8}>
-                                    <div className={`${classes.listItem} ${sendtByMe ? 'bg-secondary' : ''}`}>
+                                    <div className={`${sendtByMe ? 'bg-secondary' : ''}`}>
                                         <Typography variant="body1" color="textPrimary">
                                             {message.text}
                                         </Typography>
