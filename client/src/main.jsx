@@ -25,7 +25,6 @@ const router = createBrowserRouter([
             { path: '/dashboard', element: <Dashboard /> },
             { path: '/login', element: <Login /> },
             { path: '/signup', element: <Signup /> },
-            { path: '/success', element: <Success /> },
             { path: '/accountSettings', element: <AccountSettings /> },
             { path: '/add-product', element: <AddProductPage /> },
             { path: '/products/:id', element: <ProductDetailsPage /> },
