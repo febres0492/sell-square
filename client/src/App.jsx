@@ -7,11 +7,8 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
-// import Nav from './components/Nav';
 import { StoreProvider } from './utils/GlobalState';
 import AppBar from './components/AppBar';
-import Modal from './components/Modal';
-// import HomePage from './pages/HomePage';
 
 const httpLink = createHttpLink({ uri: '/graphql', });
 const authLink = setContext((_, { headers }) => {
@@ -33,7 +30,6 @@ function App() {
     return (
         <ApolloProvider client={client}>
             <StoreProvider>
-                <Modal />
                 <AppBar />
                 {/* <SideBar /> */}
                 <Outlet />

@@ -1,12 +1,11 @@
-import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { TextField, Typography, Button, Box, Container, Paper } from '@material-ui/core';
 import { QUERY_USER } from '../utils/queries';
 import { UPDATE_USER } from '../utils/mutations';
 import ifLoggedIn from '../utils/ifLoggedIn';
 import { showModal } from '../components/Modal';
-import { useMutation } from '@apollo/client';
-import Auth from '../utils/auth';
+
+const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
 
 function AccountSettings() {
     const { data: userData, loading: userLoading, error: userError } = ifLoggedIn(QUERY_USER);
@@ -57,8 +56,12 @@ function AccountSettings() {
         }
 
         try {
-            const { data } = await updateUser();
-            if (data) {
+            const res = await updateUser()
+            console.log('updateUser data', res);
+            if (res.data?.updateUser?._id) {
+                // clearing inputs
+                setFormState({ ...formState, currentPassword: '', newPassword: '', confirmNewPassword: '' })
+
                 showModal('Password updated successfully');
             }
         } catch (error) {

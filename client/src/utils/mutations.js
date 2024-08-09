@@ -69,13 +69,13 @@ export const UPDATE_USER = gql`
         $firstName: String, 
         $lastName: String, 
         $currentPassword: String, 
-        $password: String
+        $newPassword: String
     ) {
         updateUser(
             firstName: $firstName, 
             lastName: $lastName, 
             currentPassword: $currentPassword, 
-            password: $password
+            newPassword: $newPassword
         ) {
             _id
             firstName

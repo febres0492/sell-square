@@ -89,6 +89,8 @@ function ProductDetailsPage() {
     const product = data?.product || {};
     const isMyProduct = product.user._id === userData?.user?._id;
 
+    console.log(c.yellow, 'product', product);
+
     const handleEditButton = () => {
         if (loggedIn) {
             navigate(`/edit-product/${product._id}`);

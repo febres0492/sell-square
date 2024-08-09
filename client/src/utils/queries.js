@@ -36,12 +36,6 @@ export const QUERY_PRODUCT_BY_ID = gql`
      query getProduct($id: ID!) {
         product(_id: $id) {
             ${keys}
-            user {
-                _id
-                firstName
-                lastName
-                email
-            }
         }
     }
 `;
@@ -49,25 +43,7 @@ export const QUERY_PRODUCT_BY_ID = gql`
 export const QUERY_USER_PRODUCTS = gql`
     query Products {
         products(getUserProducts: true) {
-            _id
-            name
-            description
-            image
-            quantity
-            price
-            category {
-                _id
-                name
-            }
-            zipcode
-        }
-    }
-`;
-
-export const QUERY_CHECKOUT = gql`
-    query getCheckout($products: [ID]!) {
-        checkout(products: $products) {
-            session 
+            ${keys}
         }
     }
 `;

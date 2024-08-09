@@ -1,6 +1,7 @@
 const { User, Product, Category, Order, Conversation } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+const bcrypt = require('bcrypt');
 
 const c = {
     red: '\x1b[31m%s\x1b[0m',
@@ -94,42 +95,6 @@ const resolvers = {
             }
 
             throw AuthenticationError();
-        },
-        checkout: async (parent, args, context) => {
-            const url = new URL(context.headers.referer).origin;
-            const order = new Order({ products: args.products });
-            const line_items = [];
-
-            const { products } = await order.populate('products');
-
-            for (let i = 0; i < products.length; i++) {
-                const product = await stripe.products.create({
-                    name: products[i].name,
-                    description: products[i].description,
-                    images: [`${url}/images/${products[i].image}`]
-                });
-
-                const price = await stripe.prices.create({
-                    product: product.id,
-                    unit_amount: products[i].price * 100,
-                    currency: 'usd',
-                });
-
-                line_items.push({
-                    price: price.id,
-                    quantity: 1
-                });
-            }
-
-            const session = await stripe.checkout.sessions.create({
-                payment_method_types: ['card'],
-                line_items,
-                mode: 'payment',
-                success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `${url}/`
-            });
-
-            return { session: session.id };
         },
         conversation: async (parent, args, context) => {
             let filter = {};
@@ -287,34 +252,36 @@ const resolvers = {
                 throw new Error('Failed to send message.');
             }
         },
-        updateUser: async (_, { firstName, lastName, email, currentPassword, password }, context) => {
-            console.log(c.res, 'updateUser', context.user);
+        updateUser: async (_, args, context) => {
+            const { firstName, lastName, email, currentPassword, newPassword } = args;
+            console.log(c.red, 'updateUser currentPassword', currentPassword);
+            console.log(c.red, 'updateUser password', newPassword);
             if (!context.user) {
-                throw new AuthenticationError('Login Required!');
+                return AuthenticationError('Login Required!');
             }
-
+        
             const user = await User.findById(context.user._id);
-
+        
             if (!user) {
-                throw new AuthenticationError('User not found');
+                return AuthenticationError('User not found');
             }
-
-            if (currentPassword && password) {
+        
+            if (currentPassword && newPassword) {
                 const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
-
+        
                 if (!isPasswordCorrect) {
-                    throw new AuthenticationError('Current password is incorrect');
+                    return AuthenticationError('Current password is incorrect');
                 }
-
-                user.password = await bcrypt.hash(password, 10);
+        
+                user.password = newPassword
             }
-
+        
             if (firstName) user.firstName = firstName;
             if (lastName) user.lastName = lastName;
             if (email) user.email = email;
-
+        
             await user.save();
-
+        
             return {
                 _id: user._id,
                 firstName: user.firstName,

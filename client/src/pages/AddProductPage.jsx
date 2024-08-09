@@ -31,10 +31,7 @@ const AddProductPage = () => {
             const variables = Object.keys(product).reduce((acc, key) => ({ ...acc, [key]: product[key] }), {});
             variables.image = imageUrl;
 
-            const poduct = await addProduct({
-                variables,
-                // context: { headers: { authorization: `Bearer ${Auth.getToken()}`, }, },
-            });
+            const poduct = await addProduct({ variables })
             console.log('new product', poduct);
 
             // redirecting to productDetailsPage
