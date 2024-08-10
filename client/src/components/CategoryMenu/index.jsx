@@ -15,25 +15,27 @@ function CategoryMenu() {
         });
     };
 
-    if (loadingCat) return <div className="d-flex justify-content-center"><div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div></div>;
+    if (loadingCat) return (
+        <div className="d-flex justify-content-center">
+            <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
+            </div>
+        </div>
+    );
 
     return (
-        <div className="d-flex flex-column align-items-center">
-            <div>
+        <div className="container-fluid">
+            <div className="d-flex overflow-x text-nowrap bg-d2 rounded scrollbar">
+                <button className="btn-1 bg-l2 m-1" onClick={() => { handleClick(''); }} >
+                    All
+                </button>
                 {categories.map((item) => (
-                    <button
-                        key={item._id}
-                        className="btn btn-primary m-1"
+                    <button key={item._id} className="btn-1 bg-l2 c1 m-1"
                         onClick={() => { handleClick(item._id); }}
                     >
                         {item.name}
                     </button>
                 ))}
-                <button className="btn btn-secondary m-1"
-                    onClick={() => { handleClick(''); }}
-                >
-                    All
-                </button>
             </div>
         </div>
     );

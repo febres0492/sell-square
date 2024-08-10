@@ -8,7 +8,7 @@ import {
 import { setContext } from '@apollo/client/link/context';
 
 import { StoreProvider } from './utils/GlobalState';
-import AppBar from './components/AppBar';
+import NavBar from './components/NavBar';
 
 const httpLink = createHttpLink({ uri: '/graphql', });
 const authLink = setContext((_, { headers }) => {
@@ -30,7 +30,7 @@ function App() {
     return (
         <ApolloProvider client={client}>
             <StoreProvider>
-                <AppBar />
+                <NavBar />
                 <Outlet />
             </StoreProvider>
         </ApolloProvider>

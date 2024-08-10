@@ -37,13 +37,11 @@ const startApolloServer = async () => {
     }
 
     app.get('*', (req, res) => {
-        // res.sendFile('../client/dist/index.html');
         res.sendFile(path.join(__dirname, '../client/dist/index.html'));
     });
 
     db.once('open', () => {
         app.listen(PORT, () => {
-            console.log(`MONGODB_URI`,process.env.MONGODB_URI);
             console.log(`API server running on port ${PORT}!`);
         });
     });

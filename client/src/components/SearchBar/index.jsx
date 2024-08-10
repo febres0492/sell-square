@@ -51,24 +51,19 @@ function SearchBar() {
     };
 
     return (
-        <div className="container">
-            <h4 className="mb-3">Products</h4>
-            <div className="mb-3">
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter search term"
-                    value={inputValue}
+        <div className="container-fluid">
+            <div className="my-3 df gap-2">
+                <input type="text" className="form-control w-50" placeholder="Enter search term"
+                    value={inputValue} onKeyDown={handleKeyDown}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyDown={handleKeyDown}
                 />
+                <button className="btn-1 bg-c1" onClick={handleSearch}>
+                    Search
+                </button>
+                <button className="btn-1 bg-d4 ml-2" onClick={handleClear}>
+                    Clear
+                </button>
             </div>
-            <button className="btn btn-primary" onClick={handleSearch}>
-                Search
-            </button>
-            <button className="btn btn-secondary ml-2" onClick={handleClear}>
-                Clear
-            </button>
         </div>
     );
 }

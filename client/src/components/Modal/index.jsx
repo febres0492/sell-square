@@ -6,7 +6,7 @@ const ReusableModal = ({ open, handleClose, handleConfirm, handleLogin, message,
     if (!open) return null;
 
     return (
-        <div className="modal show d-block" tabIndex="-1" role="dialog">
+        <div className="modal show d-block bg-" tabIndex="-1" role="dialog">
             <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content">
                     <div className="modal-header">

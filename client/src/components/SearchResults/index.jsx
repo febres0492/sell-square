@@ -22,26 +22,30 @@ function SearchResults() {
         }
     }, [loading, data, error, dispatch]);
 
-    return (<>
-    
-        <div className="d-flex flex-wrap">
-            {searchResults.map((r) => (
-                <div className="card px-1 py-1" key={r._id}>
+    return (
+        <div className='container-fluid mt-3'>
+            <div className="d-flex flex-wrap gap-4">
+                {searchResults.map((r) => (
                     <Link to={`/products/${r._id}`}>
-                        <img alt={r.name} src={r.image} />
-                        <p>{r.name}</p>
+                        <div className="card p-2 tac bg-d4 text-white gap-2" key={r._id}>
+                            <div className="img-div bg-l1 rounded">
+                                <img alt={r.name} src={r.image} />
+                            </div>
+                            <p className='m-0'>{r.name}</p>
+                        
+                        {/* <div>
+                            <span>Seller: {r.user ? `${r.user?.firstName} ${ r.user?.lastName}` : 'Unknown'}</span>
+                        </div> */}
+                            <div>
+                                <span>${r.price}</span>
+                            </div>
+                            <button className="btn-1 bg-c1" onClick={() => console.log('Buy button clicked')}>Learn More</button>
+                        </div>
                     </Link>
-                    <div>
-                        <span>Seller: {r.user ? `${r.user?.firstName} ${ r.user?.lastName}` : 'Unknown'}</span>
-                    </div>
-                    <div>
-                        <span>${r.price}</span>
-                    </div>
-                    <button onClick={() => console.log('Buy button clicked')}>Buy</button>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
-    </>);
+    );
 }
 
 export default SearchResults;
