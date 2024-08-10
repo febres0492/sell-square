@@ -1,15 +1,20 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import ifLoggedIn from '../utils/ifLoggedIn';
 import { QUERY_USER, QUERY_USER_PRODUCTS, QUERY_CONVERSATIONS } from '../utils/queries';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
 const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
 
 const Dashboard = () => {
-    const { loading, error, data } = ifLoggedIn(QUERY_USER_PRODUCTS);
+    const { loading, error, data, refetch } = ifLoggedIn(QUERY_USER_PRODUCTS);
+    // useEffect( refetch , [refetch]);
+
     const products = data?.products || [];
+
+    console.log(c.yellow, 'products', products);
 
     if (loading) return <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>;
     if (error) return <div className="alert alert-danger">Error: {error.message}</div>;

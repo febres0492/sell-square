@@ -60,18 +60,17 @@ body {
     scrollbar-color: var(--color-1) transparent;
 }
 
-/* WebKit-based browsers */
 .scrollbar::-webkit-scrollbar {
-    width: 8px; /* Width of the entire scrollbar */
+    width: 8px; 
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--d1); /* Color of the scrollbar thumb */
-    border-radius: 10px; /* Rounded corners */
+    background-color: var(--d1); 
+    border-radius: 10px; 
 }
 
 .scrollbar::-webkit-scrollbar-track {
-    background: var(--cl); /* Color of the scrollbar track */
+    background: var(--cl); 
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -124,6 +123,12 @@ input:focus {
     text-align: center;
 }
 
+.df-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.fg { flex-grow: 1; }
 
 .jcc { justify-content: center; }
 .jcsb { justify-content: space-between; }
@@ -174,7 +179,6 @@ input:focus {
     }
 }
 
-
 /* Nav */
 
 .navbar-brand {
@@ -190,9 +194,7 @@ input:focus {
     background-color: var(--d1) !important;
 }
 
-/* login */
-
-.login-box {
+.box-1 {
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
@@ -200,11 +202,6 @@ input:focus {
     border-radius: 5px;
     background-color: var(--cl);
     box-shadow: 0 0 10px rgba(0, 0, 0, .1);
-
-    label {
-        display: block;
-        margin: 1rem 0;
-    }
 }
 
 /* Search results  */
@@ -213,14 +210,23 @@ input:focus {
 .img-div {
     min-width: 150px;
     aspect-ratio: 1/1;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+    }
 }
+
+/* Define the scale effect class */
 
 
 
 /*  Background Color Classes  */
 
 .bg-c1 { background-color: var(--color-1) !important; }
-.bg-c2 { background-color: var(--cl-1) !important; }
+.bg-c2 { background-color: var(--color-2) !important; }
 .bg-c3 { background-color: var(--color-3) !important; }
 
 .bg-l1 { background-color: var(--l1) !important; }

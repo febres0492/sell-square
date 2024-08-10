@@ -37,7 +37,7 @@ const NavBar = ({ open, handleDrawerOpen }) => {
                                         <button className="btn-1 bg-l1">Signup</button> 
                                     </Link>
                                     <Link to="/login">
-                                        <button className="btn-1 bg-l1">Login</button> 
+                                        <button className="btn-1 bg-c1">Login</button> 
                                     </Link>
                                 </>
                             )}

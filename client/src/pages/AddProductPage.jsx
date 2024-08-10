@@ -60,7 +60,7 @@ const AddProductPage = () => {
                 </select>
                 <input type="text" name="zipcode" placeholder="Zipcode" value={product.zipcode} onChange={handleChange} required />
                 <label>Product Image</label>
-                <input type="file" name="image" onChange={handleFileChange} required />
+                <input type="file" name="image" onChange={handleFileChange} />
                 <button type="submit" disabled={loading}>
                     {loading ? 'Adding...' : 'Add Product'}
                 </button>
