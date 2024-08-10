@@ -8,6 +8,8 @@ const apiRoutes = require('./routes');
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
+console.log(`db`,db);
+
 const PORT = process.env.PORT || 3001;
 const app = express();
 const server = new ApolloServer({
@@ -41,10 +43,6 @@ const startApolloServer = async () => {
         res.sendFile(path.join(__dirname, '../client/dist/index.html'));
     });
 
-    // app.get('*', (req, res) => {
-    //     res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
-    // });
-
     db.once('open', () => {
         app.listen(PORT, () => {
             console.log(`MONGODB_URI`,process.env.MONGODB_URI);
@@ -53,5 +51,4 @@ const startApolloServer = async () => {
     });
 };
 
-// Call the async function to start the server
 startApolloServer();
