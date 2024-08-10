@@ -8,8 +8,6 @@ const apiRoutes = require('./routes');
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
-console.log(`db`,db);
-
 const PORT = process.env.PORT || 3001;
 const app = express();
 const server = new ApolloServer({

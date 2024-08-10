@@ -10,12 +10,7 @@ import { setContext } from '@apollo/client/link/context';
 import { StoreProvider } from './utils/GlobalState';
 import AppBar from './components/AppBar';
 
-const httpLink = createHttpLink({
-    uri: `${import.meta.env.VITE_API_URL}/graphql`,
-})
-
-console.log('VITE_API_URL', import.meta.env.VITE_API_URL);
-
+const httpLink = createHttpLink({ uri: '/graphql', });
 const authLink = setContext((_, { headers }) => {
     const token = localStorage.getItem('id_token');
     return {
