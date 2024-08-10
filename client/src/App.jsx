@@ -14,6 +14,8 @@ const httpLink = createHttpLink({
     uri: `${import.meta.env.VITE_API_URL}/graphql`,
 })
 
+console.log('VITE_API_URL', import.meta.env.VITE_API_URL);
+
 const authLink = setContext((_, { headers }) => {
     const token = localStorage.getItem('id_token');
     return {
