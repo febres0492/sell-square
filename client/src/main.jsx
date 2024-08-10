@@ -1,5 +1,5 @@
-import ReactDOM from 'react-dom/client'
-import './index.css'
+import ReactDOM from 'react-dom/client';
+import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: <App />,
-        error: <NoMatch />,
+        errorElement: <NoMatch />, 
         children: [
             { index: true, element: <Home /> },
             { path: '/dashboard', element: <Dashboard /> },
@@ -30,11 +30,10 @@ const router = createBrowserRouter([
             { path: '/products/:id', element: <ProductDetailsPage /> },
             { path: '/edit-product/:id', element: <EditProductPage /> },
             { path: '/conversation/:id', element: <ConversationPage /> }
-
         ]
     }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <RouterProvider router={router} />
-)
+);
