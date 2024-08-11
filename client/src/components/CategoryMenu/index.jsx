@@ -24,13 +24,13 @@ function CategoryMenu() {
     if (loadingCat) return (
         <div className="d-flex justify-content-center">
             <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
+                <span className="sr-only"></span>
             </div>
         </div>
     );
 
     return (
-        <div className="container-fluid">
+        <div className="container-fluid mt-3">
             <div className="d-flex overflow-x text-nowrap bg-d2 rounded scrollbar pb-1">
                 <button name="" className="category-btn cat-btn btn-1 bg-l2 m-1" onClick={(e) => { handleClick(e)}} >
                     All

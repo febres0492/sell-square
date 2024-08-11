@@ -34,18 +34,40 @@ function SearchBar() {
     };
 
     return (
-        <div className="container-fluid">
-            <div className="my-3 df gap-2">
-                <input type="text" className="form-control w-50" placeholder="Enter search term"
-                    value={inputValue} onKeyDown={handleKeyDown}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <button className="btn-1 bg-c1" onClick={handleSearch}>
-                    Search
-                </button>
-                <button className="btn-1 bg-d4 ml-2" onClick={handleClear}>
-                    Clear
-                </button>
+        <div className="container-fluid text-white">
+            <div className="row">
+                <div className="mt-3 d-flex flex-column flex-sm-row gap-2">
+                    <input type="text" className="form-control fg" placeholder="Enter search term"
+                        style={{ "--maxw": '600px' }}
+                        value={inputValue} onKeyDown={handleKeyDown}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <button className="btn-1 bg-c1 m-0" onClick={handleSearch}>
+                        Search
+                    </button>
+                </div>
+            </div>
+            <div className="row">
+                <div className="mt-3">
+                {loading ? (
+                        <div className="spinner-border" role="status">
+                            <span className="sr-only"></span>
+                        </div>
+                    ) : (
+                        <div className='df jcc aic gap-2 pt-2'>
+                            {searchQuery ? (
+                                <div className='border pointer d-flex gap-2 aic px-2 rounded' onClick={handleClear}>
+                                    <h2 id="res-title" className='m-0'>{ searchQuery }</h2>
+                                    <div id="clear-res-div" className='rounded bg-d4'>
+                                        <span id="res-x" className="close" aria-hidden="true">&times;</span>
+                                    </div>
+                                </div>
+                            ) : (
+                                <h2 className='m-0'>All Products</h2>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

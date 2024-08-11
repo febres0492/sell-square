@@ -177,6 +177,9 @@ input:focus {
     }
 }
 
+.rel{ position: relative; }
+.abs{ position: absolute; }
+
 /* Nav */
 
 .navbar-brand {
@@ -218,6 +221,24 @@ input:focus {
     }
 }
 
+#clear-res-div{
+    position: relative;
+    display:block;
+    height: 30px;
+    width: 30px; 
+    span{
+        position: absolute;
+        height: 100%;
+        font-size: 2rem;
+        top: 11%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.pointer {
+    cursor: pointer;
+}
 
 [style*=--maxw\:] { 
     max-width: var(--maxw) !important; 
