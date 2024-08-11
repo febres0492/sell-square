@@ -21,10 +21,7 @@ const NavBar = ({ open, handleDrawerOpen }) => {
                         <Link to="/dashboard"> 
                             <button className="btn-1 m-0 bg-l1">Dashboard</button> 
                         </Link>
-                        <Link to="/accountSettings"> 
-                            <button className="btn-1 m-0 bg-l1">Account</button> 
-                        </Link>
-                        <Link to="/" onClick={Auth.logout}>
+                        <Link to="/" onClick={Auth.logout} className="ml-auto">
                             <button className="btn-1 m-0 bg-l1">Logout</button> 
                         </Link>
                     </>

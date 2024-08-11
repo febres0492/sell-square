@@ -1,126 +1,43 @@
-import React, { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import ifLoggedIn from '../utils/ifLoggedIn';
-import { QUERY_USER, QUERY_USER_PRODUCTS, QUERY_CONVERSATIONS } from '../utils/queries';
+import React, { useState, useEffect } from 'react';
+// import { Link, useNavigate } from 'react-router-dom';
+// import { useQuery } from '@apollo/client';
+// import ifLoggedIn from '../utils/ifLoggedIn';
+// import { QUERY_USER, QUERY_USER_PRODUCTS, QUERY_CONVERSATIONS } from '../utils/queries';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Products from '../components/Products';
+import AddProduct from '../components/AddProduct'; 
+import Conversations from '../components/Conversations';
+import AccountSettings from '../components/AccountSettings';
 
 const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
 
 const Dashboard = () => {
-    const { loading, error, data, refetch } = ifLoggedIn(QUERY_USER_PRODUCTS);
-    // useEffect( refetch , [refetch]);
 
-    const products = data?.products || [];
+    const [showComponent, setShowComponent] = useState('products');
 
-    console.log(c.yellow, 'products', products);
-
-    if (loading) return <div className="spinner-border" role="status"><span className="sr-only"></span></div>;
-    if (error) return <div className="alert alert-danger">Error: {error.message}</div>;
+    const selectComponent = (e) => {
+        setShowComponent(e.target.name);
+        const buttons = document.querySelectorAll('.sub-component-btn')
+        buttons.forEach((btn) => btn.classList.remove('cat-btn'))
+        e.target.classList.add('cat-btn')
+    }
 
     return (
         <div className="container-fluid df gap-4">
             <div className="container-fluid pt-3">
-                <div className="d-flex justify-content-between align-items-center">
-                    <Link to="/">
-                        <button className="btn btn-primary"> ← Home </button>
-                    </Link>
-                    <Link to="/add-product">
-                        <button className="btn btn-primary"> Add Product </button>
-                    </Link>
+                <div className="df gap-3">
+                    <button className="sub-component-btn btn-1 m-0 bg-l1" name="products" onClick={selectComponent}> Products </button>
+                    <button className="sub-component-btn btn-1 m-0 bg-l1" name="conversations" onClick={selectComponent}> Conversations </button>
+                    <button className="sub-component-btn btn-1 m-0 bg-l1" name="accountSettings" onClick={selectComponent}> Account Settings </button>
+                    <button className="sub-component-btn btn-1 m-0 bg-l1" name="addProduct" onClick={selectComponent}> Add Product </button>
                 </div>
             </div>
-            <Conversations />
-            <Products products={products} />
+            {showComponent === 'products' && <Products />}
+            {showComponent === 'conversations' && <Conversations />}
+            {showComponent === 'addProduct' && <AddProduct />} 
+            {showComponent === 'accountSettings' && <AccountSettings />} 
         </div>
     );
 };
-
-function Conversations() {
-    const userData = useQuery(QUERY_USER).data?.user || {};
-    const { loading, error, data, refetch } = useQuery(QUERY_CONVERSATIONS, { variables: { userId: userData._id } });
-
-    useEffect(() => { refetch(); }, [refetch]);
-
-    console.log(c.yellow, 'userData', data);
-
-    if (loading) return <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>;
-    if (error) return <div className="alert alert-danger">Error: {error.message}</div>;
-
-    const conversationsData = Object.values(data)[0] || [];
-    console.log(c.yellow, 'conversations', data, conversationsData);
-
-    return (
-        <div className="container-fluid">
-            <div className="container-box">
-                <h5>Conversations</h5>
-                <div className="row">
-                    {conversationsData.length === 0 ?
-                        <div className="col">
-                            <h6>No Conversations</h6>
-                        </div>
-                        :
-                        (conversationsData.map(con => {
-                            const participant = con.participants;
-                            const fistLast = participant.firstName || '' + ' ' + participant.lastName || '';
-                            console.log('participant', participant);
-
-                            return (
-                                <div className="col-6 col-md-6 col-lg-4 mb-3" key={con._id}>
-                                    <Link to={`/conversation/${con._id}`}>
-                                        <div className="card">
-                                            <img
-                                                src={con.productId.image || 'https://via.placeholder.com/150'}
-                                                className="card-img-top"
-                                                alt={con.productId.name || 'Image title'}
-                                            />
-                                            <div className="card-body">
-                                                <h5 className="card-title">{con.productId.name}</h5>
-                                                <p className="card-text">{con.productId.description}</p>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                </div>
-                            )
-                        })) }
-                </div>
-            </div>
-        </div>
-    );
-}
-
-function Products({ products }) {
-    return (
-        <div className="container-fluid">
-            <div className="container-box">
-                <h5>Products</h5>
-                {products.length === 0 ? (
-                    <div className="col">
-                        <h6>No Products</h6>
-                    </div>
-                ) : (
-                    products.map((product) => (
-                        <div className="col-6 col-sm-4 col-md-3 col-lg-2 tac" key={product._id}>
-                            <Link to={`/products/${product._id}`}>
-                                <div className="card">
-                                    <img
-                                        src={product.image || 'https://via.placeholder.com/150'}
-                                        className="card-img-top"
-                                        alt={product.name || 'Image title'}
-                                    />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{product.name}</h5>
-                                        <p className="card-text">{product.description}</p>
-                                        <p className="card-text"><small className="text-muted">{product.category.name}</small></p>
-                                    </div>
-                                </div>
-                            </Link>
-                        </div>
-                    ))
-                )}
-            </div>
-        </div>
-    );
-}
 
 export default Dashboard;
