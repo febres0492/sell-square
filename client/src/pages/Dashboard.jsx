@@ -16,35 +16,35 @@ const Dashboard = () => {
 
     console.log(c.yellow, 'products', products);
 
-    if (loading) return <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>;
+    if (loading) return <div className="spinner-border" role="status"><span className="sr-only"></span></div>;
     if (error) return <div className="alert alert-danger">Error: {error.message}</div>;
 
     return (
         <>
-            <div className="container my-4">
-                <div className="d-flex justify-content-between align-items-center">
-                    <Link to="/">
-                        <button className="btn btn-primary">
-                            ← Home
-                        </button>
-                    </Link>
-                    <Link to="/add-product">
-                        <button className="btn btn-primary">
-                            Add Product
-                        </button>
-                    </Link>
+            <div className="container-fluid my-4">
+                <div className="row">
+
+                    <div className="d-flex justify-content-between align-items-center">
+                        <Link to="/">
+                            <button className="btn btn-primary">
+                                ← Home
+                            </button>
+                        </Link>
+                        <Link to="/add-product">
+                            <button className="btn btn-primary">
+                                Add Product
+                            </button>
+                        </Link>
+                    </div>
                 </div>
-            </div>
 
-            <div className="container my-4">
-                <Conversations />
-            </div>
+                <div className="row">
+                    <Conversations />
+                </div>
 
-            <div className="container my-4">
-                <h5>Your Products</h5>
                 <div className="row">
                     {products.map((product) => (
-                        <div className="col-6 col-md-6 col-lg-4 mb-3" key={product._id}>
+                        <div className="col-6 col-sm-4 col-md-3 col-lg-2 tac" key={product._id}>
                             <Link to={`/products/${product._id}`}>
                                 <div className="card">
                                     <img
