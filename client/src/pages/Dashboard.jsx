@@ -5,7 +5,6 @@ import ifLoggedIn from '../utils/ifLoggedIn';
 import { QUERY_USER, QUERY_USER_PRODUCTS, QUERY_CONVERSATIONS } from '../utils/queries';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
 
 const Dashboard = () => {
@@ -20,50 +19,20 @@ const Dashboard = () => {
     if (error) return <div className="alert alert-danger">Error: {error.message}</div>;
 
     return (
-        <>
-            <div className="container-fluid my-4">
-                <div className="row">
-
-                    <div className="d-flex justify-content-between align-items-center">
-                        <Link to="/">
-                            <button className="btn btn-primary">
-                                ← Home
-                            </button>
-                        </Link>
-                        <Link to="/add-product">
-                            <button className="btn btn-primary">
-                                Add Product
-                            </button>
-                        </Link>
-                    </div>
-                </div>
-
-                <div className="row">
-                    <Conversations />
-                </div>
-
-                <div className="row">
-                    {products.map((product) => (
-                        <div className="col-6 col-sm-4 col-md-3 col-lg-2 tac" key={product._id}>
-                            <Link to={`/products/${product._id}`}>
-                                <div className="card">
-                                    <img
-                                        src={product.image || 'https://via.placeholder.com/150'}
-                                        className="card-img-top"
-                                        alt={product.name || 'Image title'}
-                                    />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{product.name}</h5>
-                                        <p className="card-text">{product.description}</p>
-                                        <p className="card-text"><small className="text-muted">{product.category.name}</small></p>
-                                    </div>
-                                </div>
-                            </Link>
-                        </div>
-                    ))}
+        <div className="container-fluid df gap-4">
+            <div className="container-fluid pt-3">
+                <div className="d-flex justify-content-between align-items-center">
+                    <Link to="/">
+                        <button className="btn btn-primary"> ← Home </button>
+                    </Link>
+                    <Link to="/add-product">
+                        <button className="btn btn-primary"> Add Product </button>
+                    </Link>
                 </div>
             </div>
-        </>
+            <Conversations />
+            <Products products={products} />
+        </div>
     );
 };
 
@@ -82,39 +51,75 @@ function Conversations() {
     console.log(c.yellow, 'conversations', data, conversationsData);
 
     return (
-        <>
-            <h5>Conversations</h5>
-            <div className="row">
-                {conversationsData.length === 0 ?
-                    <div className="col">
-                        <h6>No Conversations</h6>
-                    </div>
-                    :
-                    (conversationsData.map(con => {
-                        const participant = con.participants;
-                        const fistLast = participant.firstName || '' + ' ' + participant.lastName || '';
-                        console.log('participant', participant);
+        <div className="container-fluid">
+            <div className="container-box">
+                <h5>Conversations</h5>
+                <div className="row">
+                    {conversationsData.length === 0 ?
+                        <div className="col">
+                            <h6>No Conversations</h6>
+                        </div>
+                        :
+                        (conversationsData.map(con => {
+                            const participant = con.participants;
+                            const fistLast = participant.firstName || '' + ' ' + participant.lastName || '';
+                            console.log('participant', participant);
 
-                        return (
-                            <div className="col-6 col-md-6 col-lg-4 mb-3" key={con._id}>
-                                <Link to={`/conversation/${con._id}`}>
-                                    <div className="card">
-                                        <img
-                                            src={con.productId.image || 'https://via.placeholder.com/150'}
-                                            className="card-img-top"
-                                            alt={con.productId.name || 'Image title'}
-                                        />
-                                        <div className="card-body">
-                                            <h5 className="card-title">{con.productId.name}</h5>
-                                            <p className="card-text">{con.productId.description}</p>
+                            return (
+                                <div className="col-6 col-md-6 col-lg-4 mb-3" key={con._id}>
+                                    <Link to={`/conversation/${con._id}`}>
+                                        <div className="card">
+                                            <img
+                                                src={con.productId.image || 'https://via.placeholder.com/150'}
+                                                className="card-img-top"
+                                                alt={con.productId.name || 'Image title'}
+                                            />
+                                            <div className="card-body">
+                                                <h5 className="card-title">{con.productId.name}</h5>
+                                                <p className="card-text">{con.productId.description}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            </div>
-                        )
-                    }))}
+                                    </Link>
+                                </div>
+                            )
+                        })) }
+                </div>
             </div>
-        </>
+        </div>
+    );
+}
+
+function Products({ products }) {
+    return (
+        <div className="container-fluid">
+            <div className="container-box">
+                <h5>Products</h5>
+                {products.length === 0 ? (
+                    <div className="col">
+                        <h6>No Products</h6>
+                    </div>
+                ) : (
+                    products.map((product) => (
+                        <div className="col-6 col-sm-4 col-md-3 col-lg-2 tac" key={product._id}>
+                            <Link to={`/products/${product._id}`}>
+                                <div className="card">
+                                    <img
+                                        src={product.image || 'https://via.placeholder.com/150'}
+                                        className="card-img-top"
+                                        alt={product.name || 'Image title'}
+                                    />
+                                    <div className="card-body">
+                                        <h5 className="card-title">{product.name}</h5>
+                                        <p className="card-text">{product.description}</p>
+                                        <p className="card-text"><small className="text-muted">{product.category.name}</small></p>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    ))
+                )}
+            </div>
+        </div>
     );
 }
 

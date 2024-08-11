@@ -237,6 +237,14 @@ input:focus {
     }
 }
 
+.container-box {
+    --pad:1rem;
+    border-radius: 10px;
+    background-color: var(--cl);
+    padding: var(--pad);
+    min-height: 200px;
+}
+
 .pointer {
     cursor: pointer;
 }
