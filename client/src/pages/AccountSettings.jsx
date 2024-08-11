@@ -21,11 +21,7 @@ function AccountSettings() {
         confirmNewPassword: ''
     });
 
-    console.log('AccountSettings user', user);
-
-    const { 
-        mutateFunction: updateUser, loading: updateLoading, error: updateError, data: updateData 
-    } = ifLoggedIn(UPDATE_USER, formState, { isMutation: true });
+    const [updateUser] = ifLoggedIn(UPDATE_USER, formState, { isMutation: true });
 
     const removeEmptyKeys = (obj) => {
         return Object.fromEntries(Object.entries(obj).filter(([key, value]) => value !== ''));
@@ -100,7 +96,7 @@ function AccountSettings() {
                         </div>
                     </div>
                     <div className="card my-4 p-3">
-                        <h2> Account Settings </h2>
+                        <h2> Update User Info </h2>
                         <form>
                             {fields.map((field) => (
                                 <div className="mb-3" key={field.name}>

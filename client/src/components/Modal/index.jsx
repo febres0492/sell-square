@@ -14,7 +14,7 @@ const ReusableModal = ({ open, handleClose, handleConfirm, handleLogin, message,
     return (
         <div className="modal show d-block bg-d1" tabIndex="-1" role="dialog" onClick={handleOutsideClick}>
             <div className="modal-dialog modal-dialog-centered tac" role="document" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-content bg-l4">
+                <div className="modal-content bg-dark text-white">
                     <div className="modal-header">
                         <h5 className="modal-title">{message}</h5>
                     </div>

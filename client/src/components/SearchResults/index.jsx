@@ -21,7 +21,7 @@ function SearchResults() {
                         style={{"--maxw":'270px', "--hover-scale":'1.05'}} 
                     >
                         <Link to={`/products/${r._id}`}>
-                            <div className='p-2 bg-d2 rounded'>
+                            <div className='p-2 bg-d4 rounded'>
                                 <div className="img-div bg-l1">
                                     <img alt={r.name} src={r.image} />
                                 </div>
