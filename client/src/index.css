@@ -85,8 +85,6 @@ a, Link {
     font-weight: bold;
 }
 
-/* a:hover { text-decoration: underline; } */
-
 button[disabled] {
     cursor: default;
     opacity: .8;
@@ -206,9 +204,10 @@ input:focus {
 
 /* Search results  */
 
+
     /* cards */
 .img-div {
-    min-width: 150px;
+    width: 100%;
     aspect-ratio: 1/1;
 
     img {
@@ -218,6 +217,34 @@ input:focus {
         border-radius: 5px;
     }
 }
+
+
+[style*=--maxw\:] { 
+    width: 100%;
+    max-width: var(--maxw) !important; 
+}
+
+[style*=--gap\:] { 
+    /* margin: calc(var(--gap)/2 * -1);  */
+    display: flex; 
+    flex-wrap: wrap; 
+    gap:var(--gap);
+    /* gap:calc(0.25rem * var(--gap)); */
+}
+
+[style*=--grid-w\:] { 
+    width: 100%;
+    max-width: calc((100%/var(--grid-w) - var(--gap, 0px)) ); 
+    /* max-width: calc((100%/12) * var(--grid-w));  */
+}
+
+[style*=--hover-scale\:] { transition: scale 0.2s; }
+[style*=--hover-scale\:]:hover { 
+    transition: scale 0.2s;
+    scale: var(--hover-scale);
+}
+
+
 
 /* Define the scale effect class */
 
