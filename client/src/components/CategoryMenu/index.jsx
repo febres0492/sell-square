@@ -31,8 +31,8 @@ function CategoryMenu() {
 
     return (
         <div className="container-fluid">
-            <div className="d-flex overflow-x text-nowrap bg-d2 rounded scrollbar">
-                <button name="all" className="category-btn btn-1 bg-l2 m-1" onClick={(e) => { handleClick(e)}} >
+            <div className="d-flex overflow-x text-nowrap bg-d2 rounded scrollbar pb-1">
+                <button name="" className="category-btn cat-btn btn-1 bg-l2 m-1" onClick={(e) => { handleClick(e)}} >
                     All
                 </button>
                 {categories.map((item) => (
@@ -46,41 +46,5 @@ function CategoryMenu() {
         </div>
     );
 }
-// function CategoryMenu() {
-//     const [state, dispatch] = useStoreContext();
-//     const { loadingCat, categories } = useFetchCategories();
-
-//     const handleClick = (id) => {
-//         dispatch({
-//             type: UPDATE_CURRENT_CATEGORY,
-//             currentCategory: id,
-//         });
-//     };
-
-//     if (loadingCat) return (
-//         <div className="d-flex justify-content-center">
-//             <div className="spinner-border" role="status">
-//                 <span className="sr-only">Loading...</span>
-//             </div>
-//         </div>
-//     );
-
-//     return (
-//         <div className="container-fluid">
-//             <div className="d-flex overflow-x text-nowrap bg-d2 rounded scrollbar">
-//                 <button className="btn-1 bg-l2 m-1" onClick={() => { handleClick(''); }} >
-//                     All
-//                 </button>
-//                 {categories.map((item) => (
-//                     <button key={item._id} className="btn-1 bg-l2 c1 m-1"
-//                         onClick={() => { handleClick(item._id); }}
-//                     >
-//                         {item.name}
-//                     </button>
-//                 ))}
-//             </div>
-//         </div>
-//     );
-// }
 
 export default CategoryMenu;

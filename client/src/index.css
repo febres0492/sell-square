@@ -220,7 +220,6 @@ input:focus {
 
 
 [style*=--maxw\:] { 
-    width: 100%;
     max-width: var(--maxw) !important; 
 }
 
