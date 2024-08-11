@@ -82,7 +82,7 @@ h1, h2, h3, h4, h5, h6 {
 
 a, Link {
     text-decoration: none !important;
-    font-weight: bold;
+    color: currentColor !important;
 }
 
 button[disabled] {
@@ -265,3 +265,7 @@ input:focus {
 .bg-d2 { background-color: var(--d2) !important; }
 .bg-d3 { background-color: var(--d3) !important; }
 .bg-d4 { background-color: var(--d4) !important; }
+
+.cat-btn{
+    background-color: var(--color-1) !important;
+}

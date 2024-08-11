@@ -7,10 +7,17 @@ function CategoryMenu() {
     const [state, dispatch] = useStoreContext();
     const { loading: loadingCat, data: categories } = updateState('categories');
 
-    const handleClick = (id) => {
+    const handleClick = (ev) => {
+        const { name } = ev.target;
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        categoryBtns.forEach((btn) => {
+            btn.classList.remove('cat-btn');
+        });
+        ev.target.classList.add('cat-btn');
+
         dispatch({
             type: "UPDATE_CURRENT_CATEGORY",
-            currentCategory: id,
+            currentCategory: name,
         });
     };
 
@@ -25,12 +32,12 @@ function CategoryMenu() {
     return (
         <div className="container-fluid">
             <div className="d-flex overflow-x text-nowrap bg-d2 rounded scrollbar">
-                <button className="btn-1 bg-l2 m-1" onClick={() => { handleClick(''); }} >
+                <button name="all" className="category-btn btn-1 bg-l2 m-1" onClick={(e) => { handleClick(e)}} >
                     All
                 </button>
                 {categories.map((item) => (
-                    <button key={item._id} className="btn-1 bg-l2 c1 m-1"
-                        onClick={() => { handleClick(item._id); }}
+                    <button name={item.name} key={item._id} className="category-btn btn-1 bg-l2 c1 m-1"
+                        onClick={(e) => { handleClick(e); }}
                     >
                         {item.name}
                     </button>

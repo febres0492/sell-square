@@ -5,17 +5,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const ReusableModal = ({ open, handleClose, handleConfirm, handleLogin, message, type }) => {
     if (!open) return null;
 
+    const handleOutsideClick = (e) => {
+        if (e.target.classList.contains('modal')) {
+            handleClose()
+        }
+    };
+
     return (
-        <div className="modal show d-block bg-" tabIndex="-1" role="dialog">
-            <div className="modal-dialog modal-dialog-centered" role="document">
-                <div className="modal-content">
+        <div className="modal show d-block bg-d1" tabIndex="-1" role="dialog" onClick={handleOutsideClick}>
+            <div className="modal-dialog modal-dialog-centered tac" role="document" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-content bg-l4">
                     <div className="modal-header">
                         <h5 className="modal-title">{message}</h5>
-                        <button type="button" className="close" aria-label="Close" onClick={handleClose}>
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </div>
-                    <div className="modal-body">
+                    <div className="modal-body tac">
                         {type === 'confirm' ? (
                             <>
                                 <button className="btn btn-primary m-2" onClick={handleConfirm}>
@@ -56,6 +59,7 @@ const showModal = (message, args) => {
             const [open, setOpen] = useState(true);
 
             const closeModal = (args) => {
+                console.log('closeModal');
                 setOpen(false);
                 document.body.removeChild(div);
                 if (type === 'login') { window.location.href = '/login'; }
