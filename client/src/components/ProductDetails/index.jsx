@@ -41,7 +41,7 @@ function ProductDetails(props) {
         } else {
             const newMessage = await sendMessage({
                 recipientId: productSellerId,
-                messageText: 'I am interested in your product',
+                messageText: '--startconversation',
                 productId: id
             });
             if (newMessage) {

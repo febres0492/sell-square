@@ -117,8 +117,12 @@ function ConversationPage(props) {
                                 console.log('message', message.receiverId, userData._id, message.receiverId == userData._id);
                                 const sendtByMe = message.receiverId != userData._id;
                                 const hhmm = formatTime(message.createdAt)
+
+                                if(message.text === '--startconversation' || message.text === 'I am interested in your product') {
+                                    return ''
+                                }
                                 return (
-                                    <li className="list-group-item" key={`${message._id}_${i}`}>
+                                    <li className="list-group-item mb-3" key={`${message._id}_${i}`}>
                                         <div className={`d-flex justify-content-${sendtByMe ? 'end' : 'start'}`}>
                                             <div className={`p-2 rounded text-white ${sendtByMe ? 'bg-c1' : 'bg-secondary'}`}>
                                                 <div>{message.text}</div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Products from '../components/Products';
 import ProductDetails from '../components/ProductDetails';
@@ -7,10 +7,14 @@ import Conversations from '../components/Conversations';
 import AccountSettings from '../components/AccountSettings';
 import OpenConversation from '../components/OpenConversation';
 import EditProduct from '../components/EditProduct';
+import { useParams } from 'react-router-dom';
 
 const Dashboard = () => {
+    const params = useParams()
     const [showComponent, setShowComponent] = useState('Products');
     const [selectedId, setSelectedId] = useState(null);
+
+    console.log('param', params);
 
     const selectButton = (name) => {
         document.querySelectorAll('.sub-component-btn').forEach((btn) => {
@@ -21,6 +25,8 @@ const Dashboard = () => {
 
     const selectComponent = (args) => {
         const { e, component, id } = args;
+
+        console
         
         setShowComponent(component);
         setSelectedId(id || null);
@@ -28,6 +34,12 @@ const Dashboard = () => {
     };
 
     selectButton(showComponent);
+
+    useEffect(() => {
+        if (params.component) {
+            selectComponent({ component: params.component, id: params.id });
+        }
+    }, [params]);
 
     const components = {
         Products: <Products selectComponent={selectComponent} />,

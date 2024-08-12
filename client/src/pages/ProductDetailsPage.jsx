@@ -30,7 +30,7 @@ function ProductDetailsPage() {
 
     const handleSendMessage = useCallback(async () => {
         if (convExit) {
-            navigate(`/conversation/${convData.conversation[0]._id}`);
+            navigate(`/dashboard/OpenConversation/${convData.conversation[0]._id}`);
         } else {
             const newMessage = await sendMessage({
                 recipientId: productSellerId,
@@ -39,7 +39,8 @@ function ProductDetailsPage() {
             });
             if (newMessage) {
                 console.log(c.green, 'newMessage', newMessage.conversationId);
-                navigate(`/conversation/${newMessage.conversationId}`);
+                navigate(`/dashboard`);
+                // navigate(`/conversation/${newMessage.conversationId}`);
             }
         }
     }, [convExit, convData, data, navigate, productSellerId, sendMessage]);
@@ -73,42 +74,94 @@ function ProductDetailsPage() {
     };
 
     return (
-        <div className="container">
-            <Link to="/">
-                <button className="btn btn-primary">
-                    ← Back to Products
-                </button>
-            </Link>
-            <div className="row">
-                {product ? (
-                    <div className="card">
-                        <img className="card-img-top" src={product.image || 'https://via.placeholder.com/150'} alt={product.name} />
-                        <div className="card-body">
-                            <p className="card-text"><strong>Seller:</strong> {product.user.firstName} {product.user.lastName}</p>
-                            <h2 className="card-title">{product.name}</h2>
-                            <p className="card-text">{product.description}</p>
-                            <p className="card-text"><strong>Price:</strong> ${product.price}</p>
-                            <p className="card-text"><strong>Category:</strong> {product.category.name}</p>
-                            <p className="card-text"><strong>Quantity:</strong> {product.quantity}</p>
-                            <p className="card-text"><strong>Zipcode:</strong> {product.zipcode}</p>
-                            {loggedIn && isMyProduct && (
-                                <button className="btn btn-secondary" onClick={handleEditButton}>
-                                    Edit
-                                </button>
-                            )}
-                            {loggedIn && !isMyProduct && (
-                                <button className="btn btn-primary" onClick={handleSendMessage}>
-                                    Message Seller
-                                </button>
-                            )}
-                        </div>
+        <div className="container-fluid" >
+            <div className="container-fluid py-3">
+                <div className="col-12 df jcsb aic ">
+                    <button className="btn-1 bg-c1 m-0" onClick={()=> navigate('/')}>Back</button>
+                </div>
+            </div>
+        
+            <div className="container-fluid">
+                <div className="container-box ">
+                    <div className="col-12 df jcc aic mb-3">
+                        <h3 className="m-0">{product.name}</h3>
                     </div>
-                ) : (
-                    <div>Product not found</div>
-                )}
+                    
+                    <div className="col">
+                        {product ? (<div className='row'>
+                        
+                            <div className="col-12 col-sm-6">
+                                <div className="img-div">
+                                    <img className="card-img-left" src={product.image || 'https://via.placeholder.com/150'} alt={product.name} />
+                                </div>
+                            </div>
+                            <div className="col-12 col-sm-6">
+                                <div className="card-body">
+                                    <h2 className="card-title">Description</h2>
+                                    <p className="card-text"><strong>Seller:</strong> {product.user.firstName} {product.user.lastName}</p>
+                                    <p className="card-text">{product.description}</p>
+                                    <p className="card-text"><strong>Price:</strong> ${product.price}</p>
+                                    <p className="card-text"><strong>Category:</strong> {product.category.name}</p>
+                                    <p className="card-text"><strong>Quantity:</strong> {product.quantity}</p>
+                                    <p className="card-text"><strong>Zipcode:</strong> {product.zipcode}</p>
+                                    {/* {loggedIn && isMyProduct && (
+                                        <button className="btn btn-primary px-4" onClick={handleEditButton}>
+                                            Edit
+                                        </button>
+                                    )} */}
+                                    {loggedIn && !isMyProduct && (
+                                        <button className="btn btn-primary px-4" onClick={handleSendMessage}>
+                                            Message Seller
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>) : (
+                            <div>Product not found</div>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );
+
+    // return (
+    //     <div className="container">
+    //         <Link to="/">
+    //             <button className="btn btn-primary">
+    //                 ← Back to Products
+    //             </button>
+    //         </Link>
+    //         <div className="row">
+    //             {product ? (
+    //                 <div className="card">
+    //                     <img className="card-img-top" src={product.image || 'https://via.placeholder.com/150'} alt={product.name} />
+    //                     <div className="card-body">
+    //                         <p className="card-text"><strong>Seller:</strong> {product.user.firstName} {product.user.lastName}</p>
+    //                         <h2 className="card-title">{product.name}</h2>
+    //                         <p className="card-text">{product.description}</p>
+    //                         <p className="card-text"><strong>Price:</strong> ${product.price}</p>
+    //                         <p className="card-text"><strong>Category:</strong> {product.category.name}</p>
+    //                         <p className="card-text"><strong>Quantity:</strong> {product.quantity}</p>
+    //                         <p className="card-text"><strong>Zipcode:</strong> {product.zipcode}</p>
+    //                         {loggedIn && isMyProduct && (
+    //                             <button className="btn btn-secondary" onClick={handleEditButton}>
+    //                                 Edit
+    //                             </button>
+    //                         )}
+    //                         {loggedIn && !isMyProduct && (
+    //                             <button className="btn btn-primary" onClick={handleSendMessage}>
+    //                                 Message Seller
+    //                             </button>
+    //                         )}
+    //                     </div>
+    //                 </div>
+    //             ) : (
+    //                 <div>Product not found</div>
+    //             )}
+    //         </div>
+    //     </div>
+    // );
 }
 
 export default ProductDetailsPage;
