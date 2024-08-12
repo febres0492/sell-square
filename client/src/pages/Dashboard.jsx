@@ -1,41 +1,55 @@
-import React, { useState, useEffect } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { useQuery } from '@apollo/client';
-// import ifLoggedIn from '../utils/ifLoggedIn';
-// import { QUERY_USER, QUERY_USER_PRODUCTS, QUERY_CONVERSATIONS } from '../utils/queries';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Products from '../components/Products';
+import ProductDetails from '../components/ProductDetails';
 import AddProduct from '../components/AddProduct'; 
 import Conversations from '../components/Conversations';
 import AccountSettings from '../components/AccountSettings';
 
-const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
-
 const Dashboard = () => {
+    const [showComponent, setShowComponent] = useState('Products');
 
-    const [showComponent, setShowComponent] = useState('products');
+    const selectButton = (name) => {
+        document.querySelectorAll('.sub-component-btn').forEach((btn) => {
+            btn.classList.remove('cat-btn')
+            btn.name === name ? btn.classList.add('cat-btn') : null;
+        })
+    };
 
-    const selectComponent = (e) => {
-        setShowComponent(e.target.name);
-        const buttons = document.querySelectorAll('.sub-component-btn')
-        buttons.forEach((btn) => btn.classList.remove('cat-btn'))
-        e.target.classList.add('cat-btn')
-    }
+    const selectComponent = (e, component) => {
+        setShowComponent(component);
+        selectButton(component);
+    };
+
+    selectButton(showComponent)
+
+    const components = {
+        Products: <Products selectComponent={selectComponent} />,
+        AddProduct: <AddProduct selectComponent={selectComponent} />,
+        Conversations: <Conversations selectComponent={selectComponent} />,
+        AccountSettings: <AccountSettings selectComponent={selectComponent} />,
+        ProductDetails: <ProductDetails selectComponent={selectComponent} />
+    };
 
     return (
         <div className="container-fluid df gap-4">
             <div className="container-fluid pt-3">
                 <div className="df gap-3">
-                    <button className="sub-component-btn btn-1 m-0 bg-l1" name="products" onClick={selectComponent}> Products </button>
-                    <button className="sub-component-btn btn-1 m-0 bg-l1" name="conversations" onClick={selectComponent}> Conversations </button>
-                    <button className="sub-component-btn btn-1 m-0 bg-l1" name="accountSettings" onClick={selectComponent}> Account Settings </button>
-                    <button className="sub-component-btn btn-1 m-0 bg-l1" name="addProduct" onClick={selectComponent}> Add Product </button>
+                    <button name="Products" className="sub-component-btn btn-1 m-0 bg-l1" 
+                        onClick={(e) => selectComponent(e, 'Products')}> Products 
+                    </button>
+                    <button name="Conversations" className="sub-component-btn btn-1 m-0 bg-l1" 
+                        onClick={(e) => selectComponent(e, 'Conversations')}> Conversations 
+                    </button>
+                    <button name="AccountSettings" className="sub-component-btn btn-1 m-0 bg-l1" 
+                        onClick={(e) => selectComponent(e, 'AccountSettings')}> Account Settings 
+                    </button>
+                    <button name="AddProduct" className="sub-component-btn btn-1 m-0 bg-l1" 
+                        onClick={(e) => selectComponent(e, 'AddProduct')}> Add Product 
+                    </button>
                 </div>
             </div>
-            {showComponent === 'products' && <Products />}
-            {showComponent === 'conversations' && <Conversations />}
-            {showComponent === 'addProduct' && <AddProduct />} 
-            {showComponent === 'accountSettings' && <AccountSettings />} 
+            {components[showComponent]}
         </div>
     );
 };

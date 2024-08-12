@@ -7,6 +7,8 @@ function CategoryMenu() {
     const [state, dispatch] = useStoreContext();
     const { loading: loadingCat, data: categories } = updateState('categories');
 
+    console.log('categories', state.categories);
+
     const handleClick = (ev) => {
         const { name } = ev.target;
         const categoryBtns = document.querySelectorAll('.category-btn');

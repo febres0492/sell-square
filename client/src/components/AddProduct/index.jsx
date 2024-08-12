@@ -20,6 +20,7 @@ const AddProduct = () => {
     };
 
     const handleFileChange = (e) => { setImageFile(e.target.files[0]); };
+    const test = () => { console.log('product', product); };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -58,13 +59,14 @@ const AddProduct = () => {
                     ))}
                 </select>
                 <input type="text" name="zipcode" placeholder="Zipcode" value={product.zipcode} onChange={handleChange} required />
-                <label>Product Image</label>
+                <label className='text-white tal'>Product Image</label>
                 <input type="file" name="image" onChange={handleFileChange} />
                 <button className="btn-1 bg-c1" type="submit" disabled={loading}>
                     {loading ? 'Adding...' : 'Add Product'}
                 </button>
                 {error && <p>Error: {error.message}</p>}
             </form>
+            <button onClick={test}>test</button>
             {data && <p>Product added successfully!</p>}
         </div>
     );

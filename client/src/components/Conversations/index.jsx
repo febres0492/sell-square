@@ -6,16 +6,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
 
-
-function Conversations() {
+function Conversations({ selectComponent }) {
     const userData = useQuery(QUERY_USER).data?.user || {};
     const { loading, error, data, refetch } = useQuery(QUERY_CONVERSATIONS, { variables: { userId: userData._id } });
 
     useEffect(() => { refetch(); }, [refetch]);
 
+    const goToComp = (comp) => { if(selectComponent) { selectComponent(comp,{data:'test 1'}) } }
+
     console.log(c.yellow, 'userData', data);
 
-    if (loading) return <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>;
+    if (loading) return <div className="spinner-border" role="status"><span className="sr-only"></span></div>;
     if (error) return <div className="alert alert-danger">Error: {error.message}</div>;
 
     const conversationsData = Object.values(data)[0] || [];

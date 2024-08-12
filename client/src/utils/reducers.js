@@ -9,6 +9,8 @@ import {
     CLEAR_CART,
     TOGGLE_CART,
     UPDATE_SEARCH_RESULTS,
+    UPDATE_MY_PRODUCTS,
+    UPDATE_DASHBOARD_PAGE,
 } from './actions';
 
 // The reducer is a function that accepts the current state and an action. It returns a new state based on that action.
@@ -90,6 +92,18 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 searchResults: [...action.products],
+            };
+
+        // case UPDATE_MY_PRODUCTS:
+        //     return {
+        //         ...state,
+        //         myProducts: [...action.myProducts],
+        //     };
+
+        case UPDATE_DASHBOARD_PAGE:
+            return {
+                ...state,
+                dashboardPage: action.dashboardPage,
             };
 
         // Return the state as is in the event that the `action.type` passed to our reducer was not accounted for by the developers

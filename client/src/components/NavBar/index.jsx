@@ -9,12 +9,12 @@ const NavBar = ({ open, handleDrawerOpen }) => {
     console.log(c.red,'loggedIn', loggedIn);
 
     return (
-        <nav class="navbar navbar-expand-sm navbar-dark bg-d4 px-4">
+        <nav className="navbar navbar-expand-sm navbar-dark bg-d4 px-4">
             <Link className="navbar-brand" to="/">Sell Square</Link>
-            {/* <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+            {/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
             </button> */}
-            <div class="df jcc navbar-collapse column-gap-3 row-gap-2" id="navbarNav">
+            <div className="df jcc navbar-collapse column-gap-3 row-gap-2" id="navbarNav">
                 <Link to="/"> <button className="btn-1 m-0 bg-l1">Home</button> </Link>
                 {loggedIn && (
                     <>
