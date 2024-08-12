@@ -6,13 +6,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
 
-function Conversations({ selectComponent }) {
+function Conversations(props) {
+    const selectComponent = props.selectComponent
+    const goToComp = (args) => { if (selectComponent) { selectComponent(args) } }
+
     const userData = useQuery(QUERY_USER).data?.user || {};
     const { loading, error, data, refetch } = useQuery(QUERY_CONVERSATIONS, { variables: { userId: userData._id } });
 
     useEffect(() => { refetch(); }, [refetch]);
-
-    const goToComp = (comp, data) => { if(selectComponent) { selectComponent(comp, data) } }
 
     console.log(c.yellow, 'userData', data);
 
@@ -39,7 +40,7 @@ function Conversations({ selectComponent }) {
 
                             return (
                                 <div className="col-6 col-md-6 col-lg-4 mb-3" key={con._id}>
-                                    <div className="card" onClick={()=>goToComp('OpenConversation',{id:con._id})}>
+                                    <div className="card" onClick={()=>goToComp({component:'OpenConversation', id: con._id})}>
                                         <img
                                             src={con.productId.image || 'https://via.placeholder.com/150'}
                                             className="card-img-top"

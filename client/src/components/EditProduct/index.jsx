@@ -9,7 +9,6 @@ import { showModal } from '../../components/Modal';
 function EditProductPage(props) {
     const { id } = props;
     const selectComponent = props.selectComponent
-
     const goToComp = (args) => { if (selectComponent) { selectComponent(args) } }
 
     const [imageFile, setImageFile] = useState(null);

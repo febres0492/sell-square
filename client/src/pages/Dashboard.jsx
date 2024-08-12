@@ -35,8 +35,8 @@ const Dashboard = () => {
         ProductDetails: <ProductDetails selectComponent={selectComponent} id={selectedId} />,
         EditProduct: <EditProduct selectComponent={selectComponent} id={selectedId} />,
         Conversations: <Conversations selectComponent={selectComponent} />,
+        OpenConversation: <OpenConversation selectComponent={selectComponent} id={selectedId}/>,
         AccountSettings: <AccountSettings selectComponent={selectComponent} />,
-        OpenConversation: <OpenConversation selectComponent={selectComponent} id={selectedId}/>
     };
 
     return (
