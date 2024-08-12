@@ -12,7 +12,7 @@ function Conversations({ selectComponent }) {
 
     useEffect(() => { refetch(); }, [refetch]);
 
-    const goToComp = (comp) => { if(selectComponent) { selectComponent(comp,{data:'test 1'}) } }
+    const goToComp = (comp, data) => { if(selectComponent) { selectComponent(comp, data) } }
 
     console.log(c.yellow, 'userData', data);
 
@@ -39,7 +39,20 @@ function Conversations({ selectComponent }) {
 
                             return (
                                 <div className="col-6 col-md-6 col-lg-4 mb-3" key={con._id}>
+                                    <div className="card" onClick={()=>goToComp('OpenConversation',{id:con._id})}>
+                                        <img
+                                            src={con.productId.image || 'https://via.placeholder.com/150'}
+                                            className="card-img-top"
+                                            alt={con.productId.name || 'Image title'}
+                                        />
+                                        <div className="card-body">
+                                            <h5 className="card-title">{con.productId.name}</h5>
+                                            <p className="card-text">{con.productId.description}</p>
+                                        </div>
+                                    </div>
                                     <Link to={`/conversation/${con._id}`}>
+                                    </Link>
+                                    {/* <Link to={`/conversation/${con._id}`}>
                                         <div className="card">
                                             <img
                                                 src={con.productId.image || 'https://via.placeholder.com/150'}
@@ -51,7 +64,7 @@ function Conversations({ selectComponent }) {
                                                 <p className="card-text">{con.productId.description}</p>
                                             </div>
                                         </div>
-                                    </Link>
+                                    </Link> */}
                                 </div>
                             )
                         })) }

@@ -5,47 +5,53 @@ import ProductDetails from '../components/ProductDetails';
 import AddProduct from '../components/AddProduct'; 
 import Conversations from '../components/Conversations';
 import AccountSettings from '../components/AccountSettings';
+import OpenConversation from '../components/OpenConversation';
 
 const Dashboard = () => {
     const [showComponent, setShowComponent] = useState('Products');
+    const [selectedId, setSelectedId] = useState(null);
 
     const selectButton = (name) => {
         document.querySelectorAll('.sub-component-btn').forEach((btn) => {
-            btn.classList.remove('cat-btn')
+            btn.classList.remove('cat-btn');
             btn.name === name ? btn.classList.add('cat-btn') : null;
-        })
+        });
     };
 
-    const selectComponent = (e, component) => {
+    const selectComponent = (args) => {
+        const { e, component, id } = args;
+        
         setShowComponent(component);
+        setSelectedId(id || null);
         selectButton(component);
     };
 
-    selectButton(showComponent)
+    selectButton(showComponent);
 
     const components = {
         Products: <Products selectComponent={selectComponent} />,
         AddProduct: <AddProduct selectComponent={selectComponent} />,
+        ProductDetails: <ProductDetails selectComponent={selectComponent} id={selectedId} />,
         Conversations: <Conversations selectComponent={selectComponent} />,
         AccountSettings: <AccountSettings selectComponent={selectComponent} />,
-        ProductDetails: <ProductDetails selectComponent={selectComponent} />
+        OpenConversation: <OpenConversation selectComponent={selectComponent} id={selectedId}/>
     };
 
     return (
         <div className="container-fluid df gap-4">
             <div className="container-fluid pt-3">
-                <div className="df gap-3">
+                <div className="d-flex gap-3 overflow-x scrollbar p-2 rounded bg-d1">
                     <button name="Products" className="sub-component-btn btn-1 m-0 bg-l1" 
-                        onClick={(e) => selectComponent(e, 'Products')}> Products 
+                        onClick={(e) => selectComponent({ e, component: 'Products' })}> Products 
                     </button>
                     <button name="Conversations" className="sub-component-btn btn-1 m-0 bg-l1" 
-                        onClick={(e) => selectComponent(e, 'Conversations')}> Conversations 
+                        onClick={(e) => selectComponent({ e, component: 'Conversations' })}> Conversations 
                     </button>
                     <button name="AccountSettings" className="sub-component-btn btn-1 m-0 bg-l1" 
-                        onClick={(e) => selectComponent(e, 'AccountSettings')}> Account Settings 
+                        onClick={(e) => selectComponent({ e, component: 'AccountSettings' })}> Account Settings 
                     </button>
                     <button name="AddProduct" className="sub-component-btn btn-1 m-0 bg-l1" 
-                        onClick={(e) => selectComponent(e, 'AddProduct')}> Add Product 
+                        onClick={(e) => selectComponent({ e, component: 'AddProduct' })}> Add Product 
                     </button>
                 </div>
             </div>

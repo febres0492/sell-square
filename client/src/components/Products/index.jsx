@@ -12,7 +12,9 @@ function Products({ selectComponent }) {
 
     useEffect(() => { refetch(); }, [refetch]);
 
-    const goToComp = (e,comp) => { if(selectComponent) { selectComponent(e,comp) } }
+    const goToComp = (args) => { 
+        if (selectComponent) { selectComponent(args) } 
+    }
 
     const products = data?.products || [];
 
@@ -25,7 +27,7 @@ function Products({ selectComponent }) {
                 <div className="row row-gap-4 jcsb">
                     <div className="col-12 d-flex jcsb aic">
                         <h3 className="m-0">Products</h3>
-                        <button className="btn-1 bg-c1" onClick={(e) => goToComp(e,'AddProduct')}>Add Product</button>
+                        <button className="btn-1 bg-c1" onClick={(e) => goToComp(e, 'AddProduct')}>Add Product</button>
                     </div>
                     {products.length === 0 ? (
                         <div className="col">
@@ -34,20 +36,23 @@ function Products({ selectComponent }) {
                     ) : (
                         products.map((product) => (
                             <div className="col-6 col-sm-4 col-md-3 col-lg-2 tac" key={product._id}>
-                                <Link to={`/products/${product._id}`}>
-                                    <div className="card">
+                                <div className="card" style={{"--hover-scale":'1.05'}}
+                                    onClick={()=>goToComp({'component':'ProductDetails', id:product._id})}>
+                                    <div className="img-div bg-l1">
                                         <img
-                                            src={product.image || 'https://via.placeholder.com/150'}
+                                            src={product.image }
                                             className="card-img-top"
                                             alt={product.name || 'Image title'}
                                         />
-                                        <div className="card-body">
-                                            <h5 className="card-title">{product.name}</h5>
-                                            <p className="card-text">{product.description}</p>
-                                            <p className="card-text"><small className="text-muted">{product.category.name}</small></p>
-                                        </div>
                                     </div>
-                                </Link>
+                                    <div className="card-body">
+                                        <h5 className="card-title">{product.name}</h5>
+                                        {/* <p className="card-text">{product.description}</p> */}
+                                        <p className="card-text"><small className="text-muted">{product.category.name}</small></p>
+                                    </div>
+                                </div>
+                                {/* <Link to={`/products/${product._id}`}>
+                                </Link> */}
                             </div>
                         ))
                     )}

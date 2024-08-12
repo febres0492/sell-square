@@ -14,7 +14,7 @@ const NavBar = ({ open, handleDrawerOpen }) => {
             {/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button> */}
-            <div className="df jcc navbar-collapse column-gap-3 row-gap-2" id="navbarNav">
+            <div className="df jcfe navbar-collapse column-gap-3 row-gap-2" id="navbarNav">
                 <Link to="/"> <button className="btn-1 m-0 bg-l1">Home</button> </Link>
                 {loggedIn && (
                     <>
