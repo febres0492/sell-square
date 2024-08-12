@@ -86,7 +86,7 @@ function ConversationPage(props) {
     return (<>
         <div className="container-fluid">
             <div className="col-12 df jcsb aic ">
-                <button className="btn-1 bg-c1 m-0" onClick={(e) => goToComp({component:'Products'})}>Back</button>
+                <button className="btn-1 bg-c1 m-0" onClick={(e) => goToComp({component:'Conversations'})}>Back</button>
                 <div class="drop-menu rel">
                     <button class="btn-1 btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                         Options
