@@ -56,11 +56,9 @@ function ProductDetails(props) {
     if (error) {
         return (
             <div className="container">
-                <Link to="/">
-                    <button className="btn btn-primary">
-                        ← Back to Products
-                    </button>
-                </Link>
+                <button className="btn-1 bg-c1 m-0" onClick={(e) => goToComp({component:'Products'})}>
+                    ← Back
+                </button>
                 <div className="text-danger">Error: {error.message}</div>
             </div>
         );
@@ -110,7 +108,7 @@ function ProductDetails(props) {
                                 <p className="card-text"><strong>Quantity:</strong> {product.quantity}</p>
                                 <p className="card-text"><strong>Zipcode:</strong> {product.zipcode}</p>
                                 {loggedIn && isMyProduct && (
-                                    <button className="btn btn-primary px-4" onClick={handleEditButton}>
+                                    <button className="btn btn-primary px-4" onClick={()=>goToComp({component:'EditProduct', id:product._id})}>
                                         Edit
                                     </button>
                                 )}

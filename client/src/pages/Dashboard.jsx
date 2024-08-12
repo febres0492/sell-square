@@ -6,6 +6,7 @@ import AddProduct from '../components/AddProduct';
 import Conversations from '../components/Conversations';
 import AccountSettings from '../components/AccountSettings';
 import OpenConversation from '../components/OpenConversation';
+import EditProduct from '../components/EditProduct';
 
 const Dashboard = () => {
     const [showComponent, setShowComponent] = useState('Products');
@@ -32,6 +33,7 @@ const Dashboard = () => {
         Products: <Products selectComponent={selectComponent} />,
         AddProduct: <AddProduct selectComponent={selectComponent} />,
         ProductDetails: <ProductDetails selectComponent={selectComponent} id={selectedId} />,
+        EditProduct: <EditProduct selectComponent={selectComponent} id={selectedId} />,
         Conversations: <Conversations selectComponent={selectComponent} />,
         AccountSettings: <AccountSettings selectComponent={selectComponent} />,
         OpenConversation: <OpenConversation selectComponent={selectComponent} id={selectedId}/>
