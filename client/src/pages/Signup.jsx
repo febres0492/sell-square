@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client';
 import Auth from '../utils/auth';
 import { ADD_USER } from '../utils/mutations';
 import { showModal } from '../components/Modal';
+import { useNavigate } from 'react-router-dom';
 
 function Signup(props) {
     const [formState, setFormState] = useState({ email: '', password: '' });
@@ -11,28 +12,44 @@ function Signup(props) {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-
-        const emptyFields = Object.values(formState).some((field) => field === '')
+    
+        const emptyFields = Object.values(formState).some((field) => field === '');
         if (emptyFields) {
-            showModal('All fields are required')
-            return
+            showModal('All fields are required');
+            return;
         }
-
+    
         if (formState.password !== formState.repeatPassword) {
-            showModal('Passwords and Repeat Password do not match')
-            return
+            showModal('Passwords and Repeat Password do not match');
+            return;
         }
+    
+        try {
+            let res = await addUser({
+                variables: {
+                    email: formState.email,
+                    password: formState.password,
+                    firstName: formState.firstName,
+                    lastName: formState.lastName,
+                },
+            });
 
-        const mutationResponse = await addUser({
-            variables: {
-                email: formState.email,
-                password: formState.password,
-                firstName: formState.firstName,
-                lastName: formState.lastName,
-            },
-        });
-        const token = mutationResponse.data.addUser.token;
-        Auth.login(token);
+            res = res.data || res
+            res = res ? Object.values(res)[0] : null;
+    
+            if (res.success === false || !res) {
+                showModal(res.message || 'An error occurred during signup');
+                return
+            }
+
+            if(res.token){
+                Auth.login(res.token);
+            }
+
+        } catch (error) {
+            console.error(error);
+            showModal('An error occurred during signup');
+        }
     };
 
     const handleChange = (event) => {

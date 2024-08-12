@@ -2,6 +2,7 @@ const { User, Product, Category, Order, Conversation } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 const bcrypt = require('bcrypt');
+const { GraphQLJSON } = require('graphql-type-json');
 
 const c = {
     red: '\x1b[31m%s\x1b[0m',
@@ -10,6 +11,25 @@ const c = {
 };
 
 const resolvers = {
+    JSON: GraphQLJSON,
+    res: {
+        __resolveType(obj) {
+            console.log(c.red, 'obj', obj);
+            if (obj.token) { return 'Auth'; }
+            if (obj.hasOwnProperty('success')) {
+                console.log(c.red, 'obj.message', obj.message);
+                return 'Alert'; 
+            }
+            if (obj.content) { return 'Message'; }
+            if (obj.price) { return 'Product'; }
+            if (obj.firstName && obj.lastName && obj.email) { return 'User'; }
+            if (obj.name) { return 'Category'; }
+            if (obj.participants && obj.messages) { return 'Conversation'; }
+            if (typeof obj === 'object') { return 'JSON'; }
+            console.log(c.red, 'eturning null');
+            return null;
+        },
+    },
     Query: {
         categories: async () => {
             return await Category.find();
@@ -34,7 +54,8 @@ const resolvers = {
             if (args.searchTerm) {
                 filter.$or = [
                     { name: { $regex: args.searchTerm, $options: 'i' } },
-                    { description: { $regex: args.searchTerm, $options: 'i' } }
+                    { description: { $regex: args.searchTerm, $options: 'i' } },
+                    { zipcode: { $regex: args.searchTerm, $options: 'i' } },
                 ];
             }
         
@@ -124,11 +145,7 @@ const resolvers = {
             }
         },
         userConversations: async (parent, args, context) => {
-            if (!context.user._id) {
-                console.log(c.red,'login to view conversations');
-                // return{ error: 'You need to be logged in to view your conversations' };
-                return AuthenticationError() 
-            }
+            if (!context.user._id) { return { success: false, message: 'Login Required' }; }
             try {
                 const conversations = await Conversation.find({ participants: context.user._id })
                 .populate('participants', 'firstName lastName email')
@@ -153,9 +170,12 @@ const resolvers = {
     Mutation: {
         addUser: async (parent, args) => {
             // Check if the email is already in use
+            args.email = args.email.toLowerCase()
+            console.log(c.red, 'addUser', args);
             const existingUser = await User.findOne({ email: args.email });
             if (existingUser) {
-                return AuthenticationError('Email is already in use');
+                console.log(c.red, 'Email is already in use');
+                return { success: false, message: 'Email is already in use' }
             }
         
             // Create the new user
@@ -166,7 +186,7 @@ const resolvers = {
         },
         addProduct: async (parent, args, context) => {
             console.log('addProduct', context.user);
-            if (!context.user) { throw AuthenticationError() }
+            if (!context.user._id) { return { success: false, message: 'Login Required' }; }
             try {
                 const product = await Product.create({
                     ...args,
@@ -191,7 +211,7 @@ const resolvers = {
             
         },
         updateProduct: async (parent, args, context) => {
-            if (!context.user) { throw AuthenticationError() }
+            if (!context.user._id) { return { success: false, message: 'Login Required' }; }
 
             console.log('updateProduct', context.user);
             const updatedProduct = await Product.findByIdAndUpdate(
@@ -203,20 +223,18 @@ const resolvers = {
         },
         login: async (parent, { email, password }, context) => {
             const user = await User.findOne({ email });
-            if (!user) { throw AuthenticationError() }
-            console.log(c.red, 'login', user);
+            if (!user) { return { success: false, message: 'No user found with this email address' } }
+            
             const correctPw = await user.isCorrectPassword(password);
-            if (!correctPw) { throw AuthenticationError() }
+            if (!correctPw) { return { success: false, message: 'Incorrect password' } }
+
             context.user = user;
             const token = signToken(user);
             return { token, user };
         },
         sendMessage: async (parent, { receiverId, content, productId }, context) => {
             // Check if the senderId is provided
-            if(!context.user) { 
-                console.log(c.red, 'You need to be logged in to send messages');
-                throw new AuthenticationError() 
-            }
+            if (!context.user._id) { return { success: false, message: 'Login Required' }; }
             const senderId = context.user._id;
             console.log(c.red, 'sendMessage', senderId, receiverId, content, productId);
             const newMessage = { text: content, senderId, receiverId, createdAt: new Date(), };
@@ -258,21 +276,17 @@ const resolvers = {
             const { firstName, lastName, email, currentPassword, newPassword } = args;
             console.log(c.red, 'updateUser currentPassword', currentPassword);
             console.log(c.red, 'updateUser password', newPassword);
-            if (!context.user) {
-                return AuthenticationError('Login Required!');
-            }
+            if (!context.user._id) { return { success: false, message: 'Login Required' }; }
         
             const user = await User.findById(context.user._id);
         
-            if (!user) {
-                return AuthenticationError('User not found');
-            }
+            if (!user) { return { success: false, message: 'User Not Found' }; }
         
             if (currentPassword && newPassword) {
                 const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
         
                 if (!isPasswordCorrect) {
-                    return AuthenticationError('Current password is incorrect');
+                    return { success: false, message: 'Current password is incorrect' }
                 }
         
                 user.password = newPassword

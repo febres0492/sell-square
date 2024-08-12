@@ -37,7 +37,7 @@ function SearchBar() {
         <div className="container-fluid text-white">
             <div className="row">
                 <div className="mt-3 d-flex flex-column flex-sm-row gap-2">
-                    <input type="text" className="form-control fg" placeholder="Enter search term"
+                    <input type="text" className="form-control fg" placeholder="Enter search term or Zipcode"
                         style={{ "--maxw": '600px' }}
                         value={inputValue} onKeyDown={handleKeyDown}
                         onChange={(e) => setSearchTerm(e.target.value)}

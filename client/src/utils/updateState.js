@@ -19,30 +19,28 @@ const actionTypes = {
 const updateState = (dataKey, data) => {
     const [state, dispatch] = useStoreContext();
     const dataState = state[dataKey];
-
     const query = queries[dataKey];
 
-    const { loading, data: fetchedData } = useQuery(query, {
-        skip: !!data, // skip the query if data is provided
-    });
+    // If data is an object with just one key, extract its value
+    if (data && typeof data === 'object' && Object.keys(data).length === 1) {
+        data = Object.values(data)[0];
+    }
 
-    console.log('fetchedData', fetchedData);
+    const { loading, data: fetchedData } = useQuery(query, {
+        skip: !!data, 
+    });
 
     const newData = fetchedData ? Object.values(fetchedData)[0] : data;
 
     useEffect(() => {
         if (!dataState.length && (data || fetchedData)) {
-            console.log('newData', newData);
             const payload = {
                 type: actionTypes[dataKey],
-                [dataKey]: data ? data : newData,
+                [dataKey]: data || newData,
             };
-
             dispatch(payload);
         }
     }, [loading, fetchedData, dataState.length, dispatch, dataKey, data]);
-
-    console.log('newData', newData);
 
     return { data: newData, loading }; 
 };

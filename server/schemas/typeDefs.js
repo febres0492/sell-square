@@ -1,4 +1,9 @@
+const { GraphQLScalarType } = require('graphql');
+const GraphQLJSON = require('graphql-type-json');
+
 const typeDefs = `
+    scalar JSON
+
     type Category {
         _id: ID
         name: String
@@ -54,6 +59,13 @@ const typeDefs = `
         user: User
     }
 
+    type Alert {
+        message: String
+        success: Boolean
+    }
+
+    union res = Auth | Alert | Message | Product | User | Category | Conversation 
+
     type Query {
         categories: [Category]
         products(
@@ -72,7 +84,7 @@ const typeDefs = `
     }
 
     type Mutation {
-        addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
+        addUser(firstName: String!, lastName: String!, email: String!, password: String!): res
         addOrder(products: [ID]!): Order
         updateUser(firstName: String, lastName: String, currentPassword: String,  newPassword: String): User
         updateProduct(
@@ -85,7 +97,7 @@ const typeDefs = `
             category: ID,
             zipcode: Int
         ): Product
-        login(email: String!, password: String!): Auth
+        login(email: String!, password: String!): res
         addProduct(
             name: String!,
             description: String!,

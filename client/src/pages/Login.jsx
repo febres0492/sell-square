@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { LOGIN } from '../utils/mutations';
 import Auth from '../utils/auth';
+import { showModal } from '../components/Modal';
 
 function Login(props) {
     const [formState, setFormState] = useState({ email: '', password: '' });
@@ -14,6 +15,12 @@ function Login(props) {
             const mutationResponse = await login({
                 variables: { email: formState.email, password: formState.password },
             });
+
+            if (mutationResponse.success === false) {
+                showModal('The provided credentials are incorrect');
+                return
+            }
+
             const token = mutationResponse.data.login.token;
             Auth.login(token);
         } catch (e) {

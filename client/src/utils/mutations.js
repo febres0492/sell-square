@@ -15,11 +15,17 @@ const keys = `
 `
 
 export const LOGIN = gql`
-    mutation login($email: String!, $password: String!) {
+    mutation Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
+        ... on Auth {
             token
             user {
-                _id
+                _id 
+            }
+        }
+        ... on Alert {
+            message
+            success
             }
         }
     }
@@ -44,21 +50,17 @@ export const ADD_ORDER = gql`
 `;
 
 export const ADD_USER = gql`
-    mutation addUser(
-        $firstName: String!
-        $lastName: String!
-        $email: String!
-        $password: String!
-    ) {
-        addUser(
-            firstName: $firstName
-            lastName: $lastName
-            email: $email
-            password: $password
-        ) {
-            token
-            user {
-                _id
+    mutation AddUser($firstName: String!, $lastName: String!, $email: String!, $password: String!) {
+        addUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
+            ... on Auth {
+                token
+                user {
+                    _id
+                }
+            }
+            ... on Alert {
+                message
+                success
             }
         }
     }
