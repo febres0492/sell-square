@@ -12,17 +12,18 @@ function Login(props) {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
-            const mutationResponse = await login({
+            let res = await login({
                 variables: { email: formState.email, password: formState.password },
             });
-
-            if (mutationResponse.success === false) {
-                showModal('The provided credentials are incorrect');
+            res = res.data || res
+            res = res ? Object.values(res)[0] : null;
+    
+            if (res.success === false || !res) {
+                showModal(res.message || 'An error occurred during signup');
                 return
             }
 
-            const token = mutationResponse.data.login.token;
-            Auth.login(token);
+            if(res.token){ Auth.login(res.token); }
         } catch (e) {
             console.log(e);
         }

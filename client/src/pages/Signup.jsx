@@ -86,10 +86,15 @@ function Signup(props) {
                         <label htmlFor="pwd">Repeat Password:</label>
                         <input placeholder="******" name="repeatPassword" type="password" id="pwd" onChange={handleChange} />
                     </div>
-                    <div className="df-column ais">
+                    <div className="df-column ais gap-3">
                         <button className='btn-1 bg-c1 m-0' type="submit">Create Account</button>
                     </div>
+
                 </form>
+                <div className="df-column aic gap-3 pt-3">
+                    <p className='m-0'>Already have an account?</p>
+                    <Link to="/login" className='btn-1 bg-l3 m-0'>Login</Link>
+                </div>
             </div>
 
         </div>
