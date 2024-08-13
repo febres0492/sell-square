@@ -38,8 +38,8 @@ function ProductDetailsPage() {
                 productId: id
             });
             if (newMessage) {
-                console.log(c.green, 'newMessage', newMessage.conversationId);
-                navigate(`/dashboard/OpenConversation/${newMessage.conversation[0]._id}`);
+                console.log(c.green, 'newMessage', newMessage);
+                navigate(`/dashboard/OpenConversation/${newMessage.conversationId}`);
             }
         }
     }, [convExit, convData, data, navigate, productSellerId, sendMessage]);
