@@ -30,7 +30,7 @@ function ProductDetailsPage() {
 
     const handleSendMessage = useCallback(async () => {
         if (convExit) {
-            navigate(`/dashboard/OpenConversation/${convData.conversation[0]._id}`);
+            navigate(`/dashboard/OpenConversation/${id}`);
         } else {
             const newMessage = await sendMessage({
                 recipientId: productSellerId,
@@ -39,7 +39,7 @@ function ProductDetailsPage() {
             });
             if (newMessage) {
                 console.log(c.green, 'newMessage', newMessage.conversationId);
-                navigate(`/dashboard/OpenConversation/${convData.conversation[0]._id}`);
+                navigate(`/dashboard/OpenConversation/${id}`);
             }
         }
     }, [convExit, convData, data, navigate, productSellerId, sendMessage]);
