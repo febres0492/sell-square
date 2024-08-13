@@ -6,7 +6,7 @@
 
 ## Description
 
-Sell Square is an online marketplace that connects buyers and sellers. It allowes people to buy and sell many items.  
+Sell Square is an online marketplace that connects buyers and sellers. It allows people to buy and sell many items.  
 The platform provides a seamless experience for creating and managing accounts, posting products for sale, and editing or deleting product listings. 
 
 [![Go_to_live_site](https://img.shields.io/badge/Go_to_live_site_>>-darkgreen?style=for-the-badge)](https://sell-square.onrender.com/)
@@ -32,9 +32,10 @@ The platform provides a seamless experience for creating and managing accounts, 
 
 - **User Profiles**
 - **Product Listings**
+- **Search and Filter by categories**
 - **Messaging System**
-- **Responsive Design**
 - **Admin Dashboard**
+- **Responsive Design**
 
 <br>
 
