@@ -2,17 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { UPDATE_PRODUCT, DELETE_PRODUCT } from '../../utils/mutations';
 import { QUERY_PRODUCT_BY_ID } from '../../utils/queries';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { uploadImage, deleteImage } from '../../utils/helpers';
 import { showModal } from '../../components/Modal';
 
 function EditProductPage(props) {
     const { id } = props;
-    const selectComponent = props.selectComponent
-    const goToComp = (args) => { if (selectComponent) { selectComponent(args) } }
-
+    const navigate = useNavigate();
     const [imageFile, setImageFile] = useState(null);
-
     const { loading, data, error } = useQuery(QUERY_PRODUCT_BY_ID, {
         variables: { id },
     });
@@ -66,7 +63,7 @@ function EditProductPage(props) {
                 formState.image = imageUrl;
             }
             await updateProduct({ variables: { id, ...formState } });
-            goToComp({component:'ProductDetails', id:id});
+            navigate(`/dashboard/ProductDetails/${id}`);
         } catch (e) {
             console.error(e, updateError);
         }
@@ -79,11 +76,11 @@ function EditProductPage(props) {
         if (!confirm) return;
         try {
             if (data.product.image) {
-                const res = await deleteImage(data.product.image);
+                deleteImage(data.product.image);
                 setFormState({ ...formState, image: '' });
             }
             await deleteProduct({ variables: { id } });
-            goToComp({component:'Products'});
+            navigate(`/dashboard/Products`);
         } catch (e) {
             console.error('Error deleting product:', e);
         }
@@ -105,7 +102,8 @@ function EditProductPage(props) {
     return (<>
         <div className="container-fluid">
             <div className="col-12 df jcsb aic ">
-                <button className="btn-1 bg-c1 m-0" onClick={(e) => goToComp({component:'Products'})}>Back</button>
+                {/* <button className="btn-1 bg-c1 m-0" onClick={(e) => goToComp({component:'Products'})}>Back</button> */}
+                <button className="btn-1 bg-c1 m-0" onClick={(e) => navigate(`/dashboard/Products`)}>Back</button>
             </div>
         </div>
 

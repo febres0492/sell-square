@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { QUERY_PRODUCT_BY_ID, QUERY_USER, QUERY_CONVERSATIONS } from '../../utils/queries';
 import Auth from "../../utils/auth";
@@ -51,12 +51,12 @@ function ProductDetails(props) {
         }
     }, [convExit, convData, data, navigate, productSellerId, sendMessage]);
 
-    if (loading) return <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>;
+    if (loading) return <div className="spinner-border" role="status"><span className="sr-only"></span></div>;
 
     if (error) {
         return (
             <div className="container">
-                <button className="btn-1 bg-c1 m-0" onClick={(e) => goToComp({component:'Products'})}>
+                <button className="btn-1 bg-c1 m-0" onClick={(e) => navigate('/dashboard/Products')}>
                     ← Back
                 </button>
                 <div className="text-danger">Error: {error.message}</div>
@@ -71,7 +71,7 @@ function ProductDetails(props) {
 
     const handleEditButton = () => {
         if (loggedIn) {
-            navigate(`/edit-product/${product._id}`);
+            navigate(`/dashboard/EditProduct/${product._id}`);
         } else {
             showModal('Please log in to edit this product');
         }
@@ -80,7 +80,8 @@ function ProductDetails(props) {
     return (<>
         <div className="container-fluid">
             <div className="col-12 df jcsb aic ">
-                <button className="btn-1 bg-c1 m-0" onClick={(e) => goToComp({component:'Products'})}>Back</button>
+                <button className="btn-1 bg-c1 m-0" onClick={(e) => navigate(`/dashboard/Products`)}>Back</button>
+                {/* <button className="btn-1 bg-c1 m-0" onClick={(e) => goToComp({component:'Products'})}>Back</button> */}
             </div>
         </div>
     
@@ -108,7 +109,8 @@ function ProductDetails(props) {
                                 <p className="card-text"><strong>Quantity:</strong> {product.quantity}</p>
                                 <p className="card-text"><strong>Zipcode:</strong> {product.zipcode}</p>
                                 {loggedIn && isMyProduct && (
-                                    <button className="btn btn-primary px-4" onClick={()=>goToComp({component:'EditProduct', id:product._id})}>
+                                    <button className="btn btn-primary px-4" onClick={handleEditButton}>
+                                    {/* <button className="btn btn-primary px-4" onClick={()=>goToComp({component:'EditProduct', id:product._id})}> */}
                                         Edit
                                     </button>
                                 )}

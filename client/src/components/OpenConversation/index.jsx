@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { QUERY_USER, QUERY_CONVERSATIONS } from '../../utils/queries';
 import useSendMessage from '../../utils/useSendMessage';
-import ifLoggedIn from '../../utils/ifLoggedIn';
+// import ifLoggedIn from '../../utils/ifLoggedIn';
 import Auth from "../../utils/auth";
 import { showModal } from '../../components/Modal';
 
@@ -11,12 +11,10 @@ const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[
 
 function ConversationPage(props) {
     const { id } = props;
-    const selectComponent = props.selectComponent
-    const goToComp = (args) => { if (selectComponent) { selectComponent(args) } }
+    const navigate = useNavigate();    
     const [messageText, setMessageText] = useState('');
     let { loading, error, data } = useQuery(QUERY_CONVERSATIONS, { variables: { id } });
     let conv = data?.conversation[0] || {};
-    console.log(c.red, 'conv', conv);
     
     const userData = useQuery(QUERY_USER).data?.user || {};
     
@@ -55,17 +53,13 @@ function ConversationPage(props) {
         setMessageText(event.target.value);
     }, []);
 
-    const handleDropdownChange = (event) => {
-        setSelectedValue(event.target.value);
-    };
-
     if (loading) return <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>;
 
     if (error) {
         return (
             <div className="container-fluid">
                 <div className="col-12 df jcsb aic ">
-                    <button className="btn-1 bg-c1 m-0" onClick={(e) => goToComp({component:'Conversations'})}>Back</button>
+                    <button className="btn-1 bg-c1 m-0" onClick={(e) => navigate('/dashboard/Conversations')}>Back</button>
                     <div className="text-danger">Error: {error.message}</div>
                 </div>
             </div>
@@ -75,7 +69,7 @@ function ConversationPage(props) {
     if (!conv._id || !conv.participants.length) {
         return (<div className="container-fluid">
             <div className="col-12 df jcsb aic ">
-                <button className="btn-1 bg-c1 m-0" onClick={(e) => goToComp({component:'Conversations'})}>Back</button>
+                <button className="btn-1 bg-c1 m-0" onClick={(e) => navigate('/dashboard/Conversations')}>Back</button>
                 <div className="text-danger">No conversation found</div>
             </div>
         </div>)
@@ -86,7 +80,7 @@ function ConversationPage(props) {
     return (<>
         <div className="container-fluid">
             <div className="col-12 df jcsb aic ">
-                <button className="btn-1 bg-c1 m-0" onClick={(e) => goToComp({component:'Conversations'})}>Back</button>
+                <button className="btn-1 bg-c1 m-0" onClick={(e) => navigate('/dashboard/Conversations')}>Back</button>
                 <div class="drop-menu rel">
                     <button class="btn-1 btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                         Options

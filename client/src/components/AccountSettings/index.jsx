@@ -6,14 +6,9 @@ import { showModal } from '../../components/Modal';
 
 const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
 
-function AccountSettings( {selectComponent}) {
-
-    console.log(c.yellow, 'AccountSettings');
+function AccountSettings() {
 
     const { data: userData, loading: userLoading, error: userError } = ifLoggedIn(QUERY_USER);
-
-    const goToComp = (e,comp) => { if(selectComponent) { selectComponent(e,comp) } }
-    
     const user  = userData?.user || {};
 
     const [formState, setFormState] = useState({

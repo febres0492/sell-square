@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_PRODUCT } from '../../utils/mutations';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useFetchCategories from '../../utils/useFetchCategories';
 import { uploadImage } from '../../utils/helpers';
 
@@ -34,7 +34,7 @@ const AddProduct = () => {
             console.log('new product', poduct);
 
             // redirecting to productDetailsPage
-            navigate(`/products/${poduct.data.addProduct._id}`);
+            navigate(`/dashboard/ProductDetails/${poduct.data.addProduct._id}`);
 
         } catch (err) {
             console.error(err);
@@ -47,10 +47,8 @@ const AddProduct = () => {
                 <div className='card my-4 p-3' style={{maxWidth:'600px'}}>
                     <h1>Add Product</h1>
                     <form className='d-flex flex-column gap-2' onSubmit={handleSubmit} >
-                        <div className="border p-2 d-flex flex-column">
-                            <input type="text" name="name" placeholder="Name" value={product.name} onChange={handleChange} required />
-                            <textarea name="description" placeholder="Description" value={product.description} onChange={handleChange} required rows="4" />
-                        </div>
+                        <input className="border" type="text" name="name" placeholder="Name" value={product.name} onChange={handleChange} required />
+                        <textarea name="description" placeholder="Description" value={product.description} onChange={handleChange} required rows="4" />
                         <div className="df ais gap-2">
                             <input className='border fg' type="number" name="price" placeholder="Price" value={product.price} onChange={handleChange} required />
                             <input className='border fg' type="number" name="quantity" placeholder="Quantity" value={product.quantity} onChange={handleChange} required />
