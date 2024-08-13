@@ -32,7 +32,7 @@ function Conversations(props) {
     
         <div className="container-fluid">
             <div className="container-box">
-                <h5>Conversations</h5>
+                <h3>Conversations</h3>
                 <div className="row">
                     {conversationsData.length === 0 ?
                         <div className="col">
@@ -45,7 +45,7 @@ function Conversations(props) {
                             console.log('participant', fistLast);
 
                             return (
-                                <div className="col-12 col-md-6 col-lg-4 mb-3" key={con._id}>
+                                <div className="col-12 col-md-6 col-lg-4 mb-3 pointer" key={con._id} style={{'--hover-scale':'1.03'}}>
                                     <div className="d-flex rounded bg-d4 overflow-hidden" onClick={()=>goToComp({component:'OpenConversation', id: con._id})}>
                                         <div className="img-div" style={{width:'80px'}}>
                                             <img

@@ -1,24 +1,24 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { showModal } from '../components/Modal';
+import NavBar from '../components/NavBar';
 
 const NoMatch = () => {
-    // const navigate = useNavigate();
-
-    useEffect(() => {
-        showModal('404 Page Not Found');
-        // navigate('/');
-    }, []);
+    const navigate = useNavigate();
 
     return (
-        <div>
-            <h1>404 Page Not Found</h1>
-            <h1>
-                <span role="img" aria-label="Face With Rolling Eyes Emoji">
-                    🙄
-                </span>
-            </h1>
-        </div>
+        <>
+            <NavBar />
+            <div className='df flex-column jcc fg aic'>
+                <h1 className="d-block">
+                    <span  role="img" aria-label="Face With Rolling Eyes Emoji">
+                        🙄
+                    </span>
+                </h1>
+                <h1>404 Page Not Found</h1>
+                <button className="btn bg-d4 text-white" onClick={() => navigate('/')}>
+                    Go Home
+                </button>
+            </div>
+        </>
     );
 };
 

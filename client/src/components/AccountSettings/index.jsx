@@ -3,7 +3,6 @@ import { QUERY_USER } from '../../utils/queries';
 import { UPDATE_USER } from '../../utils/mutations';
 import ifLoggedIn from '../../utils/ifLoggedIn';
 import { showModal } from '../../components/Modal';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const c = { red: '\x1b[31m%s\x1b[0m', green: '\x1b[32m%s\x1b[0m', yellow: '\x1b[33m%s\x1b[0m' };
 
@@ -76,7 +75,6 @@ function AccountSettings( {selectComponent}) {
     const fields = [
         { label: 'First Name', name: 'firstName', type: 'text' },
         { label: 'Last Name', name: 'lastName', type: 'text' },
-        // { label: 'Email', name: 'email', type: 'email' }
     ];
 
     const passwordFields = [
@@ -89,69 +87,68 @@ function AccountSettings( {selectComponent}) {
     const isPasswordFormEmpty = !formState.currentPassword || !formState.newPassword || !formState.confirmNewPassword;
 
     return (
-        <h2>Account Settings</h2>
-        // <div className="container my-1">
-        //     {user ? (
-        //         <div>
-        //             <div className="card my-4 p-3">
-        //                 <h2> User Info </h2>
-        //                 <div>
-        //                     <p><strong>First Name:</strong> {user.firstName}</p>
-        //                     <p><strong>Last Name:</strong> {user.lastName}</p>
-        //                     <p><strong>Email:</strong> {user.email}</p>
-        //                 </div>
-        //             </div>
-        //             <div className="card my-4 p-3">
-        //                 <h2> Update User Info </h2>
-        //                 <form>
-        //                     {fields.map((field) => (
-        //                         <div className="mb-3" key={field.name}>
-        //                             <label className="form-label">{field.label}</label>
-        //                             <input 
-        //                                 type={field.type} 
-        //                                 className="form-control" 
-        //                                 name={field.name} 
-        //                                 value={formState[field.name] || ''} 
-        //                                 onChange={handleChange} 
-        //                             />
-        //                         </div>
-        //                     ))}
-        //                     <button 
-        //                         type="button" 
-        //                         className="btn btn-primary" 
-        //                         onClick={handleUpdateInfo} 
-        //                         disabled={isInfoFormEmpty}>
-        //                         Update Info
-        //                     </button>
-        //                 </form>
-        //             </div>
-        //             <div className="card mb-4 p-3">
-        //                 <h2> Update Password </h2>
-        //                 <form>
-        //                     {passwordFields.map((field) => (
-        //                         <div className="mb-3" key={field.name}>
-        //                             <label className="form-label">{field.label}</label>
-        //                             <input 
-        //                                 type={field.type} 
-        //                                 className="form-control" 
-        //                                 name={field.name} 
-        //                                 value={formState[field.name] || ''} 
-        //                                 onChange={handleChange} 
-        //                             />
-        //                         </div>
-        //                     ))}
-        //                     <button 
-        //                         type="button" 
-        //                         className="btn btn-primary" 
-        //                         onClick={handleUpdatePassword} 
-        //                         disabled={isPasswordFormEmpty}>
-        //                         Update Password
-        //                     </button>
-        //                 </form>
-        //             </div>
-        //         </div>
-        //     ) : null}
-        // </div>
+        <div className="container my-1">
+            {user ? (
+                <div>
+                    <div className="card my-4 p-3">
+                        <h2> User Info </h2>
+                        <div>
+                            <p><strong>First Name:</strong> {user.firstName}</p>
+                            <p><strong>Last Name:</strong> {user.lastName}</p>
+                            <p><strong>Email:</strong> {user.email}</p>
+                        </div>
+                    </div>
+                    <div className="card my-4 p-3">
+                        <h2> Update User Info </h2>
+                        <form>
+                            {fields.map((field) => (
+                                <div className="mb-3" key={field.name}>
+                                    <label className="form-label">{field.label}</label>
+                                    <input 
+                                        type={field.type} 
+                                        className="form-control" 
+                                        name={field.name} 
+                                        value={formState[field.name] || ''} 
+                                        onChange={handleChange} 
+                                    />
+                                </div>
+                            ))}
+                            <button 
+                                type="button" 
+                                className="btn btn-primary" 
+                                onClick={handleUpdateInfo} 
+                                disabled={isInfoFormEmpty}>
+                                Update Info
+                            </button>
+                        </form>
+                    </div>
+                    <div className="card mb-4 p-3">
+                        <h2> Update Password </h2>
+                        <form>
+                            {passwordFields.map((field) => (
+                                <div className="mb-3" key={field.name}>
+                                    <label className="form-label">{field.label}</label>
+                                    <input 
+                                        type={field.type} 
+                                        className="form-control" 
+                                        name={field.name} 
+                                        value={formState[field.name] || ''} 
+                                        onChange={handleChange} 
+                                    />
+                                </div>
+                            ))}
+                            <button 
+                                type="button" 
+                                className="btn btn-primary" 
+                                onClick={handleUpdatePassword} 
+                                disabled={isPasswordFormEmpty}>
+                                Update Password
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            ) : null}
+        </div>
     );
 }
 

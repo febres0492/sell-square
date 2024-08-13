@@ -34,13 +34,12 @@ function ProductDetailsPage() {
         } else {
             const newMessage = await sendMessage({
                 recipientId: productSellerId,
-                messageText: 'I am interested in your product',
+                messageText: '--startconversation',
                 productId: id
             });
             if (newMessage) {
                 console.log(c.green, 'newMessage', newMessage.conversationId);
-                navigate(`/dashboard`);
-                // navigate(`/conversation/${newMessage.conversationId}`);
+                navigate(`/dashboard/OpenConversation/${convData.conversation[0]._id}`);
             }
         }
     }, [convExit, convData, data, navigate, productSellerId, sendMessage]);
@@ -63,11 +62,9 @@ function ProductDetailsPage() {
     const product = data?.product || {};
     const isMyProduct = product.user._id === userData?.user?._id;
 
-    console.log(c.yellow, 'product', product);
-
     const handleEditButton = () => {
         if (loggedIn) {
-            navigate(`/edit-product/${product._id}`);
+            navigate(`/dashboard/EditProduct/${product._id}`);
         } else {
             showModal('Please log in to edit this product');
         }
@@ -104,11 +101,11 @@ function ProductDetailsPage() {
                                     <p className="card-text"><strong>Category:</strong> {product.category.name}</p>
                                     <p className="card-text"><strong>Quantity:</strong> {product.quantity}</p>
                                     <p className="card-text"><strong>Zipcode:</strong> {product.zipcode}</p>
-                                    {/* {loggedIn && isMyProduct && (
+                                    {loggedIn && isMyProduct && (
                                         <button className="btn btn-primary px-4" onClick={handleEditButton}>
                                             Edit
                                         </button>
-                                    )} */}
+                                    )}
                                     {loggedIn && !isMyProduct && (
                                         <button className="btn btn-primary px-4" onClick={handleSendMessage}>
                                             Message Seller
@@ -124,44 +121,6 @@ function ProductDetailsPage() {
             </div>
         </div>
     );
-
-    // return (
-    //     <div className="container">
-    //         <Link to="/">
-    //             <button className="btn btn-primary">
-    //                 ← Back to Products
-    //             </button>
-    //         </Link>
-    //         <div className="row">
-    //             {product ? (
-    //                 <div className="card">
-    //                     <img className="card-img-top" src={product.image || 'https://via.placeholder.com/150'} alt={product.name} />
-    //                     <div className="card-body">
-    //                         <p className="card-text"><strong>Seller:</strong> {product.user.firstName} {product.user.lastName}</p>
-    //                         <h2 className="card-title">{product.name}</h2>
-    //                         <p className="card-text">{product.description}</p>
-    //                         <p className="card-text"><strong>Price:</strong> ${product.price}</p>
-    //                         <p className="card-text"><strong>Category:</strong> {product.category.name}</p>
-    //                         <p className="card-text"><strong>Quantity:</strong> {product.quantity}</p>
-    //                         <p className="card-text"><strong>Zipcode:</strong> {product.zipcode}</p>
-    //                         {loggedIn && isMyProduct && (
-    //                             <button className="btn btn-secondary" onClick={handleEditButton}>
-    //                                 Edit
-    //                             </button>
-    //                         )}
-    //                         {loggedIn && !isMyProduct && (
-    //                             <button className="btn btn-primary" onClick={handleSendMessage}>
-    //                                 Message Seller
-    //                             </button>
-    //                         )}
-    //                     </div>
-    //                 </div>
-    //             ) : (
-    //                 <div>Product not found</div>
-    //             )}
-    //         </div>
-    //     </div>
-    // );
 }
 
 export default ProductDetailsPage;

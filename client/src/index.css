@@ -137,7 +137,7 @@ input:focus {
 .aic { align-items: center; }
 .aifs { align-items: flex-start; }
 .aife { align-items: flex-end; }
-.ais { align-items: stretch; }
+.ais { align-items: stretch !important; }
 
 .flex { display: flex; }
 .flex-col { flex-direction: column; }

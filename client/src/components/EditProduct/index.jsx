@@ -82,7 +82,7 @@ function EditProductPage(props) {
                 const res = await deleteImage(data.product.image);
                 setFormState({ ...formState, image: '' });
             }
-            const deletedProduct = await deleteProduct({ variables: { id } });
+            await deleteProduct({ variables: { id } });
             goToComp({component:'Products'});
         } catch (e) {
             console.error('Error deleting product:', e);
