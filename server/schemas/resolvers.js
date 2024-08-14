@@ -55,12 +55,10 @@ const resolvers = {
                 filter.$or = [
                     { name: { $regex: args.searchTerm, $options: 'i' } },
                     { description: { $regex: args.searchTerm, $options: 'i' } },
-                    { zipcode: { $regex: args.searchTerm, $options: 'i' } },
                 ];
             }
         
             if (args.user) { 
-                console.log(c.red,'products', user);
                 filter.user = args.user;
             }
 
@@ -72,8 +70,9 @@ const resolvers = {
                 }
                 filter.user = context.user._id;
             }
-        
-            return await Product.find(filter).populate('category').populate('user');
+
+            const res = await Product.find(filter).populate('category').populate('user');
+            return res
         },
         product: async (parent, { _id }) => {
             try {
